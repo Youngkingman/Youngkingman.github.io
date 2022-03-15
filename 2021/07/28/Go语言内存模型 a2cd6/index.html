@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>Go语言内存模型 - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Go语言内存模型物理地址、地址空间与虚拟内存总之先推荐一下虚拟内存讲解得非常好的一个视频。  https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV18v411a7Vk?from&#x3D;search&amp;seid&#x3D;8049687409040152217&amp;spm_id_from&#x3D;333.337.0.0 物理内存顾名思义指内存芯片的内部存储结构，CPU寻址时根据物理地址获取改地址对应的数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言内存模型">
+<meta property="og:url" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="Go语言内存模型物理地址、地址空间与虚拟内存总之先推荐一下虚拟内存讲解得非常好的一个视频。  https:&#x2F;&#x2F;www.bilibili.com&#x2F;video&#x2F;BV18v411a7Vk?from&#x3D;search&amp;seid&#x3D;8049687409040152217&amp;spm_id_from&#x3D;333.337.0.0 物理内存顾名思义指内存芯片的内部存储结构，CPU寻址时根据物理地址获取改地址对应的数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/span%E7%9A%84%E6%9E%84%E6%88%90.png">
+<meta property="og:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E9%9A%90%E5%BC%8F%E9%93%BE%E8%A1%A8.png">
+<meta property="og:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E5%86%85%E5%AD%98%E9%A1%B5%E7%AE%A1%E7%90%86.png">
+<meta property="og:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/ThreadCache.jpg">
+<meta property="og:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%88%9D%E5%A7%8B%E5%8C%96.png">
+<meta property="og:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/arena-16469024847341.png">
+<meta property="og:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E5%85%A8%E8%B2%8C.png">
+<meta property="article:published_time" content="2021-07-28T01:58:24.000Z">
+<meta property="article:modified_time" content="2022-03-10T15:39:05.061Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="八股文">
+<meta property="article:tag" content="内存模型">
+<meta property="article:tag" content="Tcmalloc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/span%E7%9A%84%E6%9E%84%E6%88%90.png">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1647310810062">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1647310810062">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1647310810062">
+    <link rel="stylesheet" href="/css/style.css?v=1647310810062">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1647310810062">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>27</div>
+        <div><span>标签</span>54</div>
+        <div><span>分类</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">5</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 12px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 18px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/Javascript/" style="font-size: 12px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 12px;">STL容器</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 14px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 12px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 12px;">动态规划</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 10px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 14px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 16px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 12px;">编译原理</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 12px;">自适应控制</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 16px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 70.75%;"> 
+              <img data-src="/cover/yuanxiangcover33.jpg" data-sizes="auto" alt="Go语言内存模型" class="lazyload">
+              <h1>Go语言内存模型</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年07月28日</a>
+</div>
+
+      
+
+      <h1 id="Go语言内存模型"><a href="#Go语言内存模型" class="headerlink" title="Go语言内存模型"></a>Go语言内存模型</h1><h1 id="物理地址、地址空间与虚拟内存"><a href="#物理地址、地址空间与虚拟内存" class="headerlink" title="物理地址、地址空间与虚拟内存"></a>物理地址、地址空间与虚拟内存</h1><p>总之先推荐一下虚拟内存讲解得非常好的一个视频。</p>
+<p> <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18v411a7Vk?from=search&seid=8049687409040152217&spm_id_from=333.337.0.0">https://www.bilibili.com/video/BV18v411a7Vk?from=search&seid=8049687409040152217&spm_id_from&#x3D;333.337.0.0</a></p>
+<p>物理内存顾名思义指内存芯片的内部存储结构，CPU寻址时根据物理地址获取改地址对应的数据字。</p>
+<p>地址空间是一个非负整数集合，包含$[0,2^{n}-1]$。对于物理内存来说n是地址总线的个数，对于我们虚拟地址空间来说n是任意决定的，而且计算机中每一个进程独自拥有一整片完整的虚拟地址空间。CPU在进行索引时使用虚拟地址，经过MMU（内存管理单元）以及页表机制等硬件提供的映射服务将虚拟地址转换为对应的物理地址，这便是虚拟内存的工作流程简介。细节可以参考开头给出的视频以及CSAPP。</p>
+<p>对于这篇文章来说，最重要的是理解如下几点：</p>
+<ul>
+<li>理解虚拟内存即使已经获取并分配也并不一定占用实际的物理内存</li>
+<li>虚拟内存提供了多进程之间的隔离，Go语言内存分配器分配的是独占的虚拟内存</li>
+</ul>
+<h1 id="Go内存分配器的设计-Tcmalloc"><a href="#Go内存分配器的设计-Tcmalloc" class="headerlink" title="Go内存分配器的设计(Tcmalloc)"></a>Go内存分配器的设计(Tcmalloc)</h1><p>Go内存分配器基于谷歌研发的tcmalloc内存分配器（ThreadCache Malloc)。</p>
+<p>以下图片引用<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29216091"><em>https://zhuanlan.zhihu.com/p/29216091</em></a>的图示进行代码讲解与分析。</p>
+<h2 id="分配的基本结构——Span与Object"><a href="#分配的基本结构——Span与Object" class="headerlink" title="分配的基本结构——Span与Object"></a>分配的基本结构——Span与Object</h2><p>在第一节我们讲述了操作系统内存的分页结构（Page），Go内存分配在这基础上引入了Span和Object两个概念，其中Span是由多个页组成的较大块不定长内存；而Object是使用中为我们的程序实例对象分配内存的实际单元，由不同大小的Span切割对齐而来。</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/span%E7%9A%84%E6%9E%84%E6%88%90.png" alt="span的构成.png" class="lazyload"></p>
+<p>对于Span的管理，Go语言采用了类似于内存池分配的方法，为不同大小的对象预先切割好内存并利用隐式链表的方法进行管理。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs go"><br><span class="hljs-keyword">type</span> mspan <span class="hljs-keyword">struct</span> &#123;<br>	next *mspan     <span class="hljs-comment">// 显式链表下一节点</span><br>	prev *mspan     <span class="hljs-comment">// 显式链表前一节点</span><br><br>	startAddr <span class="hljs-type">uintptr</span> <span class="hljs-comment">// 首字节指针</span><br>	npages    <span class="hljs-type">uintptr</span> <span class="hljs-comment">// Span中的内存页数量</span><br><br>	manualFreeList gclinkptr <span class="hljs-comment">// 待分配的Object列表</span><br>  freeindex <span class="hljs-type">uintptr</span>        <span class="hljs-comment">//位于0和nelems中，表示以分配的内存块索引</span><br>  nelems <span class="hljs-type">uintptr</span>           <span class="hljs-comment">// Span中的Object数量</span><br>	<br>	allocCache <span class="hljs-type">uint64</span>        <span class="hljs-comment">//gc相关</span><br><br>	allocBits  *gcBits       <span class="hljs-comment">//gc相关</span><br>	gcmarkBits *gcBits       <span class="hljs-comment">//gc相关</span><br><br>	sweepgen    <span class="hljs-type">uint32</span><br>	divMul      <span class="hljs-type">uint16</span>        <span class="hljs-comment">// 元素大小切分</span><br>	baseMask    <span class="hljs-type">uint16</span>        <span class="hljs-comment">// if non-0, elemsize is a power of 2, &amp; this will get object allocation base</span><br>	allocCount  <span class="hljs-type">uint16</span>        <span class="hljs-comment">// 已分配Object数量</span><br>	spanclass   spanClass     <span class="hljs-comment">// uint8的结构，决定了内部Object的大小</span><br>	state       mSpanStateBox <span class="hljs-comment">// mspan状态，gc多线程相关以及内存管理使用</span><br>	needzero    <span class="hljs-type">uint8</span>         <span class="hljs-comment">// 进行内存分配前需要归0的标志位</span><br>	divShift    <span class="hljs-type">uint8</span>         <span class="hljs-comment">// for divide by elemsize - divMagic.shift</span><br>	divShift2   <span class="hljs-type">uint8</span>         <span class="hljs-comment">// for divide by elemsize - divMagic.shift2</span><br>	elemsize    <span class="hljs-type">uintptr</span>       <span class="hljs-comment">// 由内存页数目或者spanClass决定的Object大小</span><br>	limit       <span class="hljs-type">uintptr</span>       <span class="hljs-comment">// span的尾指针</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E9%9A%90%E5%BC%8F%E9%93%BE%E8%A1%A8.png" alt="隐式链表.png" class="lazyload"></p>
+<p>   （虽然图示讲的是Page，但是我们可以暂且将其看作是一个Span，其结构可以和单个Span对应）</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E5%86%85%E5%AD%98%E9%A1%B5%E7%AE%A1%E7%90%86.png" alt="内存页管理" class="lazyload"></p>
+<p>Span的大小在8B到32KB之间不等，并非严格的按照2的幂次进行分配以减少内部碎片。超过32KB的对象会以另外的方式进行分配。除此以外，分配器对于多个微小的对象会尝试组合到一个Object内部进行内存分配以提高分配效率。</p>
+<p>上述管理方式还存在着外部碎片的问题：不同大小的Span在连续的内存页中混杂共存，相同大小的内存通过指针进行联系。如果程序中有大量的小内存对象申请，分配器会将大的Span拆分为小的Span提高内存利用率，但是当小内存对象释放内存的时候程序如果需要大的内存空间就只能再向上级的分配器申请，原先的小内存对象释放后的span成为了外部碎片。为了避免这个问题直观的想法是将释放内存后的span前后的空闲span合并，由于page地址空间连续，span地址空间不连续，我们需要一个page（即地址）到span的映射来获取span前后的其他span状态。</p>
+<p>再TCmalloc中，采用RadixTree结构来完成这一映射，这是一种特殊的前缀树，详细的介绍可以参考<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Radix_tree">https://en.wikipedia.org/wiki/Radix_tree</a>这里不再进行赘述。在源码之中这一映射被存放在mheap中进行管理。</p>
+<h2 id="内存的管理组件"><a href="#内存的管理组件" class="headerlink" title="内存的管理组件"></a>内存的管理组件</h2><p>由于Span以及Heap为我们提供了从虚拟地址空间到Span内存池之间的一层抽象映射，底层的内存管理组件只需要关心Span的可用性以及待分配对象大小即可。</p>
+<p>goruntime提供了三种内存分配组件：<em><strong>mcache、mcentral以及mheap</strong></em>。</p>
+<ul>
+<li>mcache被每一个线程独占（也就是Go语言GMP模型中的P），在tcmalloc中被称为ThreadCache，可以进行无锁分配，拥有预分配好的一批span，分配时若对象在mcache中有合适的span就直接分配在其上，没有合适的span时会向<em><strong>所需span规格的mcentral</strong></em>进行申请</li>
+<li>对于不同大小的对象有不同个mcentral（并非图中所示的一个），每个mcentral维护具有相同大小的span的一个spanlist，mcache申请时需要加锁访问。</li>
+<li>如果mcentral没有合适的span可供mcache使用，那么mcentr会向mheap申请span。正如上一节所述mheap维护了内存页和span之间的映射，它首先会尝试合并空闲的span并将其交给mcentral，如果失败了，则陷入系统调用向操作系统申请新的内存。</li>
+</ul>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/ThreadCache.jpg" alt="ThreadCache.jpg" class="lazyload"></p>
+<h3 id="mcache结构体内容"><a href="#mcache结构体内容" class="headerlink" title="mcache结构体内容"></a>mcache结构体内容</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> mcache <span class="hljs-keyword">struct</span> &#123;<br>	next_sample <span class="hljs-type">uintptr</span> <span class="hljs-comment">// heap相关</span><br>	local_scan  <span class="hljs-type">uintptr</span> <span class="hljs-comment">// heap相关</span><br><br>	<span class="hljs-comment">//对于非指针的微小对象特殊处理相关，在一个object里面挤一挤</span><br>	tiny             <span class="hljs-type">uintptr</span><br>	tinyoffset       <span class="hljs-type">uintptr</span><br>	local_tinyallocs <span class="hljs-type">uintptr</span> <br><br>  <span class="hljs-comment">//对于小对象可以根据numSpanClasses直接分配在span上</span><br>	alloc [numSpanClasses]*mspan <br><br>	stackcache [_NumStackOrders]stackfreelist<br><br>	<span class="hljs-comment">// 当前分配器的状态</span><br>	local_largefree  <span class="hljs-type">uintptr</span>                  <span class="hljs-comment">// 可用于大对象（&gt;32kB)的字节指针</span><br>	local_nlargefree <span class="hljs-type">uintptr</span>                  <span class="hljs-comment">// 可用于大对象的块数目 (&gt;32kB)</span><br>	local_nsmallfree [_NumSizeClasses]<span class="hljs-type">uintptr</span> <span class="hljs-comment">// 可用于对应大小小对象的块数目指针桶(&lt;=32KB)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="mcentral结构体内容"><a href="#mcentral结构体内容" class="headerlink" title="mcentral结构体内容"></a>mcentral结构体内容</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> mcentral <span class="hljs-keyword">struct</span> &#123;<br>	lock      mutex       <span class="hljs-comment">//mcache申请时的互斥锁</span><br>	spanclass spanClass   <span class="hljs-comment">//当前mcentral属于的span大小</span><br><br>	nonempty mSpanList <span class="hljs-comment">// 具有空闲的object的span称为非空span</span><br>	empty    mSpanList <span class="hljs-comment">// 被mcache取走或者没有空闲object的span</span><br><br>	<span class="hljs-comment">//GC相关的span集合</span><br>	partial [<span class="hljs-number">2</span>]spanSet <span class="hljs-comment">// list of spans with a free object</span><br>	full    [<span class="hljs-number">2</span>]spanSet <span class="hljs-comment">// list of spans with no free objects</span><br><br>  <span class="hljs-comment">//累加的整数，用于记录被分配出去的对象数目，假设所有被mcache拿走的span被完全分配</span><br>	nmalloc <span class="hljs-type">uint64</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="mheap结构体内容"><a href="#mheap结构体内容" class="headerlink" title="mheap结构体内容"></a>mheap结构体内容</h3><p>heap结构体相对复杂，包含了一些初始化时的内存连续地址划分以及垃圾回收算法的相关字段。简单介绍一下初始化时预分配的地址空间内容。上一节没有详细说明的大于32KB的对象会直接在mheap进行分配。</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4%E5%88%9D%E5%A7%8B%E5%8C%96.png" alt="地址空间初始化.PNG " class="lazyload"></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> mheap <span class="hljs-keyword">struct</span> &#123;<br>	lock      mutex<br>	pages     pageAlloc <span class="hljs-comment">// 内存页存储结构</span><br>	sweepgen  <span class="hljs-type">uint32</span>    <span class="hljs-comment">// gc相关</span><br>	sweepdone <span class="hljs-type">uint32</span>    <span class="hljs-comment">// gc相关</span><br>	sweepers  <span class="hljs-type">uint32</span>    <span class="hljs-comment">// gc相关</span><br><br>	<span class="hljs-comment">// allspans包含所有已构建的span指针列表. 每个span只出现一次</span><br>	<span class="hljs-comment">//其内存地址会随着堆的增长进行移动和再分配</span><br>	allspans []*mspan <br><br>	<span class="hljs-comment">// gc相关</span><br>	sweepSpans [<span class="hljs-number">2</span>]gcSweepBuf<br><br>	_ <span class="hljs-type">uint32</span> <span class="hljs-comment">// uint64对齐到32-bit，保证原子性</span><br><br>	<span class="hljs-comment">// gc相关</span><br>	pagesInUse         <span class="hljs-type">uint64</span>  <br>	pagesSwept         <span class="hljs-type">uint64</span>  <br>	pagesSweptBasis    <span class="hljs-type">uint64</span>  <br>	sweepHeapLiveBasis <span class="hljs-type">uint64</span>  <br>	sweepPagesPerByte  <span class="hljs-type">float64</span> <br><br>  <span class="hljs-comment">//堆持有的虚拟内存总量，runtime通过将内存交还操作系统来维持</span><br>	scavengeGoal <span class="hljs-type">uint64</span><br><br>	<span class="hljs-comment">// Page reclaimer state</span><br>	reclaimIndex <span class="hljs-type">uint64</span><br>	reclaimCredit <span class="hljs-type">uintptr</span><br><br>	<span class="hljs-comment">// 分配状态</span><br>	largealloc  <span class="hljs-type">uint64</span>                  <span class="hljs-comment">// 为大对象分配的字节数目</span><br>	nlargealloc <span class="hljs-type">uint64</span>                  <span class="hljs-comment">// 可以分配的大对象数目</span><br>	largefree   <span class="hljs-type">uint64</span>                  <span class="hljs-comment">// 剩余大对象可分配字节数目</span><br>	nlargefree  <span class="hljs-type">uint64</span>                  <span class="hljs-comment">// 剩余大对象可分配数目</span><br>	nsmallfree  [_NumSizeClasses]<span class="hljs-type">uint64</span> <span class="hljs-comment">// 可分配小对象数目</span><br><br>  <span class="hljs-comment">//该数组用于管理所有的heapArena，包含了span指针区，bitmap区和真正的堆区</span><br>	arenas [<span class="hljs-number">1</span> &lt;&lt; arenaL1Bits]*[<span class="hljs-number">1</span> &lt;&lt; arenaL2Bits]*heapArena<br><br>	<span class="hljs-comment">// 堆分配相关</span><br>	heapArenaAlloc linearAlloc<br>	arenaHints *arenaHint<br>	arena linearAlloc<br><br>	<span class="hljs-comment">// 可用大对象地址空间的迭代</span><br>	allArenas []arenaIdx<br><br>	<span class="hljs-comment">// GC相关</span><br>	sweepArenas []arenaIdx<br><br>	<span class="hljs-comment">// GC相关</span><br>	markArenas []arenaIdx<br><br>	<span class="hljs-comment">// 堆增长的位置</span><br>	curArena <span class="hljs-keyword">struct</span> &#123;<br>		base, end <span class="hljs-type">uintptr</span><br>	&#125;<br><br>	<span class="hljs-comment">// 核心功能，对应的mcentral列表</span><br>	central [numSpanClasses]<span class="hljs-keyword">struct</span> &#123;<br>		mcentral mcentral<br>		pad      [cpu.CacheLinePadSize - unsafe.Sizeof(mcentral&#123;&#125;)%cpu.CacheLinePadSize]<span class="hljs-type">byte</span><br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>堆区的内存页以arena的数组的形式进行保存，大内存对象（&gt;32KB）直接经过arena进行分配，其结构如下所示：</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/arena-16469024847341.png" alt="arena.png" class="lazyload"></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> heapArena <span class="hljs-keyword">struct</span> &#123;<br>  <span class="hljs-comment">//用于垃圾回收时的标记位图，表示对应span的情况，在gc章节会详细讲述</span><br>	bitmap [heapArenaBitmapBytes]<span class="hljs-type">byte</span><br><br>	<span class="hljs-comment">//虚地址页ID在span上的ID映射与spans指针集合(页号对应的已分配span指针)</span><br>	spans [pagesPerArena]*mspan<br><br>	<span class="hljs-comment">// 页号所处的span是否被使用，GC相关</span><br>	pageInUse [pagesPerArena / <span class="hljs-number">8</span>]<span class="hljs-type">uint8</span><br><br>	<span class="hljs-comment">// 页号所处的span是否被标记，GC相关</span><br>	pageMarks [pagesPerArena / <span class="hljs-number">8</span>]<span class="hljs-type">uint8</span><br><br>	<span class="hljs-comment">// pageSpecials is a bitmap that indicates which spans have</span><br>	<span class="hljs-comment">// specials (finalizers or other). Like pageInUse, only the bit</span><br>	<span class="hljs-comment">// corresponding to the first page in each span is used.</span><br>	pageSpecials [pagesPerArena / <span class="hljs-number">8</span>]<span class="hljs-type">uint8</span><br><br>	<span class="hljs-comment">// 标志本arena第一页的第一个字节</span><br>	zeroedBase <span class="hljs-type">uintptr</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="全貌总结"><a href="#全貌总结" class="headerlink" title="全貌总结"></a>全貌总结</h2><p><img data-fancybox="gallery" data-sizes="auto" data-src="/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/%E5%85%A8%E8%B2%8C.png" alt="全貌.png " class="lazyload"></p>
+<p>总结一下全文，</p>
+<ul>
+<li>本文所讲的内存分配基本上是关于<strong>堆区的内存分配</strong>，但是我们在写代码时可以尽量使得对象和变量位于栈区，在编译器能够确定内存大小就不必走本文的内存分配机制。</li>
+<li>堆区在Go语言中提供了两种基本抽象，一种是包含并管理虚拟内存页的heapArena，另一种是针对32KB以下对象进行管理的具有不同大小的span</li>
+<li>与操作系统的交互、内存管理伙伴系统的实现由堆区进行，同时堆区也维持了虚拟页号到span的映射用于合并内存减少外部碎片问题</li>
+<li>mcentral管理不同类型的 span集合，每一个process（Go中指线程）向所需mecentral申请span同时拥有自己的span缓存</li>
+</ul>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2021/07/28/Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2021&#x2F;07&#x2F;28&#x2F;Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2021&#x2F;07&#x2F;28&#x2F;Go%E8%AF%AD%E8%A8%80%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%20a2cd6&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/Golang%E5%AD%A6%E4%B9%A0/">Golang学习</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Golang/" rel="tag">Golang</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Tcmalloc/" rel="tag">Tcmalloc</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" rel="tag">八股文</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" rel="tag">内存模型</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1647310810065"></script>
+
+
+	<script async src="/js/search.js?v=1647310810065"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

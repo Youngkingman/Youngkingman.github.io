@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>CSS笔记(4) - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="CSS笔记(4)目标内容 说出3~5个H5新增布局和表单标签 说出CSS3的新增特性  HTML5的新特性H5新增语义化标签 &lt;header&gt; 头部标签 &lt;nav&gt; 导航标签 &lt;article&gt; 内容标签 &lt;section&gt; 文档某个区域 &lt;aside&gt; 侧边栏标签 &lt;footer&gt; 尾部标签   需要注意：  语义化标准主要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS笔记(4)">
+<meta property="og:url" content="https://kimanyang.xyz/2022/03/01/CSS%E7%AC%94%E8%AE%B0(4)/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="CSS笔记(4)目标内容 说出3~5个H5新增布局和表单标签 说出CSS3的新增特性  HTML5的新特性H5新增语义化标签 &lt;header&gt; 头部标签 &lt;nav&gt; 导航标签 &lt;article&gt; 内容标签 &lt;section&gt; 文档某个区域 &lt;aside&gt; 侧边栏标签 &lt;footer&gt; 尾部标签   需要注意：  语义化标准主要">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kimanyang.xyz/2022/03/01/CSS%E7%AC%94%E8%AE%B0(4)/h5mark.PNG">
+<meta property="article:published_time" content="2022-03-01T09:08:24.000Z">
+<meta property="article:modified_time" content="2022-03-10T15:32:59.460Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="H5标签">
+<meta property="article:tag" content="CSS过渡">
+<meta property="article:tag" content="CSS3新特性">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kimanyang.xyz/2022/03/01/CSS%E7%AC%94%E8%AE%B0(4)/h5mark.PNG">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1647310809964">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1647310809964">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1647310809964">
+    <link rel="stylesheet" href="/css/style.css?v=1647310809964">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1647310809964">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>27</div>
+        <div><span>标签</span>54</div>
+        <div><span>分类</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">5</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 12px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 18px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/Javascript/" style="font-size: 12px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 12px;">STL容器</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 14px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 12px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 12px;">动态规划</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 10px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 14px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 16px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 12px;">编译原理</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 12px;">自适应控制</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 16px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 64.5%;"> 
+              <img data-src="/cover/yuanxiangcover10.jpg" data-sizes="auto" alt="CSS笔记(4)" class="lazyload">
+              <h1>CSS笔记(4)</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年03月01日</a>
+</div>
+
+      
+
+      <h1 id="CSS笔记-4"><a href="#CSS笔记-4" class="headerlink" title="CSS笔记(4)"></a>CSS笔记(4)</h1><h2 id="目标内容"><a href="#目标内容" class="headerlink" title="目标内容"></a>目标内容</h2><ul>
+<li>说出3~5个H5新增布局和表单标签</li>
+<li>说出CSS3的新增特性</li>
+</ul>
+<h2 id="HTML5的新特性"><a href="#HTML5的新特性" class="headerlink" title="HTML5的新特性"></a>HTML5的新特性</h2><h3 id="H5新增语义化标签"><a href="#H5新增语义化标签" class="headerlink" title="H5新增语义化标签"></a>H5新增语义化标签</h3><ul>
+<li>&lt;header&gt; 头部标签</li>
+<li>&lt;nav&gt; 导航标签</li>
+<li>&lt;article&gt; 内容标签</li>
+<li>&lt;section&gt; 文档某个区域</li>
+<li>&lt;aside&gt; 侧边栏标签</li>
+<li>&lt;footer&gt; 尾部标签</li>
+</ul>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2022/03/01/CSS%E7%AC%94%E8%AE%B0(4)/h5mark.PNG" alt="h5mark" class="lazyload"></p>
+<p>需要注意：</p>
+<ul>
+<li>语义化标准主要针对搜索引擎SEO，你要喜欢可以全部div</li>
+<li>变迁在页面中可以多次使用</li>
+<li>IE9需要用div</li>
+<li>多用于移动端</li>
+</ul>
+<h3 id="H5新增多媒体标签"><a href="#H5新增多媒体标签" class="headerlink" title="H5新增多媒体标签"></a>H5新增多媒体标签</h3><p>在不适用插件的情况下支持部分视频格式</p>
+<h4 id="1-video标签"><a href="#1-video标签" class="headerlink" title="1.video标签"></a>1.video标签</h4><p>当前支持三种格式，尽量使用mp4</p>
+<table>
+<thead>
+<tr>
+<th>浏览器</th>
+<th>MP4</th>
+<th>WebM</th>
+<th>Ogg</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IE</td>
+<td>ok</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Chrome</td>
+<td>ok</td>
+<td>ok</td>
+<td>ok</td>
+</tr>
+<tr>
+<td>Firefox</td>
+<td>ok</td>
+<td>ok</td>
+<td>ok</td>
+</tr>
+<tr>
+<td>Safari</td>
+<td>ok</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Opera</td>
+<td>ok</td>
+<td>ok</td>
+<td>ok</td>
+</tr>
+</tbody></table>
+<p>video的常见属性：</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>autoplay</td>
+<td>autoplay</td>
+<td>视频自动播放</td>
+</tr>
+<tr>
+<td>controls</td>
+<td>controls</td>
+<td>显示播放控件</td>
+</tr>
+<tr>
+<td>width</td>
+<td>像素</td>
+<td>设置宽度</td>
+</tr>
+<tr>
+<td>height</td>
+<td>像素</td>
+<td>设置高度</td>
+</tr>
+<tr>
+<td>loop</td>
+<td>lool</td>
+<td>是否循环播放</td>
+</tr>
+<tr>
+<td>preload</td>
+<td>auto（预先加载）none（不预先加载）</td>
+<td>规定是否预加载视频，有autoplay则忽略</td>
+</tr>
+<tr>
+<td>src</td>
+<td>url</td>
+<td>视频url地址</td>
+</tr>
+<tr>
+<td>poster</td>
+<td>imgurl</td>
+<td>等待加载的图片</td>
+</tr>
+<tr>
+<td>muted</td>
+<td>muted</td>
+<td>静音播放，谷歌浏览器autoplay需加入此项使能</td>
+</tr>
+</tbody></table>
+<h4 id="2-音频audio"><a href="#2-音频audio" class="headerlink" title="2.音频audio"></a>2.音频audio</h4><p>浏览器支持自己查，三种格式MP3,Wav,Ogg，尽量MP3和Wav</p>
+<h3 id="H5为input新增的属性类型"><a href="#H5为input新增的属性类型" class="headerlink" title="H5为input新增的属性类型"></a>H5为input新增的属性类型</h3><table>
+<thead>
+<tr>
+<th>属性值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>email</td>
+<td>限制类型为Email</td>
+</tr>
+<tr>
+<td>url</td>
+<td>限制类型为Url</td>
+</tr>
+<tr>
+<td>date</td>
+<td>限制类型为日期</td>
+</tr>
+<tr>
+<td>time</td>
+<td>限制类型为时间</td>
+</tr>
+<tr>
+<td>month</td>
+<td>限制类型为月份</td>
+</tr>
+<tr>
+<td>week</td>
+<td>限制类型为周</td>
+</tr>
+<tr>
+<td>number</td>
+<td>限制类型为数字</td>
+</tr>
+<tr>
+<td>tel</td>
+<td>限制类型为电话</td>
+</tr>
+<tr>
+<td>search</td>
+<td>搜索框</td>
+</tr>
+<tr>
+<td>color</td>
+<td>生成颜色选择表单</td>
+</tr>
+</tbody></table>
+<h3 id="H5为表单新增的表单属性"><a href="#H5为表单新增的表单属性" class="headerlink" title="H5为表单新增的表单属性"></a>H5为表单新增的表单属性</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>required</td>
+<td>required</td>
+<td>拥有表单该属性表示内容不能为空必须填</td>
+</tr>
+<tr>
+<td><strong>placeholder</strong></td>
+<td>提示的文本</td>
+<td>表单提示信息，存在默认值将不再显示</td>
+</tr>
+<tr>
+<td>autoforcus</td>
+<td>autofocus</td>
+<td>自动聚焦，页面加载完成后是否自动聚焦表单</td>
+</tr>
+<tr>
+<td>autocomplete</td>
+<td>off&#x2F;on</td>
+<td>是否为用户基于先前输入自动补全，默认打开，如果需要关闭得在表单里面写样式同时添加name属性</td>
+</tr>
+<tr>
+<td><strong>multiple</strong></td>
+<td>multiple</td>
+<td>可以选多个本地文件提交，用于file</td>
+</tr>
+</tbody></table>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css">&lt;<span class="hljs-selector-tag">input</span> type=&quot;search&quot; name=&quot;sear&quot; id=&quot;&quot; required=&quot;required&quot; placeholder=&quot;fuck you&quot; onfocus=&quot;this<span class="hljs-selector-class">.placeholder</span>=&#x27;&#x27;&quot; onblur=&quot;this<span class="hljs-selector-class">.placeholder</span>=&#x27;fuck you&#x27;&quot;&gt;<br></code></pre></td></tr></table></figure>
+
+<p>有部分js内容，但是上述的代码可以实现单击文本框时placeholder消失</p>
+<h2 id="CSS3的新特性"><a href="#CSS3的新特性" class="headerlink" title="CSS3的新特性"></a>CSS3的新特性</h2><h3 id="新增选择器"><a href="#新增选择器" class="headerlink" title="新增选择器"></a>新增选择器</h3><h4 id="1-属性选择器"><a href="#1-属性选择器" class="headerlink" title="1.属性选择器"></a>1.属性选择器</h4><table>
+<thead>
+<tr>
+<th>选择符</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>E[alt]</td>
+<td>选择具有alt属性的e元素</td>
+</tr>
+<tr>
+<td>E[alt&#x3D;”val”]</td>
+<td>选择具有alt属性且值等于val的E元素</td>
+</tr>
+<tr>
+<td>E[alt^&#x3D;”val”]</td>
+<td>匹配具有alt属性且值以val开头的E元素</td>
+</tr>
+<tr>
+<td>E[alt$&#x3D;”val”]</td>
+<td>匹配具有alt属性且值以val结尾的E元素</td>
+</tr>
+<tr>
+<td>E[alt*&#x3D;”val”]</td>
+<td>匹配具有alt属性且值中含有val的E元素</td>
+</tr>
+</tbody></table>
+<h4 id="2-结构伪类选择器"><a href="#2-结构伪类选择器" class="headerlink" title="2.结构伪类选择器"></a>2.结构伪类选择器</h4><table>
+<thead>
+<tr>
+<th>选择符</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>E:first-child</td>
+<td>匹配父元素中的第一个子元素E</td>
+</tr>
+<tr>
+<td>E:last-child</td>
+<td>匹配父元素中的最后一个元素E</td>
+</tr>
+<tr>
+<td>E;nth-child(n)</td>
+<td>匹配父元素中的第n个子元素E</td>
+</tr>
+<tr>
+<td>E:first-of-type</td>
+<td>指定类型E的第一个</td>
+</tr>
+<tr>
+<td>E:last-of-type</td>
+<td>指定类型E的最后一个</td>
+</tr>
+<tr>
+<td>E:nth-of-type(n)</td>
+<td>指定类型E的第n个</td>
+</tr>
+</tbody></table>
+<p>重点关注一下<code>nth-child(n)</code>，里面的<code>n</code>很多变，用处很大。</p>
+<ul>
+<li><p>n可以是数字、关键字和公式</p>
+</li>
+<li><p>n如果是数字，就是选择第n个子元素，里面数字从1开始</p>
+</li>
+<li><p>n如果是关键字，odd为偶数元素，even为奇数元素</p>
+</li>
+<li><p>n可以是公式：常见的公式如下所示（n从<strong>0</strong>开始到不超出范围内符合的）</p>
+<table>
+<thead>
+<tr>
+<th>公式</th>
+<th>取值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$2 n$</td>
+<td>偶数</td>
+</tr>
+<tr>
+<td>$2n+1$</td>
+<td>奇数</td>
+</tr>
+<tr>
+<td>$5n$</td>
+<td>5 10 15…</td>
+</tr>
+<tr>
+<td>$n+5$</td>
+<td>第五个开始到最后</td>
+</tr>
+<tr>
+<td>$- n + 5$</td>
+<td><strong>包含第五个</strong>的前五个</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p><code>nth-of-type</code>和<code>nth-child(n)</code>的用法是类似的，但是区别和字面意义一样在排序上不相同，<code>nth-of-type</code>编号是对所有类型为前面的结构伪类的元素进行的，而<code>nth-child</code>编号是对所有元素进行的，如果一个父元素拥有异质的子元素，使用<code>nth-child</code>同时也指定类型是可能选不上的。</p>
+<h4 id="3-伪元素选择器"><a href="#3-伪元素选择器" class="headerlink" title="3.伪元素选择器"></a>3.伪元素选择器</h4><p>伪元素选择器可以帮助我们利用CSS创建新标签元素而不需要HTML标签从而简化HTML结构。前面讲的浮动清除就利用了这个原理。</p>
+<table>
+<thead>
+<tr>
+<th>选择符</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>::before</td>
+<td>在元素内部的前面插入内容</td>
+</tr>
+<tr>
+<td>::after</td>
+<td>在元素内部的后面插入内容</td>
+</tr>
+</tbody></table>
+<ul>
+<li>before和after创建一个元素，但是属于行内元素</li>
+<li>新创建的元素在文档树中无法找到，称之为伪元素</li>
+<li>语法： <code>element::before&#123;&#125;</code></li>
+<li>必须要有content属性</li>
+<li>伪元素选择器的权重和标签选择器一样为1</li>
+</ul>
+<h5 id="伪元素的使用场景：字体图标"><a href="#伪元素的使用场景：字体图标" class="headerlink" title="伪元素的使用场景：字体图标"></a>伪元素的使用场景：字体图标</h5><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs css"> <span class="hljs-selector-tag">div</span> &#123;<br>     <span class="hljs-attribute">position</span>: relative;<br>     <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;<br>     <span class="hljs-attribute">height</span>: <span class="hljs-number">35px</span>;<br>     <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid red;<br>&#125;<br><br><span class="hljs-selector-tag">div</span><span class="hljs-selector-pseudo">::after</span> &#123;<br>    <span class="hljs-attribute">position</span>: absolute;<br>    <span class="hljs-attribute">top</span>: <span class="hljs-number">10px</span>;<br>    <span class="hljs-attribute">right</span>: <span class="hljs-number">10px</span>;<br>    <span class="hljs-attribute">font-family</span>: <span class="hljs-string">&#x27;icomoon&#x27;</span>;<br>    <span class="hljs-comment">/* content: &#x27;&#x27;; */</span><br>    <span class="hljs-attribute">content</span>: <span class="hljs-string">&#x27;\e91e&#x27;</span>;<br>    <span class="hljs-attribute">color</span>: red;<br>    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">18px</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="伪元素的使用场景：hover掩模"><a href="#伪元素的使用场景：hover掩模" class="headerlink" title="伪元素的使用场景：hover掩模"></a>伪元素的使用场景：hover掩模</h5><p>在笔记2中的半透明掩膜需要额外添加一个盒子让其脱标并悬浮于当前显示之上，使用伪元素特性则可以直接忽略这点（也不需要使用js）：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">    <span class="hljs-selector-class">.tudou</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">position</span>: relative;</span><br><span class="language-css">        <span class="hljs-attribute">width</span>: <span class="hljs-number">444px</span>;</span><br><span class="language-css">        <span class="hljs-attribute">height</span>: <span class="hljs-number">320px</span>;</span><br><span class="language-css">        <span class="hljs-attribute">background-color</span>: pink;</span><br><span class="language-css">        <span class="hljs-attribute">margin</span>: <span class="hljs-number">30px</span> auto;</span><br><span class="language-css">    &#125;</span><br><span class="language-css">    </span><br><span class="language-css">    <span class="hljs-selector-class">.tudou</span> <span class="hljs-selector-tag">img</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">        <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">    &#125;</span><br><span class="language-css">    </span><br><span class="language-css">    <span class="hljs-selector-class">.tudou</span><span class="hljs-selector-pseudo">::before</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">content</span>: <span class="hljs-string">&#x27;&#x27;</span>;</span><br><span class="language-css">        <span class="hljs-comment">/* 隐藏遮罩层 */</span></span><br><span class="language-css">        <span class="hljs-attribute">display</span>: none;</span><br><span class="language-css">        <span class="hljs-attribute">position</span>: absolute;</span><br><span class="language-css">        <span class="hljs-attribute">top</span>: <span class="hljs-number">0</span>;</span><br><span class="language-css">        <span class="hljs-attribute">left</span>: <span class="hljs-number">0</span>;</span><br><span class="language-css">        <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">        <span class="hljs-attribute">height</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">        <span class="hljs-attribute">background</span>: <span class="hljs-built_in">rgba</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, .<span class="hljs-number">4</span>) <span class="hljs-built_in">url</span>(<span class="hljs-string">images/arr.png</span>) no-repeat center;</span><br><span class="language-css">    &#125;</span><br><span class="language-css">    </span><br><span class="language-css">    <span class="hljs-comment">/* 当我们鼠标经过了 土豆这个盒子，就让里面before遮罩层显示出来 */</span></span><br><span class="language-css">    <span class="hljs-selector-class">.tudou</span><span class="hljs-selector-pseudo">:hover</span><span class="hljs-selector-pseudo">::before</span> &#123;</span><br><span class="language-css">        <span class="hljs-comment">/* 而是显示元素 */</span></span><br><span class="language-css">        <span class="hljs-attribute">display</span>: block;</span><br><span class="language-css">    &#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>上述的before属性用after也没啥问题。</p>
+<h5 id="伪元素使用场景：双伪元素清除浮动"><a href="#伪元素使用场景：双伪元素清除浮动" class="headerlink" title="伪元素使用场景：双伪元素清除浮动"></a>伪元素使用场景：双伪元素清除浮动</h5><p>伪元素清除浮动的方法:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.clearfix</span><span class="hljs-selector-pseudo">:after</span> &#123;<br>    <span class="hljs-attribute">content</span>: <span class="hljs-string">&quot;&quot;</span>; <span class="hljs-comment">/*伪元素必要属性*/</span><br>    <span class="hljs-attribute">display</span>: block;<span class="hljs-comment">/*插入的元素必须为块级*/</span><br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">0</span>;<span class="hljs-comment">/*不看见这个元素*/</span><br>    <span class="hljs-attribute">clear</span>: both;<span class="hljs-comment">/*左右不允许浮动，核心代码*/</span><br>    <span class="hljs-attribute">visibility</span>:hidden;<span class="hljs-comment">/*元素不可见*/</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>关于原理，解释的好的博客地址：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38105488/article/details/100052123?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-1.pc_relevant_aa&spm=1001.2101.3001.4242.2&utm_relevant_index=4">了解伪元素清除浮动原理_qq_38105488的博客-CSDN博客</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs">当应用于非浮动块时，它将非浮动块的边框边界移动到所有相关浮动元素外边界的下方。这个非浮动块的垂直外边距会折叠。<br>所以添加一个没有高度的不可浮动块元素它会另起一行直接撑开所有浮动块<br></code></pre></td></tr></table></figure>
+
+<p>双伪元素的强化版本，这种做法相当于：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.clearfix</span><span class="hljs-selector-pseudo">:before</span>,<br><span class="hljs-selector-class">.clearfix</span><span class="hljs-selector-pseudo">:after</span> &#123;<br>    <span class="hljs-attribute">content</span>: <span class="hljs-string">&quot;&quot;</span>;<br>    <span class="hljs-attribute">display</span>: table;<span class="hljs-comment">/*前后转换为块元素并且一行显示*/</span><br>&#125;<br><span class="hljs-selector-class">.clearfix</span><span class="hljs-selector-pseudo">:after</span> &#123;<br>    <span class="hljs-attribute">clear</span>: both;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="CSS3盒子模型变动"><a href="#CSS3盒子模型变动" class="headerlink" title="CSS3盒子模型变动"></a>CSS3盒子模型变动</h3><p>以前计算盒子大小的时候要提前考虑padding值和border算半天，现在可以通过<code>box-sizing</code>来指定盒子模型，即可指定为<code>content-box</code>&#x2F;<code>border-box</code></p>
+<p>盒子模型的变动为两种情况：</p>
+<ol>
+<li><code>box-sizing:content-box</code>盒子大小是<code>width(height)+padding+border</code>，即默认情况</li>
+<li><code>box-sizing:border-box</code>则盒子大小就是<code>width(height)</code>，这样就不用去算了,前提是边界合起来不超过盒子大小</li>
+</ol>
+<p>对于三角形不友好，如果设置了默认的<code>box-sizing:bordr-box;</code>记得要画三角形的时候重新设置回来。</p>
+<h3 id="CSS3过渡的使用（Important）"><a href="#CSS3过渡的使用（Important）" class="headerlink" title="CSS3过渡的使用（Important）"></a>CSS3过渡的使用（Important）</h3><p>过渡特性可以使得浏览器不需要JavaScript也能够实现动画，当元素从一种样式变换为另一种样式的时候为元素添加效果。</p>
+<p>可以美化页面，<strong>经常和hover配合使用</strong></p>
+<h4 id="过渡的语法"><a href="#过渡的语法" class="headerlink" title="过渡的语法"></a>过渡的语法</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-attribute">transition</span>:过渡的属性 花费时间 运动曲线 何时开始;<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><strong>属性</strong>：想要变换的css属性，包括宽度、高度、背景颜色、内外边距都可以。如果想要所有属性都过渡就是用一个alt</li>
+<li><strong>花费时间</strong>：单位是秒（必须写单位）比如0.5s</li>
+<li><strong>运动曲线</strong>：默认是easy，可以省略</li>
+<li><strong>何时开始</strong>：可以延迟触发，单位是秒（必须写单位），默认是0，可以省略</li>
+</ol>
+<p>谁要过渡给谁加（transition属性加在过渡之前）</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs css"> <span class="hljs-selector-tag">div</span> &#123;<br>     <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;<br>     <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;<br>     <span class="hljs-attribute">background-color</span>: pink;<br>     <span class="hljs-comment">/* transition: 变化的属性 花费时间 运动曲线 何时开始; */</span><br>     <span class="hljs-comment">/* transition: width .5s ease 0s, height .5s ease 1s; */</span><br>     <span class="hljs-comment">/* 如果想要写多个属性，利用逗号进行分割 */</span><br>     <span class="hljs-comment">/* transition: width .5s, height .5s; */</span><br>     <span class="hljs-comment">/* 如果想要多个属性都变化，属性写all就可以了 */</span><br>     <span class="hljs-comment">/* transition: height .5s ease 1s; */</span><br>     <span class="hljs-comment">/* 谁做过渡，给谁加 */</span><br>     <span class="hljs-attribute">transition</span>: all <span class="hljs-number">0.5s</span>;<br>&#125;<br><span class="hljs-selector-tag">div</span><span class="hljs-selector-pseudo">:hover</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">400px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">200px</span>;<br>    <span class="hljs-attribute">background-color</span>: skyblue;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>过渡特性的一个案例，血压拉满：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="language-css"></span><br><span class="language-css">    * &#123;</span><br><span class="language-css">        <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;</span><br><span class="language-css">        <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;</span><br><span class="language-css">        <span class="hljs-attribute">box-sizing</span>: border-box;</span><br><span class="language-css">    &#125;</span><br><span class="language-css">    <span class="hljs-selector-class">.outbox</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">margin</span>: <span class="hljs-number">20px</span> auto;</span><br><span class="language-css">        <span class="hljs-attribute">height</span>: <span class="hljs-number">30px</span>;</span><br><span class="language-css">        <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;</span><br><span class="language-css">        <span class="hljs-attribute">padding</span>: <span class="hljs-number">2px</span>;</span><br><span class="language-css">        <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid red;</span><br><span class="language-css">        <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">10px</span>;</span><br><span class="language-css">    &#125;</span><br><span class="language-css">    <span class="hljs-selector-class">.bar</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">height</span>: <span class="hljs-number">95%</span>;</span><br><span class="language-css">        <span class="hljs-attribute">width</span>: <span class="hljs-number">50%</span>;</span><br><span class="language-css">        <span class="hljs-attribute">float</span>: left;</span><br><span class="language-css">        <span class="hljs-attribute">background-color</span>: skyblue;</span><br><span class="language-css">        <span class="hljs-attribute">transition</span>: all <span class="hljs-number">0.8s</span>;</span><br><span class="language-css">    &#125;</span><br><span class="language-css">    <span class="hljs-selector-class">.bar</span><span class="hljs-selector-pseudo">:hover</span> &#123;</span><br><span class="language-css">        <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;</span><br><span class="language-css">        <span class="hljs-attribute">background-color</span>: red;</span><br><span class="language-css">    &#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;outbox&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;bar&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="其他CSS3小特性"><a href="#其他CSS3小特性" class="headerlink" title="其他CSS3小特性"></a>其他CSS3小特性</h3><ol>
+<li>图片模糊<code>filter:函数</code>需要的时候去查就好，用<code>blur()</code>可以模糊</li>
+<li>盒子宽度计算函数<code>width:calc()</code>，可以在声明CSS属性时做一些计算，支持四则运算，比如<code>width: calc(100% - 30px);</code>可以永远比父盒子宽度小30像素</li>
+</ol>
+<h2 id="一些属性书写顺序规定"><a href="#一些属性书写顺序规定" class="headerlink" title="一些属性书写顺序规定"></a>一些属性书写顺序规定</h2><p>建议遵循以下顺序：</p>
+<ol>
+<li>布局定位属性：display &#x2F; position &#x2F; float &#x2F; clear &#x2F; visibility &#x2F; overflow（建议 display 第一个写，毕竟关系到模式）</li>
+<li>自身属性：width &#x2F; height &#x2F; margin &#x2F; padding &#x2F; border &#x2F; background</li>
+<li>文本属性：color &#x2F; font &#x2F; text-decoration &#x2F; text-align &#x2F; vertical-align &#x2F; white- space &#x2F; break-word</li>
+<li>其他属性（CSS3）：content &#x2F; cursor &#x2F; border-radius &#x2F; box-shadow &#x2F; text-shadow &#x2F; background:linear-gradient …</li>
+</ol>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/03/01/CSS%E7%AC%94%E8%AE%B0(4)/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;03&#x2F;01&#x2F;CSS%E7%AC%94%E8%AE%B0(4)&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;03&#x2F;01&#x2F;CSS%E7%AC%94%E8%AE%B0(4)&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/CSS/">CSS</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" rel="tag">CSS3新特性</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSS%E8%BF%87%E6%B8%A1/" rel="tag">CSS过渡</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/H5%E6%A0%87%E7%AD%BE/" rel="tag">H5标签</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1647310809967"></script>
+
+
+	<script async src="/js/search.js?v=1647310809967"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

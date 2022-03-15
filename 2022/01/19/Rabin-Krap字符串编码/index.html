@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>Rabin-Karp字符串编码 - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Rabin-Karp字符串编码基本介绍Rabin-Karp算法作为一种简单实用的哈希算法将字符串映射为一个整数。假设字符串字符不超过$\vert\Sigma\vert$, 那么选取一个大于等于$\vert\Sigma\vert$的整数作为$base$，就可以将字符串看成是一个$base$进制的整数，将其转换为十进制数字后就得到了字符串对应的编码。 假设给定的字符串$s&#x3D;abcd$,包含的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rabin-Karp字符串编码">
+<meta property="og:url" content="https://kimanyang.xyz/2022/01/19/Rabin-Krap%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BC%96%E7%A0%81/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="Rabin-Karp字符串编码基本介绍Rabin-Karp算法作为一种简单实用的哈希算法将字符串映射为一个整数。假设字符串字符不超过$\vert\Sigma\vert$, 那么选取一个大于等于$\vert\Sigma\vert$的整数作为$base$，就可以将字符串看成是一个$base$进制的整数，将其转换为十进制数字后就得到了字符串对应的编码。 假设给定的字符串$s&#x3D;abcd$,包含的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-19T03:22:14.000Z">
+<meta property="article:modified_time" content="2022-03-10T15:40:04.785Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="数据结构与算法">
+<meta property="article:tag" content="STL容器">
+<meta property="article:tag" content="Rabin-Karp">
+<meta property="article:tag" content="哈希算法">
+<meta property="article:tag" content="KMP">
+<meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1647310810020">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1647310810020">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1647310810020">
+    <link rel="stylesheet" href="/css/style.css?v=1647310810020">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1647310810020">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>27</div>
+        <div><span>标签</span>54</div>
+        <div><span>分类</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">5</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 12px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 18px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/Javascript/" style="font-size: 12px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 12px;">STL容器</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 14px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 12px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 12px;">动态规划</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 10px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 14px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 16px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 12px;">编译原理</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 12px;">自适应控制</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 16px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 56.333333333333336%;"> 
+              <img data-src="/cover/yuanxiangcover29.jpg" data-sizes="auto" alt="Rabin-Karp字符串编码" class="lazyload">
+              <h1>Rabin-Karp字符串编码</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年01月19日</a>
+</div>
+
+      
+
+      <h1 id="Rabin-Karp字符串编码"><a href="#Rabin-Karp字符串编码" class="headerlink" title="Rabin-Karp字符串编码"></a>Rabin-Karp字符串编码</h1><h2 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h2><p>Rabin-Karp算法作为一种简单实用的哈希算法将字符串映射为一个整数。假设字符串字符不超过$\vert\Sigma\vert$, 那么选取一个大于等于$\vert\Sigma\vert$的整数作为$base$，就可以将字符串看成是一个$base$进制的整数，将其转换为十进制数字后就得到了字符串对应的编码。</p>
+<p>假设给定的字符串$s&#x3D;abcd$,包含的字符种类为4，那么字符集$\Sigma&#x3D;{a,b,c,d}$。取 $base&#x3D;7$, 那么字符串可以看成是七进制的数字$(0123)<em>7$，转换为十进制数为$66$。给出如下的一般化的编码公式：<br>$$<br>\label{rk}<br>encode(s) &#x3D; \sum</em>{i&#x3D;0}^{\vert S\vert-1}s[i]*base^{\vert S\vert-i-1}<br>$$<br>其中$\vert S\vert$表示字符串$s$长度，$s[i]$为对应字符位的编码，不加证明地给出关于$(\ref{rk})$的一个结论：</p>
+<p><strong>给定基底和字符集，两个字符串$s$和$t$相等，当且仅当它们的长度相等且编码值相等。</strong></p>
+<p>对于所有长度为$k$的字符串通过比较它们的编码值可以判断它们两两之间是否相等。但对于较长的字符串很容易出现编码值超过一般语言的整数类型可表示的范围，这就需要对编码值取模，这使得$(\ref{rk})$中的单射性质被破坏，哈希算法可能出现哈希冲突。但是如果所取得模数足够大，那么哈希碰撞的可能性会极大降低。</p>
+<p>如果选定单个模数$mod_1$，那么只有在随机产生$O(\sqrt{mod_1})$个字符串的时候才有超过50%的几率会发生哈希碰撞。通过选择多个模数$mod_1,mod_2,…,mod_n$，在取多个模数结果相等时才判断相等那碰撞概率可以降到微乎其微的程度。</p>
+<p>在正常算法题中我们只需要选定一个模数，一般选取一个质数比如$10^9+7$，有必要多选的话再加一个$10^9+9$。对于基底一般也选择一个质数，比如如果字符集$\Sigma$为小写字符集，则$\vert\Sigma\vert&#x3D;26$，可以选择略大的质数31或者29。</p>
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><p>下面针对小写字符集的Robin-Karp给出C++的算法实现：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">RobinKarpEncode</span><span class="hljs-params">(string s)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = s.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-type">int</span> endcode = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> base = <span class="hljs-number">31</span>, mod = <span class="hljs-number">1000000007</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i &lt; n;++i) &#123;<br>            encode = ((<span class="hljs-type">long</span> <span class="hljs-type">long</span>)encode * base + (s[i] - <span class="hljs-number">97</span>)) % mod;<br>        &#125;<br>        <span class="hljs-keyword">return</span> encode;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>算法并不需要每次都去计算$base^{\vert S\vert-i-1}$，这需要调用到快速幂算法，但仍然称不上快速。注意到每一次都可以重复利用到前一次的信息，假设前$k$位的编码值为$encode_k$，那么第$k+1$位的编码值可以表示为：<br>$$<br>encode_{k+1}&#x3D;encode_k*base + s[i]<br>$$<br>可以理解为每一位都乘上基底再加上个位数构成新的编码，体现了动态规划的思想。整体的动态转移方程可以写作：<br>$$<br>\label{dyn}<br>\left{<br>\begin{aligned}<br>    encode[k] &amp;&#x3D; s[k] % mod  &amp;k&#x3D;0\<br>    encode[k] &amp;&#x3D; (encode[k-1]*base+s[k])% mod \ \ &amp;k&gt;0<br>\end{aligned}<br>\right .<br>$$<br>同时需要注意的是未进行取模之前的乘积可能会超过int类型的取值，需要暂时地用到long long进行存储。</p>
+<h2 id="模板题型"><a href="#模板题型" class="headerlink" title="模板题型"></a>模板题型</h2><h3 id="最长快乐前缀："><a href="#最长快乐前缀：" class="headerlink" title="最长快乐前缀："></a>最长快乐前缀：</h3><p>「快乐前缀」是在原字符串中既是<strong>非空</strong>前缀也是后缀（不包括原字符串自身）的字符串。给你一个字符串 s，请你返回它的 最长快乐前缀。</p>
+<p>如果不存在满足题意的前缀，则返回一个空字符串。</p>
+<p>来源：力扣<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-happy-prefix">https://leetcode-cn.com/problems/longest-happy-prefix</a></p>
+<p>题解：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">string <span class="hljs-title">longestPrefix</span><span class="hljs-params">(string s)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = s.<span class="hljs-built_in">length</span>();<br>        <span class="hljs-type">int</span> mod = <span class="hljs-number">100000007</span>, base = <span class="hljs-number">29</span>, happy_pre = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> prefix = <span class="hljs-number">0</span>, suffix = <span class="hljs-number">0</span>, mul = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;i &lt; n;++i) &#123;<br>            prefix = ((<span class="hljs-type">long</span> <span class="hljs-type">long</span>)prefix * base + s[i<span class="hljs-number">-1</span>] - <span class="hljs-number">97</span>) % mod;<br>            suffix = (suffix + (<span class="hljs-type">long</span> <span class="hljs-type">long</span>)(s[n-i] - <span class="hljs-number">97</span>) * mul) % mod;<br>            <span class="hljs-keyword">if</span>(prefix == suffix) &#123;<br>                happy_pre = i;<br>            &#125;<br>            mul = (<span class="hljs-type">long</span> <span class="hljs-type">long</span>)mul * base % mod;<br>        &#125;<br>        <span class="hljs-keyword">return</span> s.<span class="hljs-built_in">substr</span>(<span class="hljs-number">0</span>, happy_pre);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这里顺便复习一下取模的一些重要性质：</p>
+<ul>
+<li>$(a+b)\mod p &#x3D; (a \mod p+b \mod p)\mod p$，取模的加法结合律</li>
+<li>$(a * b)\mod p &#x3D; (a\mod p*b\mod p)\mod p$，取模的乘法结合律</li>
+<li>$(a^b\mod p)&#x3D;((a\mod p)^b)\mod p$，取模的乘方性质</li>
+</ul>
+<p>对于代码中进行后缀计算的部分，我们使用了上述的规律</p>
+<p>对于前缀，根据$(\ref{dyn})$以及取模的加法结合律由下式递推计算出最终结果：<br>$$<br>prefix[k]% mod &#x3D; (prefix[k-1]*base%mod+(s[k]-97)%mod)% mod<br>$$<br>对于后缀，给出如下的递推公式：<br>$$<br>\left{<br>\begin{aligned}<br>    suffix[k] &amp;&#x3D; s[k] % mod  &amp;k&#x3D;0\<br>    suffix[k] &amp;&#x3D; (suffix[k-1]+mul[k] * (s[k] - 97))%mod \ \ &amp;k&gt;0\<br>    mul[k] &amp;&#x3D; mul[k-1] * base % mod</p>
+<p>\end{aligned}<br>\right .<br>$$<br>这里利用到了取模的乘法结合律（对 $(s[n-i] - 97) * mul$取模等于对内部各自取模相乘,由于字符编码较小取模之后仍然等于自身)，再同前缀方式一样利用取模的加法结合律获得后缀编码的计算方式。</p>
+<h3 id="恢复空格"><a href="#恢复空格" class="headerlink" title="恢复空格"></a>恢复空格</h3><p>哦，不！你不小心把一个长篇文章中的空格、标点都删掉了，并且大写也弄成了小写。像句子”I reset the computer. It still didn’t boot!”已经变成了”iresetthecomputeritstilldidntboot”。在处理标点符号和大小写之前，你得先把它断成词语。当然了，你有一本厚厚的词典dictionary，不过，有些词没在词典里。假设文章用sentence表示，设计一个算法，把文章断开，要求未识别的字符最少，返回未识别的字符数。</p>
+<p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/re-space-lcci">https://leetcode-cn.com/problems/re-space-lcci</a></p>
+<p>示例：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs makefile">输入：<br>dictionary = [<span class="hljs-string">&quot;looked&quot;</span>,<span class="hljs-string">&quot;just&quot;</span>,<span class="hljs-string">&quot;like&quot;</span>,<span class="hljs-string">&quot;her&quot;</span>,<span class="hljs-string">&quot;brother&quot;</span>]<br>sentence = <span class="hljs-string">&quot;jesslookedjustliketimherbrother&quot;</span><br>输出： 7<br>解释： 断句后为<span class="hljs-string">&quot;jess looked just like tim her brother&quot;</span>，共7个未识别字符。<br></code></pre></td></tr></table></figure>
+
+<p>这道题目我们首先得到当前的动态转移方程（完全背包问题，一个单词可以匹配无穷多次):<br>$$<br>\left{<br>\begin{aligned}<br>    dp[i] &amp;&#x3D; \min{dp[i],dp[j-1]}, &amp;s[j-1:i-1]&amp;能够匹配时 \<br>    dp[i] &amp;&#x3D; dp[i-1] + 1, &amp;s[j-1:i-1]&amp;全都不能匹配时<br>\end{aligned}<br>\right .<br>$$<br>完全背包的二重循环的伪代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, n)</span></span>;<br>dp[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;i &lt;=n;++i) &#123;<br>    dp[i] = dp[i<span class="hljs-number">-1</span>] + <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = i;j &gt;= <span class="hljs-number">1</span>;--j) &#123;<br>        <span class="hljs-keyword">if</span>(s[j<span class="hljs-number">-1</span>:i<span class="hljs-number">-1</span>] 能够匹配) &#123;<br>             dp[i] = <span class="hljs-built_in">min</span>(dp[i], dp[j<span class="hljs-number">-1</span>]);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们的问题现在转换为如何能够快速知道s[j-1:i-1]是否在字典之中，如果采用暴力遍历字典必会超时，于是可以采用本文中所说的Rabin-Karp算法对字典预处理为哈希值的集合，在通过Rabin-Karp算法逐项匹配的特性快速计算哈希值，从而求解，完整代码如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">using</span> LL = <span class="hljs-type">long</span> <span class="hljs-type">long</span>; <span class="hljs-comment">//命名空间，和define作用一样</span><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> LL P = (<span class="hljs-number">1LL</span> &lt;&lt; <span class="hljs-number">31</span>) - <span class="hljs-number">1</span>; <span class="hljs-comment">//常数表达式，模数</span><br>    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> LL BASE = <span class="hljs-number">41</span>;			 <span class="hljs-comment">//常数表达式，基底</span><br><br>    <span class="hljs-comment">//Rabin-Karp算法的实现，从后往前进行，直接用long long类型防止计算溢出</span><br>    <span class="hljs-comment">//这种实现方便我们在完全背包的循环中进行哈希值的计算而无需后缀计算的局部变量</span><br>    <span class="hljs-function">LL <span class="hljs-title">getHash</span><span class="hljs-params">(<span class="hljs-type">const</span> string &amp;s)</span> </span>&#123;<br>        LL hashValue = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = s.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>            hashValue = hashValue * BASE + s[i] - <span class="hljs-string">&#x27;a&#x27;</span> + <span class="hljs-number">1</span>;<br>            hashValue = hashValue % P;<br>        &#125;<br>        <span class="hljs-keyword">return</span> hashValue;<br>    &#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">respace</span><span class="hljs-params">(vector&lt;string&gt;&amp; dictionary, string sentence)</span> </span>&#123;<br>        unordered_set&lt;LL&gt; stringHash;<br>        <span class="hljs-comment">//字典预处理为哈希值集合</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; word:dictionary) &#123;<br>            stringHash.<span class="hljs-built_in">insert</span>(<span class="hljs-built_in">getHash</span>(word));<br>        &#125;<br>        <span class="hljs-type">int</span> n = sentence.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">dp</span><span class="hljs-params">(n + <span class="hljs-number">1</span>, n)</span></span>;<br>        dp[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;i &lt;=n;++i) &#123;<br>            dp[i] = dp[i<span class="hljs-number">-1</span>] + <span class="hljs-number">1</span>;<br>            LL curhash = <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = i;j &gt;= <span class="hljs-number">1</span>;--j) &#123;<br>                <span class="hljs-comment">//利用Rabin-Karp的逐项计算方式寻找匹配的子串，并进行动态规划的状态更新</span><br>                curhash = (curhash * BASE + (sentence[j<span class="hljs-number">-1</span>]- <span class="hljs-string">&#x27;a&#x27;</span> + <span class="hljs-number">1</span>)) % P;<br>                <span class="hljs-keyword">if</span>(stringHash.<span class="hljs-built_in">count</span>(curhash)) &#123;<br>                    dp[i] = <span class="hljs-built_in">min</span>(dp[i], dp[j<span class="hljs-number">-1</span>]);<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dp[n];<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="实际使用中的一种写法"><a href="#实际使用中的一种写法" class="headerlink" title="实际使用中的一种写法"></a>实际使用中的一种写法</h2><p>即上文第二道模板题使用的写法。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">using</span> LL = <span class="hljs-type">long</span> <span class="hljs-type">long</span>;<br><span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> LL P = (<span class="hljs-number">1LL</span> &lt;&lt; <span class="hljs-number">31</span>) - <span class="hljs-number">1</span>;<br><span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> LL BASE = <span class="hljs-number">41</span>;<br><br><span class="hljs-function">LL <span class="hljs-title">getHash</span><span class="hljs-params">(<span class="hljs-type">const</span> string &amp;s)</span> </span>&#123;<br>    LL hashValue = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = s.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; --i) &#123;<br>        hashValue = hashValue * BASE + s[i] - <span class="hljs-string">&#x27;a&#x27;</span> + <span class="hljs-number">1</span>;<br>        hashValue = hashValue % P;<br>    &#125;<br>    <span class="hljs-keyword">return</span> hashValue;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>多费点内存，少烧点脑子。</p>
+<h2 id="Rabin-Karp、Trie树以及KMP算法的优劣比对"><a href="#Rabin-Karp、Trie树以及KMP算法的优劣比对" class="headerlink" title="Rabin-Karp、Trie树以及KMP算法的优劣比对"></a>Rabin-Karp、Trie树以及KMP算法的优劣比对</h2><ul>
+<li><p>KMP适合单个模式串与多个串进行匹配，不存在冲突的问题，但是多个模式串与单个目标串匹配时没有优势 </p>
+</li>
+<li><p>Trie树可用于多个模式串与单个目标串匹配，可以给出更丰富的目标串信息（比如经典的路由解析算法可以采用Trie树进行）从而实现诸如前缀匹配、范围查找等方法，同时如果数据集是动态数据集，Trie树的插入操作也足够友好，同样不存在冲突问题具有稳定的复杂度。但缺点是占用内存较大（也存在压缩的算法）写起来比较复杂，工程实现上缺少轮子可以直接用，而且对于不同的编码诸如unicode编码还需要更多地考虑，实际工程中很少使用</p>
+</li>
+<li><p>本文介绍的Rabin-Karp算法不仅可以匹配多个串，相比于单纯的hash好处在于可以直接逐个单词匹配，和Trie树比起来内存占用少（因为无需为每个字典字符开辟指针节点，直接用long long或者int都能解决），时间复杂度相仿，但是存在着哈希冲突的问题。这种时候多采用几个模数就行了，在工程上是完全可以接受的，于是hash类的算法在工程中的应用更加广泛</p>
+</li>
+</ul>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/01/19/Rabin-Krap%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BC%96%E7%A0%81/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;01&#x2F;19&#x2F;Rabin-Krap%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BC%96%E7%A0%81&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;01&#x2F;19&#x2F;Rabin-Krap%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%BC%96%E7%A0%81&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/KMP/" rel="tag">KMP</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Rabin-Karp/" rel="tag">Rabin-Karp</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/STL%E5%AE%B9%E5%99%A8/" rel="tag">STL容器</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" rel="tag">哈希算法</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="tag">数据结构与算法</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1647310810025"></script>
+
+
+	<script async src="/js/search.js?v=1647310810025"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

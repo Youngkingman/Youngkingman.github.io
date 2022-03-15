@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>Stability Theorems for Non-autonomous Systems - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Stability Theorems for Non-autonomous SystemsComparison FunctionsDefinition of class $\mathcal{K}$ functionsA continuous function $\alpha:[0,a)\to[0,\infty)$ is said to belong to class $\mathcal{K}$ i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stability Theorems for Non-autonomous Systems">
+<meta property="og:url" content="https://kimanyang.xyz/2022/01/01/Stability%20Theorems%20for%20Non-autonomous%20Systems/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="Stability Theorems for Non-autonomous SystemsComparison FunctionsDefinition of class $\mathcal{K}$ functionsA continuous function $\alpha:[0,a)\to[0,\infty)$ is said to belong to class $\mathcal{K}$ i">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-01T03:29:01.000Z">
+<meta property="article:modified_time" content="2022-03-10T15:30:36.647Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="非线性控制">
+<meta property="article:tag" content="非自治系统">
+<meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1647310810032">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1647310810032">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1647310810032">
+    <link rel="stylesheet" href="/css/style.css?v=1647310810032">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1647310810032">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>27</div>
+        <div><span>标签</span>54</div>
+        <div><span>分类</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">5</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 12px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 18px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/Javascript/" style="font-size: 12px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 12px;">STL容器</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 14px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 12px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 12px;">动态规划</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 10px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 14px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 16px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 12px;">编译原理</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 12px;">自适应控制</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 16px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 75%;"> 
+              <img data-src="/cover/yuanxiangcover14.jpg" data-sizes="auto" alt="Stability Theorems for Non-autonomous Systems" class="lazyload">
+              <h1>Stability Theorems for Non-autonomous Systems</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年01月01日</a>
+</div>
+
+      
+
+      <h1 id="Stability-Theorems-for-Non-autonomous-Systems"><a href="#Stability-Theorems-for-Non-autonomous-Systems" class="headerlink" title="Stability Theorems for Non-autonomous Systems"></a>Stability Theorems for Non-autonomous Systems</h1><h2 id="Comparison-Functions"><a href="#Comparison-Functions" class="headerlink" title="Comparison Functions"></a>Comparison Functions</h2><h4 id="Definition-of-class-mathcal-K-functions"><a href="#Definition-of-class-mathcal-K-functions" class="headerlink" title="Definition of class $\mathcal{K}$ functions"></a>Definition of class $\mathcal{K}$ functions</h4><p>A continuous function $\alpha:[0,a)\to[0,\infty)$ is said to belong to <em>class $\mathcal{K}$</em> if  it is strictly increasing and $\alpha(0)&#x3D;0$. It is of class $\mathcal{K}_\infty$ if $a&#x3D;\infty$ and $\alpha(r)\to\infty$ as $r\to\infty$</p>
+<h4 id="Definition-of-class-mathcal-KL-functions"><a href="#Definition-of-class-mathcal-KL-functions" class="headerlink" title="Definition of class $\mathcal{KL}$ functions"></a>Definition of class $\mathcal{KL}$ functions</h4><p>A continuous function $\beta:[0,a)\times[0,\infty)\to[0,\infty)$ is said to belong to class $\mathcal{KL}$ if, for each fixed $t$, the mapping $\beta(r,t)$ belong to class $K$ with respect to $r$ and, for each fixed $r$, the mapping $\beta(r,t)$ is decreasing with respect to $t$ and $\beta(r,t)\to0$ as $t\to\infty$.</p>
+<h4 id="examples"><a href="#examples" class="headerlink" title="examples:"></a>examples:</h4><ul>
+<li>$\alpha(r)&#x3D;\arctan(r)$, class $\mathcal{K}$ but not class $\mathcal{K}_\infty$</li>
+<li>$\alpha(r)&#x3D;r^c,c\gt0$, class $\mathcal{K}_\infty$</li>
+<li>$\alpha(r)&#x3D;\min(r,r^2)$, class $\mathcal{K}_\infty$</li>
+<li>$\beta(r,t)&#x3D;r^2e^{-t}$, class $\mathcal{KL}$</li>
+<li>$\beta(r,t)&#x3D;\frac{r}{rt+1}$, $\frac{\partial\beta}{\partial r}\gt0$, class $\mathcal{KL}$.</li>
+</ul>
+<h2 id="Lemma-Properties"><a href="#Lemma-Properties" class="headerlink" title="Lemma(Properties)"></a>Lemma(Properties)</h2><p>Let $\alpha_1,\alpha_2\in\mathcal{K}$ on $[0,a),\alpha_3,\alpha_4\in\mathcal{K}_\infty$ and $\beta\in\mathcal{KL}$ and $\alpha_i^{-1}$ denotes the inverse of $\alpha_i$:</p>
+<ol>
+<li>$\alpha_1^{-1}$ is defined on $[0,\alpha_1(a))$ and belongs to $\mathcal{K}$</li>
+<li>$\alpha_3^{-1}$ is defined on $[0,\infty)$ and belongs to class $\mathcal{K}_\infty$</li>
+<li>$\alpha_1\circ\alpha_2$ belongs to class $\mathcal{K}$</li>
+<li>$\alpha_3\circ\alpha_4$ belongs to class $\mathcal{K}_\infty$</li>
+<li>$\sigma(r,t)&#x3D;\alpha_1(\beta(\alpha_2(r),t))$ belongs to class $\mathcal{KL}$</li>
+</ol>
+<h2 id="Lemma"><a href="#Lemma" class="headerlink" title="Lemma"></a>Lemma</h2><p>Let $V:D\to\mathbb{R}$ be a continuous positive definite function defined on a domain $D\subset\mathbb{R}^n$ that contains the origin. Let $B_r\subset D$ for some $r\gt0$. Then there exist $\alpha_1,\alpha_2\in\mathcal{K}$ defined on $[0,a]$ such that:<br>$$<br>\alpha_1(\Vert x\Vert)\le V(x)\le \alpha_2(\Vert x\Vert),\forall x\in B_r<br>\notag<br>$$<br>If $D&#x3D;\mathbb{R}^n$, $\alpha_1$ and $\alpha_2$ are defined on $[0,\infty)$. Moreover, if $V(x)$ is radially unbounded, then $\alpha_1,\alpha_2\in\mathcal{K}_\infty$.</p>
+<h4 id="example"><a href="#example" class="headerlink" title="example:"></a>example:</h4><p>Consider a quadratic positive definite function:<br>$$<br>V(x)&#x3D;x^TPx<br>\notag<br>$$<br>We know that:<br>$$<br>\lambda_\min(P)\Vert x\Vert_2^2\le x^TPx\le\lambda_\max(P)\Vert x\Vert_2^2<br>\notag<br>$$<br>and so we can define $\alpha_1(r)&#x3D;\lambda_\min(P)r^2$ and $\alpha_2(r)&#x3D;\lambda_\max(P)r^2$.</p>
+<h2 id="Non-autonomous-Systems"><a href="#Non-autonomous-Systems" class="headerlink" title="Non-autonomous Systems"></a>Non-autonomous Systems</h2><p>$$<br>\dot{x}&#x3D;f(t,x)\notag<br>$$</p>
+<p>$f(t,x)$ is piecewise continuous in $t$ and locally Lipschitz in $x$ for all $t\ge0$ and all $x\in D,(0\in D)$. The origin is an equilibrium point at $t&#x3D;0$ if<br>$$<br>f(t,0)&#x3D;0,\forall t\ge0<br>\notag<br>$$</p>
+<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition:"></a>Definition:</h3><p>The equilibrium point $x&#x3D;0$ of the non-autonomous system is:</p>
+<ul>
+<li><p>Stable: If $\forall\epsilon\gt0,\exist\delta&#x3D;\delta(\epsilon,t_0)\gt0$ such that $\Vert x(t_0)\Vert\lt\delta\implies\Vert x(t)\Vert\lt\epsilon$ stands $\forall t\ge t_0\ge0$</p>
+</li>
+<li><p>Uniformly Stable: stable and $\delta$ is independent of $t_0$</p>
+</li>
+<li><p>Asymptotically Stable: stable and $\exist c&#x3D; c(t_0)$ such that $x(t)\to0$ as $t\to\infty$ , $\forall\Vert x(t_0)\Vert\lt c$</p>
+</li>
+<li><p>Uniformly Asymptotically Stable: if $c$ is independent of $t_0$ and the convergence is uniformly in $t_0$, that is:<br>$$<br>\forall\eta\gt0\exist T&#x3D;T(\eta)\gt0:\Vert x(t)\Vert\lt\eta,\forall t\ge t_0+\tau(\eta),\forall\Vert x(t_0)\Vert\lt c<br>\notag<br>$$</p>
+</li>
+<li><p>Globally Uniformly Asymptotically Stable: if $\delta(\epsilon)$ can be chosen to satisfies $\lim_{\epsilon\to\infty}&#x3D;\infty$ and :<br>$$<br>\forall(\eta,c)\exist T&#x3D;T(\eta,c)\gt0:\Vert x(t)\Vert\lt\eta,\forall t\ge t_0+T(\eta,c),\forall\Vert x(t_0)\Vert\lt c<br>\notag<br>$$</p>
+</li>
+</ul>
+<p>It’s easier to define uniform stability and uniform asymptotic stability using comparison functions:</p>
+<ul>
+<li><p>$x&#x3D;0$ is uniformly stable if there exists a class-$\mathcal{K}$ function $\alpha(\cdot)$ and a constant $c\gt0$ such that<br>$$<br>\vert x(t)\vert\le\alpha(\vert x(t_0)\vert)\notag<br>$$<br>for all $t\ge t_0$ and for every initial condition such that $\vert x(t_0)\vert\le c$</p>
+</li>
+<li><p>uniformly asymptotically stable: if there exists a class $\mathcal{KL}\beta(\cdot,\cdot)$ such that:<br>$$<br>\vert x(t)\vert\le\beta(\vert x(t_0)\vert,t-t_0)\notag<br>$$<br>for all $t\ge t_0$ and for every initial condition such that $\vert x(t_0)\vert\le c$</p>
+</li>
+<li><p>globally uniformly asymptotically table: if $c&#x3D;\infty$</p>
+</li>
+<li><p>uniformly exponentially stable: if $\beta(r,s)&#x3D;kre^{-\lambda s}$ for some $k,\lambda\gt0$:<br>$$<br>\vert x(t)\vert\le k\vert x(t_0)\vert e^{-\lambda(t-t_0)}\notag<br>$$<br>for all $t\ge t_0$ and for every initial condition such that $\vert x(t_0)\vert\le c$.</p>
+</li>
+</ul>
+<h4 id="example-1"><a href="#example-1" class="headerlink" title="example:"></a>example:</h4><p>Consider a nonlinear system:<br>$$<br>\dot{x}&#x3D;(6t\sin t-2t)x<br>\notag<br>$$<br>Its solution is:<br>$$<br>\begin{aligned}<br>x(t) &amp;&#x3D; x(t_0)exp\left{\int_{t_0}^t(6\tau\sin\tau-2\tau)d\tau \right}\<br>&amp;&#x3D;x(t_0)exp\left{6\sin t-6t\cos t-t^2-6\sin t_0+6t_0\cos t_0-t_0^2 \right}<br>\end{aligned}<br>\notag<br>$$<br>Note $b\sin t-6t\cos t-t^2\le6+6t-t^2\le15$</p>
+<p>We have:<br>$$<br>\Vert x(t)\Vert\le\Vert x(t_0)\Vert\cdot \exp\left{<br>15-6\sin t_0+6t_0\cos t_0-t_0^2<br>\right}\triangleq c(t_0)\cdot\Vert x(t_0)\Vert<br>\notag<br>$$<br>For any $\epsilon\gt0$, choose $\delta(\epsilon,t_0)&#x3D;\frac{\epsilon}{c(t_0)}$. Then we obtain:<br>$$<br>\Vert x(t)\Vert\le c(t_0)\cdot\Vert x(t_0)\Vert\le c(t_0)\cdot\frac{\epsilon}{c(t_0)}&#x3D;\epsilon<br>\notag<br>$$<br>which implies that the origin is stable. We study the sensitivity of the system solutions due to the changes in $t_0$. Let $t_0&#x3D;2k\pi$. We examine $x(t)$ at $t&#x3D;t_0+\pi&#x3D;(2k+1)\pi$.<br>$$<br>\begin{aligned}<br>x(t_0+\pi)&#x3D;x(t_0)\exp\left{(4k+1)(6-\pi)\pi \right}<br>\end{aligned}<br>\notag<br>$$<br>Thus we have:<br>$$<br>\frac{x(t_0+\pi)}{x(t_0)}&#x3D;\exp\left{(4k+1)(6-\pi)\pi \right}\to\infty,as\ k\to\infty<br>\notag<br>$$<br>Therefore, given any $\epsilon\gt0$, there is no $\delta(\epsilon)$ independent of $t_0$ that could satisfy the uniform stability definition.</p>
+<h4 id="example-2"><a href="#example-2" class="headerlink" title="example:"></a>example:</h4><p>consider the following system, defined for $t\gt-1$:<br>$$<br>\dot{x}&#x3D;\frac{-x}{1+t}<br>\notag<br>$$<br>Its solution is $x(t)&#x3D;\frac{1+t_0}{1+t}x(t_0)$. Because $\vert x(t)\vert\le\vert x(t_0)\vert\implies$ the origin is uniformly stable with $\alpha(r)&#x3D;r$.</p>
+<p>The origin is also asymptotically stable, but not uniformly asymptotically stable, because the convergence rate depends on $t_0$.</p>
+<h3 id="Time-Dependent-Positive-Definite-Functions"><a href="#Time-Dependent-Positive-Definite-Functions" class="headerlink" title="Time-Dependent Positive Definite Functions"></a>Time-Dependent Positive Definite Functions</h3><h4 id="Definition-1"><a href="#Definition-1" class="headerlink" title="Definition:"></a>Definition:</h4><ul>
+<li>$V(t,x)$ is said to be <em>positive semidefinite</em> if $V(t,x)\ge0,V(t,0)&#x3D;0$</li>
+<li>$V(t,x)$ is said to be <em>positive definite</em> if $V(t,x)\ge W_1(x)$, for some positive definite function $W_1(x)$.</li>
+<li>$V(t,x)$ is said to be <em>decrescent</em> if $V(t,x)\le W_2(x)$, for some positive definite function $W_2(x)$.</li>
+<li>$V(t,x)$ is r<em>adially unbounded</em> if $V(t,x)\to\infty$ as $\vert x\vert\to\infty$</li>
+</ul>
+<h4 id="examples-1"><a href="#examples-1" class="headerlink" title="examples:"></a>examples:</h4><p>Let $x&#x3D;\begin{bmatrix}x_1 \ x_2\end{bmatrix}$</p>
+<ul>
+<li>$V(t,x)&#x3D;(1+t^2)(x_1^2+x_2^2)$. Find $W_1(x)&#x3D;x_1^2+x_2^2$</li>
+<li>$V(t,x)&#x3D;(1+\sin^2t)(x_1^2+x_2^2)$. Find $W_1(x)&#x3D;x_1^2+x_2^2$ and $W_2(x)&#x3D;2(x_1^2+x_2^2)$</li>
+<li>$V(t,x)&#x3D;\frac{1+t^2}{2+t^2}(x_1^2+x_2^2)$. Find $W_1(x)&#x3D;\frac{1}{2}(x_1^2+x_2^2)$ and $W_2(x)&#x3D;x_1^2+x_2^2$</li>
+</ul>
+<h3 id="Theorem"><a href="#Theorem" class="headerlink" title="Theorem"></a>Theorem</h3><h5 id="Lyapunov-Stability-for-Non-autonomous-System"><a href="#Lyapunov-Stability-for-Non-autonomous-System" class="headerlink" title="Lyapunov Stability for Non-autonomous System"></a>Lyapunov Stability for Non-autonomous System</h5><p>Let the origin $x&#x3D;0$ be an equilibrium point of $\dot{x}&#x3D;f(t,x)$ and $D\subset R^n$ be a domain containing $x&#x3D;0$. Suppose $f(t,x)$ is piecewise continuous in $t$ and locally Lipschitz in $x$ for all $t\ge0$ and $x\in D$. Let $V(t,x)$ be a continuously differentiable function such that:<br>$$<br>\begin{aligned}<br>W_1(x)\le V(t,x)\le W_2(x)\<br>\dot{V}&#x3D;\frac{\partial V}{\partial t}+\frac{\partial V}{\partial x}f(t,x)\le0<br>\end{aligned}<br>\notag<br>$$<br>for all $t\ge0$ and $x\in D$, where $W_1(x)$ and $W_2(x)$ are continuous positive definite functions on $D$. Then, the origin is uniformly stable.</p>
+<h5 id="Further-theorem"><a href="#Further-theorem" class="headerlink" title="Further theorem"></a>Further theorem</h5><p>Suppose the assumptions of the previous theorem are satisfied with:<br>$$<br>\dot{V}&#x3D;\frac{\partial V}{\partial t}+\frac{\partial V}{\partial x}f(t,x)\le-W_3(x)<br>\notag<br>$$<br>for all $t\ge0$ and $x\in D$, where $W_3(x)$ is a continuous positive definite function on $D$. Then, the origin is <em>uniformly asymptotically stable</em>. Moreover, if $r$ and $c$ are chosen such that $B_r&#x3D;{\Vert x\Vert\le r}\subset D$ and $c\lt\min_{\Vert x\Vert&#x3D;r}W_1(x)$, then every trajectory starting in ${W_2(x)\le c}$ satisfies<br>$$<br>\Vert x(t)\Vert\le\beta(\Vert x(t_0)\Vert,t-t_0),\forall t\ge t_0\ge0<br>\notag<br>$$<br>for some class $\mathcal{KL}$ function $\beta$. Finally, if $D&#x3D;R^n$ and $W_1(x)$ is radially unbounded, then the origin is <em>globally uniformly asymptotically stable</em>.</p>
+<h4 id="example-3"><a href="#example-3" class="headerlink" title="example:"></a>example:</h4><p>Consider the following nonlinear system:<br>$$<br>\begin{aligned}<br>\dot{x}_1 &amp;&#x3D; -x_1-e^{-2t}x_2 \<br>\dot{x}_2 &amp;&#x3D; x_1-x_2<br>\end{aligned}<br>\notag<br>$$<br>We consider the following Lyapunov function candidate(“你们别问我这是怎么来的，反正就这样”——梅老师原话)：<br>$$<br>V(t,x)&#x3D;x_1^2+(1+e^{-2t})x_2^2<br>\notag<br>$$<br>Since:<br>$$<br>\Vert x\Vert^2&#x3D;W_1(x)&#x3D;x_1^2+x_2^2\le V(t,x)\le x_1^2+2x_2^2&#x3D;W_2(x)\le2\Vert x\Vert^2<br>\notag<br>$$<br>Hence, $V(t,x)$ is positive definite, decrescent, and radially unbounded. </p>
+<p>The derivative of $V(t,x)$ along the system trajectories is given by:<br>$$<br>\begin{aligned}<br>\dot{V}(t,x) &amp;&#x3D; \frac{\partial V}{\partial t}+\frac{\partial V}{\partial x}\cdot f(t,x) \<br>&amp;&#x3D; -2e^{-2t}+2x_1\dot{x}_1+2(1+e^{-2t})\dot{x}_2x_2 \<br>&amp;&#x3D; -2x_1^2+2x_1x_2-2x_2^2-2e^{-2t}(x_2^2+x_1x_2-x_2x_1+x_2^2) \<br>&amp;&#x3D; -2x_1^2+2x_1x_2-2x_2^2-4e^{-2t}x^2_2 \<br>&amp;\le-(x_1^2+x_2^2) \triangleq-W_3(x)&#x3D;-\Vert x\Vert^2<br>\end{aligned}<br>\notag<br>$$<br>Hence the origin is globally uniformly asymptotically stable (exponentially stable)</p>
+<h2 id="Linear-Time-Varying-Systems"><a href="#Linear-Time-Varying-Systems" class="headerlink" title="Linear Time-Varying Systems"></a>Linear Time-Varying Systems</h2><p>$$<br>\label{LTV}<br>\dot{x}(t) &#x3D; A(t)x(t)<br>$$</p>
+<p>the solution can be represented as: $x(t)&#x3D;\Phi(t,t_0)x(t_0)$</p>
+<h3 id="Theorem-1"><a href="#Theorem-1" class="headerlink" title="Theorem"></a>Theorem</h3><p>The equilibrium point $x&#x3D;0$ of the linear system $\dot{x}(t)&#x3D;A(t)x(t)$ is globally uniformly asymptotically stable (GUAS) if and only if:<br>$$<br>\Vert \Phi(t,t_0)\Vert\le ke^{-\lambda(t-t_0)},\forall t\ge t_0\ge0<br>\notag<br>$$<br>for some positive constants $k$ and $\lambda$.</p>
+<p>Remark that:</p>
+<ol>
+<li>for linear systems GUAS$\Leftrightarrow$Exponential stability</li>
+<li>for linear time-varying system, GUAS cannot be characterized by the location of the eigenvalues of $A$.</li>
+</ol>
+<h4 id="example-4"><a href="#example-4" class="headerlink" title="example:"></a>example:</h4><p>$$<br>A(t)&#x3D;\begin{bmatrix}-1+1.5\cos^2t &amp; 1-1.5\sin t\cos t \<br>1-1.5\sin t\cos t &amp; -1+1.5\sin^2t\end{bmatrix}<br>\notag<br>$$</p>
+<p>For each $t$, $\lambda_i(A(t))&#x3D;-0.25\pm 0.25\sqrt{7}j$. Yet the origin is unstable. $\Phi(t,0)$ is given by:<br>$$<br>\Phi(t,0)&#x3D;\begin{bmatrix}e^{0.5}\cos t &amp; e^{-t}\sin t \<br>-e^{0.5t}\sin t &amp; e^{-t}\cos t \end{bmatrix}<br>\notag<br>$$</p>
+<h4 id="Corollary"><a href="#Corollary" class="headerlink" title="Corollary:"></a>Corollary:</h4><p>The system $(\ref{LTV})$ is uniformly asymptotically stable if there exists $\lambda\gt0$ such that:<br>$$<br>\lambda_i(A(t)+A^T(t))\le-\lambda,\forall t\ge0,i&#x3D;1,…,n.<br>\notag<br>$$<br><strong>Proof:</strong> Let $V(t,x) &#x3D; x^Tx$, then:<br>$$<br>\begin{aligned}<br>\dot{V}&amp;&#x3D;\dot{x}^Tx+x^T\dot{x} \<br>&amp;&#x3D;(A(t)x)^Tx+x^TA(t)x \<br>&amp;&#x3D; x^T(A^T(t)+A(t))x\le-\lambda x^Tx&#x3D;-V<br>\end{aligned}<br>\notag<br>$$</p>
+<h4 id="Corollary-1"><a href="#Corollary-1" class="headerlink" title="Corollary:"></a>Corollary:</h4><p>Assume that there exists $P(t)\in\mathbb{R}^{n\times n}$ which is continuously differentiable and symmetric, and there exist $0\lt c_1\lt c_2\lt\infty$ such that:<br>$$<br>c_1I\le P(t)\le c_2I,\forall t\ge0<br>\notag<br>$$<br>Further assume for some $Q(t)\in\mathbb{R}^{n\times n}$, continuous and symmetric such that:<br>$$<br>Q(t)\ge c_3I\gt0,\forall t\ge0 \<br>\dot{P}(t)+P(t)A(t)+A(t)^TP(t)&#x3D;-Q(t)<br>\notag<br>$$<br>Then the system $(\ref{LTV})$ is globally uniformly asymptotically stable.</p>
+<p><strong>Proof:</strong> Let $V(t,x)&#x3D;x^TP(t)x\implies c_1x^Tx\le V(t,x)\le c_2x^Tx\implies V(t,x)$ is positive definite and decrescent. And :<br>$$<br>\begin{aligned}<br>\dot{V}&amp;&#x3D;\dot{x}^TP(t)x+x^TP(t)\dot{x}+x^T\dot{P}(t)x \<br>&amp;&#x3D;-x^TQ(t)x\le -c_3x^Tx<br>\end{aligned}<br>\notag<br>\notag<br>$$</p>
+<h4 id="Corollary-2"><a href="#Corollary-2" class="headerlink" title="Corollary:"></a>Corollary:</h4><p>Assume that at any time $t\ge0$, the eigenvalues of $A(t)$ all have negative real parts. In addition, if $A(t)$ is bounded, and $\int_0^{\infty}A^T(\tau)A(\tau)d\tau\lt\infty$, then $(\ref{LTV})$ is globally uniformly asymptotically stable.</p>
+<h2 id="Barbalat’s-Lemma-very-important"><a href="#Barbalat’s-Lemma-very-important" class="headerlink" title="Barbalat’s Lemma(very important)"></a>Barbalat’s Lemma(very important)</h2><p>How about the asymptotically stability when $\dot{V}(t,x)$ is only negative semi-definite? For autonomous system, LaSalle’s invariance theorem can be used. But it is not valid for non-autonomous systems.</p>
+<p><em>Barbalat’s Lemma</em> is a purely mathematical result concerning the asymptotically properties of functions and their derivatives.</p>
+<h5 id="an-example-can-convergence-of-f-implies-dot-f-to0"><a href="#an-example-can-convergence-of-f-implies-dot-f-to0" class="headerlink" title="an example: can convergence of $f \implies\dot{f}\to0$ ?"></a>an example: can convergence of $f \implies\dot{f}\to0$ ?</h5><p>$$<br>f(t)&#x3D;e^{-t}\sin(e^{2t})\<br>\dot{f}&#x3D;-e^{-t}\sin e^{2t}+\cos e^{2t}\cdot2e^{t}<br>\notag<br>$$</p>
+<h3 id="Definition-Uniform-Continuity-一致连续"><a href="#Definition-Uniform-Continuity-一致连续" class="headerlink" title="Definition: Uniform Continuity(一致连续)"></a>Definition: Uniform Continuity(一致连续)</h3><p>A function $f:\mathbb{R}\to\mathbb{R}$ is said to be uniformly continuous if:<br>$$<br>\forall\epsilon\gt0,\exist\delta(\epsilon)\gt0,\forall\vert t_2-t_1\vert\le\delta<br>\implies\vert f(t_2)-f(t_1)\vert\le\epsilon<br>\notag<br>$$</p>
+<h4 id="Lemma-Barbalat"><a href="#Lemma-Barbalat" class="headerlink" title="Lemma(Barbalat):"></a>Lemma(Barbalat):</h4><p>If the differentiable function:</p>
+<ol>
+<li>$f(t)$ has a finite limit as $t\to\infty$.</li>
+<li>$\dot{f}(t)$ is uniformly continuous. ($\ddot{f}$ is bounded)</li>
+</ol>
+<p> Then $\lim \limits_{t\to\infty}\dot{f}(t)&#x3D;0$. </p>
+<p>Note: A sufficient condition for a differentiable function to be uniformly continuous is that its derivative be bounded.</p>
+<h4 id="Lemma-“Lyapunov-Like”"><a href="#Lemma-“Lyapunov-Like”" class="headerlink" title="Lemma(“Lyapunov-Like”):"></a>Lemma(“Lyapunov-Like”):</h4><p>If a scalar function $V(t,x)$ satisfies the following conditions:</p>
+<ul>
+<li>$V(t,x)$ is lower bounded</li>
+<li>$\dot{V}(t,x)$ is negative semidefinite ($\dot{V}\le0$)</li>
+<li>$\dot{V}(t,x)$ is uniformly continuous ($\ddot{V}$ is bounded)</li>
+</ul>
+<p>then $\lim\limits_{t\to\infty}\dot{V}(t,x)&#x3D;0$.</p>
+<h5 id="example-5"><a href="#example-5" class="headerlink" title="example:"></a>example:</h5><p>In adaptive control, we will often encounter the following non-autonomous system:<br>$$<br>\begin{aligned}<br>\dot{e} &amp;&#x3D;-e+\phi(t)\tilde{\theta} \<br>\dot{\tilde{\theta}} &amp;&#x3D; -\phi(t)e<br>\end{aligned}<br>\notag<br>$$<br>where $\phi(t)$ is a bounded continuous function, $e$ and $\tilde{\theta}$ are two states of the closed-loop system, representing the tracking error and parameter error.</p>
+<p>Consider the quadratic scalar function:<br>$$<br>V&#x3D;\frac{1}{2}e^2+\frac{1}{2}\tilde{\theta}^2\ge0<br>\notag<br>$$<br>Its derivative:<br>$$<br>\begin{aligned}<br>\dot{V}&amp;&#x3D;e\dot{e}+\tilde{\theta}\dot{\tilde\theta} \<br>&amp;&#x3D;-e^2+e\phi(t)\tilde\theta-\tilde{\theta}\phi(t)e \<br>&amp;&#x3D;-e^2\le0<br>\end{aligned}<br>\notag<br>$$<br>is negative semi-definite. Check $\ddot{V}&#x3D;-2e(-e+\phi(t)\tilde\theta)$.</p>
+<p>Note that $\dot{V}\le0$, which implies that $V(t)\le V(0)$. Therefore $e$ and $\tilde{\theta}$ are bounded. With $\phi(t)$ being bounded, we can conclude that $\ddot{V}$ is also bounded. From Barbalat’s Lemma, we can conclude that $\lim\limits_{t\to\infty}\dot{V}(t)&#x3D;0$, that is, $\lim\limits_{t\to\infty}e(t)&#x3D;0$.</p>
+<h3 id="Theorem-La-Salle-Yoshizawa"><a href="#Theorem-La-Salle-Yoshizawa" class="headerlink" title="Theorem(La Salle-Yoshizawa):"></a>Theorem(La Salle-Yoshizawa):</h3><p>Let $x&#x3D;0$ be an equilibrium point of $\dot{x}&#x3D;f(t,x)$ and suppose that $f(t,x)$ is locally Lipschitz in $x$ and uniformly in $t$. Let $V(t,x)$ be a continuously differentiable function such that:<br>$$<br>\alpha_1(\vert x\vert)\le V(t,x)\le\alpha_2(\vert x\vert) \<br>\dot{V}&#x3D;\frac{\partial V}{\partial t}+\frac{\partial V}{\partial x}f(t,x)\le-W(x)\le0<br>\notag<br>$$<br>$\forall t\ge0,x\in\mathbb{R}^n$, where $\alpha_1(\cdot)$ and $\alpha_2(\cdot)$ are class $\mathcal{K}<em>\infty$ functions and $W(x)$ is a <em>continuous function</em>. Then all solutions of $\dot{x}&#x3D;f(t,x)$ satisfy:<br>$$<br>\lim\limits</em>{t\to\infty}W(x(t))&#x3D;0<br>\notag<br>$$<br>In addition, if $W(x)$ is positive definite, $x&#x3D;0$ is globally uniformly asymptotically stable.</p>
+<p><strong>Proof:</strong> </p>
+<p>(Revisit if $f$ has a finite limit, $\dot{f}$ uniformly continuous, then $\dot{f}\to0$</p>
+<p>so if $\int_0^t W(x(\tau))d\tau$ has a finite limit, $W(x(t))$ is uniformly continuous, then ${W}(x(t))\to0$)</p>
+<p>Note, $W(x)\ge0$, so $\int_0^t W(x)$ is monotonous non-decreasing.</p>
+<p>From $\dot{V}\le-W(x(t))$ we know $V(t)-V(0)\le-\int_0^t W(x)$ and thus:<br>$$<br>\int_0^tW(x(\tau))d\tau\le V(0)-V(t)\le V(0)<br>\notag<br>$$<br>so monotonous non-decreasing function has upper bound, thus it has a finite limit.</p>
+<p>Since $\dot{V}\le0$ and $\alpha_1(\Vert x\Vert)\le V(t,x)\le\alpha_2(\Vert x\Vert)\implies V$ is bounded, $\Vert x\Vert\le\alpha_1^{-1}$ is bounded. Assume that $\Vert x\Vert\le R\triangleq\alpha_1^{-1}(V(0))$. Note that a continuous function is uniformly continuous on a closed set. $W(x)$ is uniformly continuous in $x$. For all $t_2\gt t_1\gt0$, we have:<br>$$<br>\vert x(t_2)-x(t_1)\vert&#x3D;\bigg|\int_{t_1}^{t_2}f(\tau,x(\tau))d\tau\bigg|\le L_R\int_{t_1}^{t_2}\Vert x(t)\Vert d\tau\le L_R\cdot R\vert t_2-t_1\vert<br>\notag<br>$$<br>Then $x(t)$ is uniformly continuous in $t$, and thus $W(x(t))$ is also uniformly continuous in $t$. From Barbalat’s Lemma, $\lim\limits_{t\to\infty}W(x(t))&#x3D;0$.</p>
+<h3 id="Theorem-L-p-norm"><a href="#Theorem-L-p-norm" class="headerlink" title="Theorem($L_p$ norm)"></a>Theorem($L_p$ norm)</h3><p>For function of time, the $L_p$ norm is given by:<br>$$<br>\label{lpnorm}<br>\Vert x\Vert_p&#x3D;\left(\int_0^\infty\Vert x(\tau)\Vert^pd\tau \right)^{\frac{1}{p}}<br>$$<br>for $p\in[1,\infty)$, while:<br>$$<br>\Vert x\Vert_\infty&#x3D;\sup\limits_{t\ge0}\Vert x(t)\Vert<br>\notag<br>$$<br>We say that $x\in\mathbb{L}_p$ when $\Vert x\Vert_p\lt\infty$. </p>
+<h4 id="Corollary-0-1"><a href="#Corollary-0-1" class="headerlink" title="Corollary 0.1"></a>Corollary 0.1</h4><p>If $x\in\mathbb{L}_2\bigcap\mathbb{L}_\infty$ and $\dot{x}\in\mathbb{L}<em>\infty$, then $\lim\limits</em>{t\to\infty}x(t)&#x3D;0$.</p>
+<p><strong>Proof:</strong> Define:<br>$$<br>f(t)&#x3D;\int_0^t \Vert x(\tau)\Vert^2 d\tau<br>\notag<br>$$<br>Since $x\in\mathbb{L}_2$, we can get $f(t)$ has a finite limit as $t\to\infty$. Furthermore:<br>$$<br>\dot{f}(t)&#x3D;\Vert x\Vert^2,\ddot{f}(t)&#x3D;2x^T(t)\dot{x}(t)<br>\notag<br>$$<br>From the fact that $x,\dot{x}\in\mathbb{L}<em>\infty$, we can get $\ddot{f}(t)\in\mathbb{L}<em>\infty$(bounded), which implies that $\dot{f}$ is uniformly continuous. Therefore from Barbalat’s lemma that $\lim\limits</em>{t\to\infty}\dot{f}(t)&#x3D;0$, that is, $\lim\limits</em>{t\to\infty}x(t)&#x3D;0$.</p>
+<h2 id="Boundedness-and-Ultimate-Boundedness"><a href="#Boundedness-and-Ultimate-Boundedness" class="headerlink" title="Boundedness and Ultimate Boundedness"></a>Boundedness and Ultimate Boundedness</h2><p>The concept of stability in the sense of Lyapunov are formulated with respect to an equilibrium point. Often, systems are designed to operate in the presence of disturbances and other uncertainties.</p>
+<p>Until now we have used Lyapunov theory to study the behavior of the system about the equilibrium point.</p>
+<p>What happens when the system does not have any equilibrium point ?</p>
+<p>We will see that Lyapunov analysis can be used to show boundedness of the solution of the state equation.</p>
+<h4 id="example-6"><a href="#example-6" class="headerlink" title="example:"></a>example:</h4><p>$$<br>\dot{x}&#x3D;-x+\delta\sin t,x(t_0)&#x3D;a,a\gt\delta\gt0<br>\notag<br>$$</p>
+<p>Its solution is given by:<br>$$<br>x(t)&#x3D;e^{-(t-t_0)}x(t_0)+\delta\int_{t_0}^{t}e^{-(t-\tau)}\sin\tau d\tau<br>\notag<br>$$<br>The solution satisfies:<br>$$<br>\begin{aligned}<br>\Vert x(t)\Vert&amp;\le e^{-(t-t_0)}\Vert x(t_0)\Vert+\delta\cdot\int_{t_0}^{t}e^{-(t-\tau)}d\tau \<br>&amp;&#x3D;e^{-(t-t_0)}a+\delta(1-e^{-(t-t_0)}) \<br>&amp;&#x3D;\delta+(a-\delta)e^{-(t-t_0)}\le\delta+a-\delta&#x3D;a<br>\end{aligned}<br>\notag<br>$$<br>which shows that the solution is uniformly bounded. Further, for any number $b\in(\delta,a)$, it can be easily seen that:<br>$$<br>\Vert x(t)\Vert\le b,\forall t\ge t_0+\ln\frac{a-\delta}{b-\delta}\notag<br>$$<br>The bound $b$, which again is independent of $t_0$, gives a better estimate of the solution after a transient period has passed. In this case, the solution is said to be <em>uniformly ultimately bounded</em> and $b$ is called the <em>ultimate bound</em>.</p>
+<p>This can be also done via Lyapunov analysis without the explicit solution of th state equation. </p>
+<p>&#x2F;<em>Todo Here</em>&#x2F;</p>
+<h4 id="Definition-2"><a href="#Definition-2" class="headerlink" title="Definition"></a>Definition</h4><p>The solution of $\dot{x}&#x3D;f(t,x)$ are</p>
+<ul>
+<li>Uniformly Bounded (UB): if there exists a $c\gt0$, independent of $t_0\ge0$ such that:</li>
+</ul>
+<p>$$<br>\forall a\in(0,c)\exist\beta&#x3D;\beta(a)\gt0:\Vert x(t_0)\Vert\le a\implies \Vert x(t)\Vert\le\beta,\forall t\ge t_0\notag<br>$$</p>
+<ul>
+<li><p>Globally Uniformly Bounded (GUB): if $a$ can be arbitrarily large</p>
+</li>
+<li><p>Uniformly Ultimately Bounded (UUB): with ultimate bound $b$, if there exists $b\gt0,c\gt0$(independent of $t_0$) such that:<br>$$<br>\forall a\in(0,c)\exist T&#x3D;T(a,b)\gt0:\Vert x(t_0)\Vert\le a\implies\Vert x(t)\Vert\le b,\forall t\ge t_0+T\notag<br>$$</p>
+</li>
+<li><p>Globally Uniformly Ultimately Bounded (GUUB): if $a$ can be arbitrarily large.</p>
+</li>
+</ul>
+<p><strong>Remark</strong>: For a Lyapunov function candidate $V$, if we have $\beta,C\gt0$ such that:<br>$$<br>\begin{aligned}<br>\dot{V}&amp;\le-\beta V+C&#x3D;-\beta(V-\frac{C}{\beta}) \<br>\implies&amp;e^{\beta t}\dot{V}+e^{\beta t}\beta V\le C\cdot\beta^{\beta t} \<br>\implies&amp;\frac{d}{dt}(e^{\beta t}V(t))\le C\cdot e^{\beta t} \<br>\implies&amp;e^{\beta t}V(t)-e^{\beta t_0}V(t_0)\le C\int_{t_0}^{t}e^{\beta\tau}d\tau \<br>V(t)&amp;\le e^{-\beta(t-t_0)}V(t_0)+\frac{C}{\beta}(1-e^{-\beta(t-t_0)})<br>\end{aligned}<br>\notag<br>$$</p>
+<h2 id="Input-to-state-Stability"><a href="#Input-to-state-Stability" class="headerlink" title="Input-to-state Stability"></a>Input-to-state Stability</h2><p>For a linear time-variant system $\dot{x}&#x3D;Ax&#x3D;Bu$ with $A$ Hurwitz. The solution is given by:<br>$$<br>x(t)&#x3D;e^{A(t-t_0)}x(t_0)+\int_{t_0}^{t}e^{A(t-\tau)}Bu(\tau)d\tau<br>\notag<br>$$<br>Using the bound:<br>$$<br>\Vert e^{A(t-t_0)}\Vert\le ke^{-\lambda(t-t_0)}<br>\notag<br>$$<br>we conclude that:<br>$$<br>\begin{aligned}<br>\Vert x(t)\Vert&amp;\le ke^{-\lambda(t-t_0)}\Vert x(t_0)\Vert+\int_{t_0}^{t}ke^{-\lambda(t-\tau)}\Vert B\Vert\Vert u(\tau)\Vert d\tau \<br>&amp;\le ke^{-\lambda(t-t_0)}\Vert x(t_0)\Vert+\frac{k}{\lambda}(1-e^{-\lambda(t-t_0)})\Vert B\Vert\sup\limits_{t_0\le\tau\le t}\Vert u(\tau)\Vert \<br>&amp;\le ke^{-\lambda(t-t_0)}\Vert x(t_0)\Vert+\frac{k}{\lambda}\Vert B\Vert\sup\limits_{t_0\le\tau\le t}\Vert u(\tau)\Vert<br>\end{aligned}<br>\notag<br>$$<br>And it is GUAS. <em>This doesn’t hold for a general nonlinear system</em></p>
+<h4 id="example-7"><a href="#example-7" class="headerlink" title="example"></a>example</h4><p>$$<br>\dot{x}&#x3D;-3x+(1+2x^2)u<br>\notag<br>$$</p>
+<p>when $u&#x3D;0$, the equilibrium point $x&#x3D;0$ is GAS. Yet, when $x(0)&#x3D;2$ and $u(t)&#x3D;1$, the solution is given by:<br>$$<br>x(t)&#x3D;\frac{3-e^t}{3-2e^t}<br>\notag<br>$$<br>which is unbounded. It even has a finite escape time.</p>
+<h3 id="Definition-of-Input-to-State-Stability-ISS"><a href="#Definition-of-Input-to-State-Stability-ISS" class="headerlink" title="Definition of Input to State Stability(ISS)"></a>Definition of Input to State Stability(ISS)</h3><p>The system is $\dot{x}&#x3D;f(t,x,u)$ is said to be input-to-state stable if there exist $\beta\in\mathcal{KL}$ and $\gamma\in\mathcal{K}$ such that for any initial state $x(t_0)$ and any bounded input $u(t)$, the solution $x(t)$ exists for all $t\ge t_0$ and satisties:<br>$$<br>\Vert x(t)\Vert\le\beta(\Vert x(t_0)\Vert,t-t_0)+\gamma(\sup\limits_{t_0\le\tau\le t}\Vert u(\tau)\Vert)<br>\notag<br>$$</p>
+<h4 id="Remarks"><a href="#Remarks" class="headerlink" title="Remarks:"></a>Remarks:</h4><ol>
+<li>For any bounded input $u(t)$, the state $x(t)$ will be bounded</li>
+<li>As $t$ increases, the state $x(t)$ will be ultimately bounded by a class $\mathcal{K}$ function of $\sup\limits_{t\ge t_0}\Vert u(t)\Vert$</li>
+<li>If $u(t)\to0$ as $t\to\infty$ then $x(t)\to0$ as $t\to\infty$</li>
+<li>Since for $u(t)&#x3D;0,\Vert x(t)\Vert\le\beta(\Vert x(t_0)\Vert,t-t_0)\Leftrightarrow x&#x3D;0$ of the unforced system is GUAS.</li>
+</ol>
+<h4 id="Theorem-2"><a href="#Theorem-2" class="headerlink" title="Theorem"></a>Theorem</h4><p>Let $V:[0,\infty)\times\mathbb{R}^n\to\mathbb{R}$ be a $C^1$ function such that:<br>$$<br>\alpha_1(\Vert x\Vert)\le V(t,x)\le\alpha_2(\Vert x\Vert) \<br>\frac{\partial V}{\partial t}+\frac{\partial V}{\partial x}f(t,x,u)\le-W_3(x),\Vert x\Vert\ge\rho(u)\gt0<br>\notag<br>$$<br>$\forall(t,x,u)\in[0,\infty)\times\mathbb{R}^n\times\mathbb{R}^n,\alpha_1,\alpha_2\in{\mathcal{K}_\infty},\rho(u)\in\mathcal{K}$. $W_3(x)\gt0$ and $C^0$. Then the system $\dot{x}&#x3D;f(t,x,u)$ is ISS with $\gamma&#x3D;\alpha_1^{-1}\circ\alpha_2\circ\rho$.</p>
+<h4 id="Lemma-1"><a href="#Lemma-1" class="headerlink" title="Lemma"></a>Lemma</h4><p>Suppose that $f(t,x,u)$ is $C^1$ and globally Lipschitz in $(x,u)$, uniformly in $t$. If the unforced system has a globally exponentially stable equilibrium point at $x&#x3D;0$, then the system $\dot{x}&#x3D;f(t,x,u)$ is ISS.</p>
+<h2 id="Cascade-System"><a href="#Cascade-System" class="headerlink" title="Cascade System"></a>Cascade System</h2>
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/01/01/Stability%20Theorems%20for%20Non-autonomous%20Systems/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;01&#x2F;01&#x2F;Stability%20Theorems%20for%20Non-autonomous%20Systems&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;01&#x2F;01&#x2F;Stability%20Theorems%20for%20Non-autonomous%20Systems&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%8E%A7%E5%88%B6%E7%90%86%E8%AE%BA/">控制理论</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" rel="tag">非线性控制</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" rel="tag">非自治系统</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1647310810036"></script>
+
+
+	<script async src="/js/search.js?v=1647310810036"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

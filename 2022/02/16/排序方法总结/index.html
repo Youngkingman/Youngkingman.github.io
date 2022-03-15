@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>排序方法总结 - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="排序方法总结常用的排序总结   算法 平均时间复杂度 最差时间复杂度 空间复杂度 稳定性    插入排序 $O(n^2)$ $O(n^2)$ $O(1)$ 是   选择排序 $O(n^2)$ $O(n^2)$ $O(1)$ 是   冒泡排序 $O(n^2)$ $O(n^2)$ $O(1)$ 是   快速排序 $O(n\log n)$ $O(n^2)$ $O(\log n)$ 否   堆排序 $O(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序方法总结">
+<meta property="og:url" content="https://kimanyang.xyz/2022/02/16/%E6%8E%92%E5%BA%8F%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="排序方法总结常用的排序总结   算法 平均时间复杂度 最差时间复杂度 空间复杂度 稳定性    插入排序 $O(n^2)$ $O(n^2)$ $O(1)$ 是   选择排序 $O(n^2)$ $O(n^2)$ $O(1)$ 是   冒泡排序 $O(n^2)$ $O(n^2)$ $O(1)$ 是   快速排序 $O(n\log n)$ $O(n^2)$ $O(\log n)$ 否   堆排序 $O(">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-16T08:16:24.000Z">
+<meta property="article:modified_time" content="2022-03-10T15:29:17.417Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="快速排序">
+<meta property="article:tag" content="堆排序">
+<meta property="article:tag" content="归并排序">
+<meta property="article:tag" content="二分法">
+<meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1647310810002">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1647310810002">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1647310810002">
+    <link rel="stylesheet" href="/css/style.css?v=1647310810002">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1647310810002">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>27</div>
+        <div><span>标签</span>54</div>
+        <div><span>分类</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">5</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 12px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 18px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/Javascript/" style="font-size: 12px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 12px;">STL容器</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 14px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 12px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 12px;">动态规划</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 10px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 14px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 16px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 12px;">编译原理</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 12px;">自适应控制</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 16px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 70.84745762711864%;"> 
+              <img data-src="/cover/yuanxiangcover7.jpg" data-sizes="auto" alt="排序方法总结" class="lazyload">
+              <h1>排序方法总结</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年02月16日</a>
+</div>
+
+      
+
+      <h1 id="排序方法总结"><a href="#排序方法总结" class="headerlink" title="排序方法总结"></a>排序方法总结</h1><h2 id="常用的排序总结"><a href="#常用的排序总结" class="headerlink" title="常用的排序总结"></a>常用的排序总结</h2><table>
+<thead>
+<tr>
+<th>算法</th>
+<th>平均时间复杂度</th>
+<th>最差时间复杂度</th>
+<th>空间复杂度</th>
+<th>稳定性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>插入排序</td>
+<td>$O(n^2)$</td>
+<td>$O(n^2)$</td>
+<td>$O(1)$</td>
+<td>是</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>$O(n^2)$</td>
+<td>$O(n^2)$</td>
+<td>$O(1)$</td>
+<td>是</td>
+</tr>
+<tr>
+<td>冒泡排序</td>
+<td>$O(n^2)$</td>
+<td>$O(n^2)$</td>
+<td>$O(1)$</td>
+<td>是</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>$O(n\log n)$</td>
+<td>$O(n^2)$</td>
+<td>$O(\log n)$</td>
+<td>否</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>$O(n\log n)$</td>
+<td>$O(n\log n)$</td>
+<td>$O(\log n)$</td>
+<td>是</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>$O(n\log n)$</td>
+<td>$O(n\log n)$</td>
+<td>$O(\log n)$</td>
+<td>是</td>
+</tr>
+</tbody></table>
+<p>桶排序和希尔排序就暂时不考虑了。</p>
+<h2 id="手撕快速排序（Quick-Sort"><a href="#手撕快速排序（Quick-Sort" class="headerlink" title="手撕快速排序（Quick Sort)"></a>手撕快速排序（Quick Sort)</h2><p>采用左闭右开的二分写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-built_in">quickSort</span>(nums,<span class="hljs-number">0</span>,n);<br>        <span class="hljs-keyword">return</span> nums;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(r - l &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;<br>        <span class="hljs-type">int</span> part = <span class="hljs-built_in">partition</span>(nums,l, r);<br>        <span class="hljs-built_in">quickSort</span>(nums,l,part);<br>        <span class="hljs-built_in">quickSort</span>(nums,part, r);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> </span>&#123;<br>        <span class="hljs-type">int</span> midIdx = (r - l)/<span class="hljs-number">2</span> + l;<br>        <span class="hljs-built_in">swap</span>(nums[l],nums[midIdx]);<br>        <span class="hljs-type">int</span> first = l, last = r - <span class="hljs-number">1</span>, mid = nums[l];<br>        <span class="hljs-keyword">while</span>(first &lt; last) &#123;<br>            <span class="hljs-keyword">while</span>(first &lt; last &amp;&amp; nums[last] &gt; mid) last--;<br>            <span class="hljs-keyword">if</span>(first &lt; last) &#123;nums[first] = nums[last];first++;&#125;<br>            <span class="hljs-keyword">while</span>(first &lt; last &amp;&amp; nums[first] &lt; mid) first++;<br>            <span class="hljs-keyword">if</span>(first &lt; last) &#123;nums[last] = nums[first];last--;&#125;<br>        &#125;<br>        nums[first] = mid;<br>        <span class="hljs-keyword">return</span> first;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>这里强调一下取随机中点作为partition还是很有必要的，毕竟给了个专门卡快排的示例</p>
+<h3 id="模板快速选择，"><a href="#模板快速选择，" class="headerlink" title="模板快速选择，"></a>模板快速选择，</h3><p>根据快排原理进行找到第k大的数,采用左开右闭写法</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">findKthLargest</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">quickSelect</span>(nums,<span class="hljs-number">0</span>,nums.<span class="hljs-built_in">size</span>(), k - <span class="hljs-number">1</span>);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">quickSelect</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r, <span class="hljs-type">int</span> idx)</span> </span>&#123;<br>        <span class="hljs-type">int</span> part = <span class="hljs-built_in">partition</span>(nums,l, r);<br>        <span class="hljs-keyword">if</span>(part == idx) &#123;<br>            <span class="hljs-keyword">return</span> nums[part];<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-keyword">if</span>(part &lt; idx) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-built_in">quickSelect</span>(nums,part,r,idx);<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-built_in">quickSelect</span>(nums,l,part,idx);<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partition</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> </span>&#123;<br>        <span class="hljs-type">int</span> midIdx = ((r - l) &gt;&gt; <span class="hljs-number">1</span>) + l;<br>        <span class="hljs-built_in">swap</span>(nums[l],nums[midIdx]);<br>        <span class="hljs-type">int</span> first = l, last = r - <span class="hljs-number">1</span>, mid = nums[l];<br>        <span class="hljs-keyword">while</span>(first &lt; last) &#123;<br>            <span class="hljs-keyword">while</span>(first &lt; last &amp;&amp; nums[last] &lt; mid) last--;<br>            <span class="hljs-keyword">if</span>(first &lt; last) &#123;nums[first] = nums[last];first++;&#125;<br>            <span class="hljs-keyword">while</span>(first &lt; last &amp;&amp; nums[first] &gt; mid) first++;<br>            <span class="hljs-keyword">if</span>(first &lt; last) &#123;nums[last] = nums[first];last--;&#125;<br>        &#125;<br>        nums[first] = mid;<br>        <span class="hljs-keyword">return</span> first;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>附优先队列写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">string <span class="hljs-title">kthLargestNumber</span><span class="hljs-params">(vector&lt;string&gt;&amp; nums, <span class="hljs-type">int</span> k)</span> </span>&#123;<br>        <span class="hljs-keyword">auto</span> cmp = [&amp;](<span class="hljs-type">const</span> string s1, <span class="hljs-type">const</span> string s2)-&gt;<span class="hljs-type">bool</span> &#123;<br>            <span class="hljs-keyword">if</span>(s1.<span class="hljs-built_in">size</span>() &gt; s2.<span class="hljs-built_in">size</span>()) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(s1.<span class="hljs-built_in">size</span>() &lt; s2.<span class="hljs-built_in">size</span>()) &#123;<br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                <span class="hljs-keyword">return</span> s1 &gt; s2;<br>            &#125;<br>        &#125;;<br>        priority_queue&lt;string, vector&lt;string&gt;, <span class="hljs-keyword">decltype</span>(cmp) &gt; <span class="hljs-built_in">pq</span>(cmp);<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; str:nums) &#123;<br>            pq.<span class="hljs-built_in">push</span>(str);<br>            <span class="hljs-keyword">if</span>(pq.<span class="hljs-built_in">size</span>() &gt; k) &#123;pq.<span class="hljs-built_in">pop</span>();&#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> pq.<span class="hljs-built_in">top</span>();<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="手撕归并排序"><a href="#手撕归并排序" class="headerlink" title="手撕归并排序"></a>手撕归并排序</h2><h3 id="容易理解版本（左闭右开）"><a href="#容易理解版本（左闭右开）" class="headerlink" title="容易理解版本（左闭右开）"></a>容易理解版本（左闭右开）</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">merge</span><span class="hljs-params">(arr1, arr2 []<span class="hljs-type">int</span>)</span></span> (ret []<span class="hljs-type">int</span>) &#123;<br>	<span class="hljs-keyword">for</span> <span class="hljs-built_in">len</span>(arr1) &gt; <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-built_in">len</span>(arr2) &gt; <span class="hljs-number">0</span> &#123;<br>		<span class="hljs-keyword">if</span> arr1[<span class="hljs-number">0</span>] &gt; arr2[<span class="hljs-number">0</span>] &#123;<br>			ret = <span class="hljs-built_in">append</span>(ret, arr1[<span class="hljs-number">0</span>])<br>			arr1 = arr1[<span class="hljs-number">1</span>:]<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			ret = <span class="hljs-built_in">append</span>(ret, arr2[<span class="hljs-number">0</span>])<br>			arr2 = arr2[<span class="hljs-number">1</span>:]<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span> <span class="hljs-built_in">len</span>(arr1) &gt; <span class="hljs-number">0</span> &#123;<br>		ret = <span class="hljs-built_in">append</span>(ret, arr1[<span class="hljs-number">0</span>])<br>		arr1 = arr1[<span class="hljs-number">1</span>:]<br>	&#125;<br>	<span class="hljs-keyword">for</span> <span class="hljs-built_in">len</span>(arr2) &gt; <span class="hljs-number">0</span> &#123;<br>		ret = <span class="hljs-built_in">append</span>(ret, arr2[<span class="hljs-number">0</span>])<br>		arr2 = arr2[<span class="hljs-number">1</span>:]<br>	&#125;<br>	<span class="hljs-keyword">return</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MergeSort</span><span class="hljs-params">(arr []<span class="hljs-type">int</span>)</span></span> (ret []<span class="hljs-type">int</span>) &#123;<br>	<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(arr) &lt;= <span class="hljs-number">1</span> &#123;<br>		<span class="hljs-keyword">return</span> arr<br>	&#125;<br>	mid := <span class="hljs-built_in">len</span>(arr) / <span class="hljs-number">2</span><br>	l := <span class="hljs-built_in">len</span>(arr)<br><br>	left := MergeSort(arr[<span class="hljs-number">0</span>:mid])<br>	right := MergeSort(arr[mid:l])<br><br>	ret = merge(left, right)<br>	<span class="hljs-keyword">return</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="利用双指针和单个额外数组版本"><a href="#利用双指针和单个额外数组版本" class="headerlink" title="利用双指针和单个额外数组版本"></a>利用双指针和单个额外数组版本</h3><p>Go版本的左闭右闭</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">MergeSort</span><span class="hljs-params">(arr []<span class="hljs-type">int</span>, temp []<span class="hljs-type">int</span>, st, end <span class="hljs-type">int</span>)</span></span> &#123;<br>	<span class="hljs-keyword">if</span> st &gt;= end &#123;<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	l := end - st<br>	mid := (l &gt;&gt; <span class="hljs-number">1</span>) + st<br>	MergeSort(arr, temp, st, mid)    <span class="hljs-comment">//假设此时st/mid有序了</span><br>	MergeSort(arr, temp, mid+<span class="hljs-number">1</span>, end) <span class="hljs-comment">//假设此时mid+1/st有序了</span><br>	<span class="hljs-comment">//两个有序数组归并</span><br>	p1 := st<br>	p2 := mid + <span class="hljs-number">1</span><br>	k := st<br>	<span class="hljs-keyword">for</span> p1 &lt;= mid &amp;&amp; p2 &lt;= end &#123;<br>		<span class="hljs-keyword">if</span> arr[p1] &lt; arr[p2] &#123;<br>			temp[k] = arr[p1]<br>			p1++<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			temp[k] = arr[p2]<br>			p2++<br>		&#125;<br>		k++<br>	&#125;<br>	<span class="hljs-keyword">for</span> p1 &lt;= mid &#123;<br>		temp[k] = arr[p1]<br>		k++<br>		p1++<br>	&#125;<br>	<span class="hljs-keyword">for</span> p2 &lt;= end &#123;<br>		temp[k] = arr[p2]<br>		k++<br>		p2++<br>	&#125;<br>	<span class="hljs-keyword">for</span> k := st; k &lt;= end; k++ &#123;<br>		arr[k] = temp[k]<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>C++版本的左闭右开</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">ret</span><span class="hljs-params">(n, <span class="hljs-number">0</span>)</span></span>; <br>        <span class="hljs-built_in">mergeSort</span>(nums,ret,<span class="hljs-number">0</span>,n);<br>        <span class="hljs-keyword">return</span> nums;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">mergeSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, vector&lt;<span class="hljs-type">int</span>&gt;&amp; tmp, <span class="hljs-type">int</span> l, <span class="hljs-type">int</span> r)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(r - l &lt;= <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;<br>        <span class="hljs-type">int</span> mid = (r-l)/<span class="hljs-number">2</span>+l;<br>        <span class="hljs-built_in">mergeSort</span>(nums,tmp,l,mid);<br>        <span class="hljs-built_in">mergeSort</span>(nums,tmp,mid,r);<br>        <span class="hljs-type">int</span> p1 = l, p2 = mid, k = l;<br>        <span class="hljs-keyword">while</span>(p1 &lt; mid &amp;&amp; p2 &lt; r) &#123;<br>            <span class="hljs-keyword">if</span>(nums[p1] &lt; nums[p2]) &#123;<br>                tmp[k] = nums[p1];<br>                p1++;<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                tmp[k] = nums[p2];<br>                p2++;<br>            &#125;<br>            k++;<br>        &#125;<br>        <span class="hljs-keyword">while</span>(p1 &lt; mid) &#123;<br>            tmp[k] = nums[p1];<br>            p1++;k++;<br>        &#125;<br>        <span class="hljs-keyword">while</span>(p2 &lt; r) &#123;<br>            tmp[k] = nums[p2];<br>            p2++;k++;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = l;i &lt; r;++i) &#123;<br>            nums[i] = tmp[i];<br>        &#125;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="手撕堆排序"><a href="#手撕堆排序" class="headerlink" title="手撕堆排序"></a>手撕堆排序</h2><p>Golang版本的堆构建</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">swap</span><span class="hljs-params">(arr *[]<span class="hljs-type">int</span>, idx1, idx2 <span class="hljs-type">int</span>)</span></span> &#123;<br>	(*arr)[idx1], (*arr)[idx2] = (*arr)[idx2], (*arr)[idx1]<br>&#125;<br><br><span class="hljs-comment">//若子树满足堆条件，那adjust过的大树也满足堆条件</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">adjust</span><span class="hljs-params">(arr *[]<span class="hljs-type">int</span>, last, idx <span class="hljs-type">int</span>)</span></span> &#123;<br>	cur_idx := idx<br>	left, right := <span class="hljs-number">2</span>*idx+<span class="hljs-number">1</span>, <span class="hljs-number">2</span>*idx+<span class="hljs-number">2</span><br>	<span class="hljs-keyword">if</span> left &lt; last &amp;&amp; (*arr)[cur_idx] &lt; (*arr)[left] &#123;<br>		cur_idx = left<br>	&#125;<br>	<span class="hljs-keyword">if</span> right &lt; last &amp;&amp; (*arr)[cur_idx] &lt; (*arr)[right] &#123;<br>		cur_idx = right<br>	&#125;<br>	<span class="hljs-keyword">if</span> cur_idx != idx &#123;<br>		swap(arr, cur_idx, idx)<br>		adjust(arr, last, cur_idx)<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">enHeap</span><span class="hljs-params">(arr *[]<span class="hljs-type">int</span>)</span></span> &#123;<br>	<span class="hljs-comment">//构建堆，从最右的非叶子节点开始可提高速度</span><br>	last := <span class="hljs-built_in">len</span>(*arr)<br>	<span class="hljs-keyword">for</span> start := (<span class="hljs-built_in">len</span>(*arr) - <span class="hljs-number">1</span> - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; start &gt;= <span class="hljs-number">0</span>; start-- &#123;<br>		adjust(arr, last, start)<br>	&#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">heapPush</span><span class="hljs-params">(arr *[]<span class="hljs-type">int</span>, num <span class="hljs-type">int</span>)</span></span> &#123;<br>	*arr = <span class="hljs-built_in">append</span>(*arr, num)<br>	enHeap(arr)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">heapPop</span><span class="hljs-params">(arr *[]<span class="hljs-type">int</span>)</span></span> (ret <span class="hljs-type">int</span>) &#123;<br>	ret = (*arr)[<span class="hljs-number">0</span>]<br>	swap(arr, <span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(*arr)<span class="hljs-number">-1</span>)<br>	adjust(arr, <span class="hljs-built_in">len</span>(*arr)<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>)<br>	*arr = (*arr)[:<span class="hljs-built_in">len</span>(*arr)<span class="hljs-number">-1</span>]<br>	<span class="hljs-keyword">return</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">HeapSort</span><span class="hljs-params">(arr *[]<span class="hljs-type">int</span>)</span></span> &#123;<br>	enHeap(arr)<br>	<span class="hljs-comment">//将当前堆最大（小）的数移到末尾并交换，对除末尾以外的数进行调整使之满足堆条件</span><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-built_in">len</span>(*arr) - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i-- &#123;<br>		swap(arr, <span class="hljs-number">0</span>, i)<br>		adjust(arr, i, <span class="hljs-number">0</span>)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/02/16/%E6%8E%92%E5%BA%8F%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;02&#x2F;16&#x2F;%E6%8E%92%E5%BA%8F%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;02&#x2F;16&#x2F;%E6%8E%92%E5%BA%8F%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Golang/" rel="tag">Golang</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" rel="tag">二分法</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" rel="tag">堆排序</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" rel="tag">归并排序</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="tag">快速排序</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1647310810006"></script>
+
+
+	<script async src="/js/search.js?v=1647310810006"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

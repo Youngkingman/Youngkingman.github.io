@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>CSS笔记(1) - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="CSS笔记(1)CSS选择器类型基础选择器 标签选择器 类选择器（多类名使用） id选择器 通配符选择器  复合选择器 后代选择器，所有后代（孙子…都会生效）  1ol li &amp;#123;color: pink;&amp;#125;   子选择器，仅仅生效一代  1.nav&gt;a &amp;#123;color: red;&amp;#125;   并集选择器，literally  1div,p,.pig li &amp;#1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS笔记(1)">
+<meta property="og:url" content="https://kimanyang.xyz/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="CSS笔记(1)CSS选择器类型基础选择器 标签选择器 类选择器（多类名使用） id选择器 通配符选择器  复合选择器 后代选择器，所有后代（孙子…都会生效）  1ol li &amp;#123;color: pink;&amp;#125;   子选择器，仅仅生效一代  1.nav&gt;a &amp;#123;color: red;&amp;#125;   并集选择器，literally  1div,p,.pig li &amp;#1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kimanyang.xyz/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/boxmodel-16469223040661.PNG">
+<meta property="og:image" content="https://kimanyang.xyz/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/margincollapse.PNG">
+<meta property="og:image" content="https://kimanyang.xyz/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/margincollapse2.PNG">
+<meta property="article:published_time" content="2022-02-24T03:08:34.000Z">
+<meta property="article:modified_time" content="2022-03-10T15:33:18.968Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="CSS选择器">
+<meta property="article:tag" content="CSS盒模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kimanyang.xyz/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/boxmodel-16469223040661.PNG">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1647310809982">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1647310809982">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1647310809982">
+    <link rel="stylesheet" href="/css/style.css?v=1647310809982">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1647310809982">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>27</div>
+        <div><span>标签</span>54</div>
+        <div><span>分类</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">5</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 12px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 18px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/Javascript/" style="font-size: 12px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 10px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 12px;">STL容器</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 14px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 12px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 12px;">动态规划</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 10px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 14px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 16px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 12px;">编译原理</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 12px;">自适应控制</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 16px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 64.5%;"> 
+              <img data-src="/cover/yuanxiangcover10.jpg" data-sizes="auto" alt="CSS笔记(1)" class="lazyload">
+              <h1>CSS笔记(1)</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年02月24日</a>
+</div>
+
+      
+
+      <h1 id="CSS笔记-1"><a href="#CSS笔记-1" class="headerlink" title="CSS笔记(1)"></a>CSS笔记(1)</h1><h2 id="CSS选择器类型"><a href="#CSS选择器类型" class="headerlink" title="CSS选择器类型"></a>CSS选择器类型</h2><h3 id="基础选择器"><a href="#基础选择器" class="headerlink" title="基础选择器"></a>基础选择器</h3><ul>
+<li>标签选择器</li>
+<li>类选择器（多类名使用）</li>
+<li>id选择器</li>
+<li>通配符选择器</li>
+</ul>
+<h3 id="复合选择器"><a href="#复合选择器" class="headerlink" title="复合选择器"></a>复合选择器</h3><ul>
+<li>后代选择器，所有后代（孙子…都会生效）</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">ol</span> <span class="hljs-selector-tag">li</span> &#123;<span class="hljs-attribute">color</span>: pink;&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>子选择器，仅仅生效一代</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.nav</span>&gt;<span class="hljs-selector-tag">a</span> &#123;<span class="hljs-attribute">color</span>: red;&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>并集选择器，literally</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">div</span>,<span class="hljs-selector-tag">p</span>,<span class="hljs-selector-class">.pig</span> <span class="hljs-selector-tag">li</span> &#123;<span class="hljs-attribute">color</span>: pink;&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>伪类选择器</p>
+<ul>
+<li>链接伪类选择器</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-comment">/* 1.未访问的链接 a:link  把没有点击过的(访问过的)链接选出来 */</span><br><span class="hljs-selector-tag">a</span><span class="hljs-selector-pseudo">:link</span> &#123;<br>    <span class="hljs-attribute">color</span>: <span class="hljs-number">#333</span>;<br>    <span class="hljs-attribute">text-decoration</span>: none;<br>&#125;<br><span class="hljs-comment">/*2. a:visited 选择点击过的(访问过的)链接 */</span><br><span class="hljs-selector-tag">a</span><span class="hljs-selector-pseudo">:visited</span> &#123;<br>    <span class="hljs-attribute">color</span>: orange;<br>&#125;<br><span class="hljs-comment">/*3. a:hover 选择鼠标经过的那个链接 */</span><br><span class="hljs-selector-tag">a</span><span class="hljs-selector-pseudo">:hover</span> &#123;<br>    <span class="hljs-attribute">color</span>: skyblue;<br>&#125;<br><span class="hljs-comment">/* 4. a:active 选择的是我们鼠标正在按下还没有弹起鼠标的那个链接 */</span><br><span class="hljs-selector-tag">a</span><span class="hljs-selector-pseudo">:active</span> &#123;<br>    <span class="hljs-attribute">color</span>: green;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>focus选择器</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs css"> <span class="hljs-comment">/* // 把获得光标的input表单元素选取出来 */</span><br><span class="hljs-selector-tag">input</span><span class="hljs-selector-pseudo">:focus</span> &#123;<br>    <span class="hljs-attribute">background-color</span>: pink;<br>    <span class="hljs-attribute">color</span>: red;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Emmet语法"><a href="#Emmet语法" class="headerlink" title="Emmet语法"></a>Emmet语法</h2><h3 id="HTML快速生成"><a href="#HTML快速生成" class="headerlink" title="HTML快速生成"></a>HTML快速生成</h3><ol>
+<li>标签名+<code>tab</code>可以生成标签</li>
+<li>标签名<code>*</code>个数+<code>tab</code>,比如<code>div</code>+<code>*</code>+<code>3</code>+<code>tab</code></li>
+<li>父子级关系的标签直接用<code>&gt;</code>，如<code>ul&gt;li</code></li>
+<li>兄弟级关系的标签直接用<code>+</code>，如<code>div+p</code></li>
+<li>生成带有类名和<code>id</code>的可以用<code>.demo</code>或者<code>#two</code>再按tab，比如<code>div.demo+tab</code></li>
+<li>有顺序的类名可以用自增符号<code>$</code>，比如<code>div*5.demo</code> </li>
+<li>模板渲染可以填充内容<code>div&#123;fuck you $&#125;*5.demo</code></li>
+</ol>
+<p>具体使用参考博客</p>
+<p><a target="_blank" rel="noopener" href="https://code.z01.com/Emmet/#a1-3">Emmet-HTML&#x2F;CSS代码自动补全语法 (z01.com)</a></p>
+<h3 id="CSS快速生成"><a href="#CSS快速生成" class="headerlink" title="CSS快速生成"></a>CSS快速生成</h3><p>基本靠vs插件就行了，语法没啥用懒得记了</p>
+<h2 id="CSS元素显示模式"><a href="#CSS元素显示模式" class="headerlink" title="CSS元素显示模式"></a>CSS元素显示模式</h2><h3 id="三种显示模式"><a href="#三种显示模式" class="headerlink" title="三种显示模式"></a>三种显示模式</h3><p>元素（标签）以何种方式进行显示。块元素&lt;div&gt;独占一行，行内元素一行可以放多个&lt;span&gt;，HTML分为两种类型，<strong>块元素</strong>和<strong>行内元素</strong>两种类型。</p>
+<ul>
+<li>常用块元素<strong>h1~h6,p,div,ul,ol,li</strong></li>
+<li>块元素特点<ol>
+<li>独占一行</li>
+<li>高度宽度内外边距都可控</li>
+<li>默认宽度是容器（父级）的100%</li>
+<li>是容器盒子，内部由行内或者块元素</li>
+</ol>
+</li>
+<li>常用行内元素<strong>a,strong,b,em,i,del,s,ins,u,span</strong><ol>
+<li>相邻行内元素再一行上，一行可以显示多个</li>
+<li>高宽设置无效</li>
+<li>默认宽度即本身宽度</li>
+<li>行内元素只能容纳行内元素和文本（链接不能放链接）</li>
+</ol>
+</li>
+<li>兼具行内元素和块元素特点，称为<strong>行内块元素</strong>，<strong>img,input,td</strong><ol>
+<li>和相邻行内元素（行内块）再一行上，但是之间有空白间隙，一行可以显示多个（行内元素）</li>
+<li>默认宽度就是本身内容的宽度（行内元素）</li>
+<li>高度行高内外边距可以控制（块级元素）</li>
+</ol>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>元素模式</th>
+<th>元素排列</th>
+<th>设置样式</th>
+<th>默认宽度</th>
+<th>包含</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>块级元素</td>
+<td>一行只能放一个块元素</td>
+<td>可设置宽度高度</td>
+<td>容器的100%</td>
+<td>任何标签</td>
+</tr>
+<tr>
+<td>行内元素</td>
+<td>一行可以放个多个行内元素</td>
+<td>不可直接设置宽度高度</td>
+<td>本身内容宽度</td>
+<td>文本或其他行内元素</td>
+</tr>
+<tr>
+<td>行内块元素</td>
+<td>一行放多个行内块元素</td>
+<td>可以设置宽度高度</td>
+<td>本身内容宽度</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="显示模式转换"><a href="#显示模式转换" class="headerlink" title="显示模式转换"></a>显示模式转换</h3><p>使用标签<code>display</code>，比如想要把超链接范围扩大，或者把块级元素在一行里面放多个。例子如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">a</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">150px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">50px</span>;<br>    <span class="hljs-attribute">background-color</span>: pink;<br>    <span class="hljs-comment">/* 把行内元素 a 转换为块级元素 */</span><br>    <span class="hljs-attribute">display</span>: block;<br>&#125;<br><span class="hljs-selector-tag">div</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;<br>    <span class="hljs-attribute">background-color</span>: purple;<br>    <span class="hljs-comment">/* 把 div 块级元素转换为行内元素 */</span><br>    <span class="hljs-attribute">display</span>: inline;<br>&#125;<br><span class="hljs-selector-tag">span</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">30px</span>;<br>    <span class="hljs-attribute">background-color</span>: skyblue;<br>    <span class="hljs-comment">/*把span行内元素转换为行内块元素*/</span><br>    <span class="hljs-attribute">display</span>: inline-block;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>*单行文字垂直居中技巧：行高等于盒元素高度，即<code>line-height</code>和<code>height</code>取一样即可。</p>
+<h2 id="CSS背景"><a href="#CSS背景" class="headerlink" title="CSS背景"></a>CSS背景</h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">div</span>&#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">300px</span>;<br>    <span class="hljs-attribute">background-color</span>: pink;<br>    <span class="hljs-attribute">background-image</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">images/logo.png</span>);<br>    <span class="hljs-attribute">background-repeat</span>: no-repeat;<br>    <span class="hljs-attribute">background-position</span>: right center;<br>    <span class="hljs-attribute">background-position</span>: <span class="hljs-number">10px</span> <span class="hljs-number">20px</span>;<span class="hljs-comment">/*左上角相对于左上角*/</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>background-position：x y</code>属性可以使用两种：<code>方位名词</code>和<code>精确单位</code>，精确单位为左上角相对左上角</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>length</td>
+<td>百分数|由浮点数和单位标识符构成的长度值</td>
+</tr>
+<tr>
+<td>position</td>
+<td>top|center|bottom|left|center|right</td>
+</tr>
+</tbody></table>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">body</span> &#123;<br>    <span class="hljs-attribute">background-image</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">images/bg.jpg</span>);<br>    <span class="hljs-attribute">background-repeat</span>: no-repeat;<br>    <span class="hljs-attribute">background-position</span>: center top;<br>    <span class="hljs-comment">/* 把背景图片固定住 */</span><br>    <span class="hljs-attribute">background-attachment</span>: fixed;<span class="hljs-comment">/*默认scroll*/</span><br>    <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;<span class="hljs-comment">/*文本颜色*/</span><br>    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span>;<br>&#125;<br><span class="hljs-comment">/*以上可以采用复合写法*/</span><br><span class="hljs-attribute">background</span>: black <span class="hljs-built_in">url</span>(<span class="hljs-string">images/bg.jpg</span>) no-repeat fixed center top;<br></code></pre></td></tr></table></figure>
+
+<p>若要使背景半透明，可以对<code>background-color</code>使用<code>rgba</code>色，具体用的时候自己百度</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>background-color</code></td>
+<td>背景颜色</td>
+<td>RGB代码或预定义的色值</td>
+</tr>
+<tr>
+<td><code>background-image</code></td>
+<td>背景图片</td>
+<td>url路径</td>
+</tr>
+<tr>
+<td><code>background-repeat</code></td>
+<td>是否平铺</td>
+<td>repeat&#x2F;no-repeat&#x2F;repeat-x&#x2F;repeat-y</td>
+</tr>
+<tr>
+<td><code>background-position</code></td>
+<td>背景位置</td>
+<td>length&#x2F;position，先x后y</td>
+</tr>
+<tr>
+<td><code>background-attachment</code></td>
+<td>背景附着</td>
+<td>scroll&#x2F;fixed</td>
+</tr>
+<tr>
+<td>背景简写</td>
+<td>简写</td>
+<td>背景颜色 图片地址  平铺 滚动 位置</td>
+</tr>
+<tr>
+<td>背景色半透明</td>
+<td>颜色半透明</td>
+<td><code>background:rgba(a,b,c,d)</code></td>
+</tr>
+</tbody></table>
+<h2 id="CSS三大特性"><a href="#CSS三大特性" class="headerlink" title="CSS三大特性"></a>CSS三大特性</h2><h3 id="CSS层叠性"><a href="#CSS层叠性" class="headerlink" title="CSS层叠性"></a>CSS层叠性</h3><p>相同选择器给设置相同的样式，其中一个样式会覆盖（层叠）另一个冲突的样式。层叠性主要解决样式冲突的问题。层叠性的原则：</p>
+<ul>
+<li>样式冲突遵循就近原则，哪个离得近执行哪个</li>
+<li>样式不冲突，不层叠</li>
+</ul>
+<h3 id="CSS继承性"><a href="#CSS继承性" class="headerlink" title="CSS继承性"></a>CSS继承性</h3><p>子标签会继承父标签的某些样式，比如文本颜色和字号等等</p>
+<ul>
+<li>恰当使用可以简化代码降低CSS样式复杂性</li>
+<li>子元素可以继承父元素样式(<code>text-</code>及<code>font-</code>及<code>line-</code>开头元素和<code>color</code>)</li>
+</ul>
+<p>在继承时如果没有额外指定（层叠性）那么默认属性值会是父标签的对应样式属性值</p>
+<h3 id="CSS优先级"><a href="#CSS优先级" class="headerlink" title="CSS优先级"></a>CSS优先级</h3><p>当同一个元素被指定了多个选择器则会有优先级的产生。选择器相同则执行层叠性，否则根据选择器的权重进行执行：</p>
+<table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>选择器权重</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>继承或者通用选择器*</td>
+<td>0，0，0，0</td>
+</tr>
+<tr>
+<td>元素选择器(标签选择器)</td>
+<td>0，0，0，1</td>
+</tr>
+<tr>
+<td>类选择器、伪类选择器</td>
+<td>0，0，1，0</td>
+</tr>
+<tr>
+<td>ID选择器</td>
+<td>0，1，0，0</td>
+</tr>
+<tr>
+<td>行内样式style</td>
+<td>1，0，0，0</td>
+</tr>
+<tr>
+<td>!important</td>
+<td>无穷大</td>
+</tr>
+</tbody></table>
+<p>整的这么麻烦核心是为了计算权重的叠加。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">ul</span> <span class="hljs-selector-tag">li</span> &#123;<br>    <span class="hljs-attribute">color</span>: green;<br>&#125;<br><span class="hljs-comment">/* li 的权重是 0,0,0,1    1 */</span><br><span class="hljs-selector-tag">li</span> &#123;<br>    <span class="hljs-attribute">color</span>: red;<br>&#125;<br><span class="hljs-comment">/* .nav li  权重    0,0,1,0  +  0,0,0,1  =  0,0,1,1    11 */</span><br><span class="hljs-selector-class">.nav</span> <span class="hljs-selector-tag">li</span> &#123;<br>    <span class="hljs-attribute">color</span>: pink;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>最重要记住继承的权重是0</strong></p>
+<p><strong>坑点：</strong>连写需要同时具备才会出现效果，权重是连写组合中最大的一个,比如<code>li.active</code>、<code>.one.two</code></p>
+<h2 id="CSS盒子模型（重要）"><a href="#CSS盒子模型（重要）" class="headerlink" title="CSS盒子模型（重要）"></a>CSS盒子模型（重要）</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ol>
+<li>准确阐述盒子模型的4个组成部分</li>
+<li>利用边框复合写法给元素添加边框</li>
+<li>计算盒子的实际大小</li>
+<li>利用盒子模型布局模块</li>
+<li>给盒子设置圆角边框</li>
+<li>给盒子添加阴影</li>
+<li>给文字添加阴影</li>
+</ol>
+<p>核心在于<strong>模型本身</strong>、<strong>浮动</strong>和<strong>定位</strong></p>
+<p>网页布局的基本过程：</p>
+<ol>
+<li>准备好相关网页元素，网页元素本身基本都是盒子Box</li>
+<li>利用CSS设置好盒子的样式，然后摆放到相应位置</li>
+<li>往盒子中添加内容</li>
+</ol>
+<p>核心本质就是利用CSS摆盒子。</p>
+<h3 id="盒子模型组成"><a href="#盒子模型组成" class="headerlink" title="盒子模型组成"></a>盒子模型组成</h3><p>分为四个部分<code>border</code>,<code>content</code>,<code>padding</code>和<code>margin</code>。</p>
+<ul>
+<li><code>border</code>边框</li>
+<li><code>content</code>内容</li>
+<li><code>padding</code>内边距，控制边框到内容的距离</li>
+<li><code>margin</code>外边距，控制两个盒子之间的距离</li>
+</ul>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/boxmodel-16469223040661.PNG" alt="boxmodel" class="lazyload"></p>
+<p>除了content其他都有四个二级属性<code>top</code>&#x2F;<code>left</code>&#x2F;<code>right</code>&#x2F;<code>bottom</code></p>
+<h3 id="边框相关"><a href="#边框相关" class="headerlink" title="边框相关"></a>边框相关</h3><p>边框由三部分组成：边框宽度、样式和颜色，具体的：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-attribute">border</span>:border-width || border-style || border-color<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>border-width</td>
+<td>定义边框粗细，单位是px</td>
+</tr>
+<tr>
+<td>border-style</td>
+<td>定义边框的样式</td>
+</tr>
+<tr>
+<td>border-color</td>
+<td>边框的颜色</td>
+</tr>
+</tbody></table>
+<p>具体属性值可自行查阅手册，style用得比较多的是solid&#x2F;dashed&#x2F;dotted。同样的属性具有符合写法：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs css"> <span class="hljs-selector-tag">div</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;<br>     <span class="hljs-attribute">height</span>: <span class="hljs-number">200px</span>;<br>     <span class="hljs-comment">/* border-width: 5px;</span><br><span class="hljs-comment">     border-style: solid;</span><br><span class="hljs-comment">     border-color: pink; */</span><br>     <span class="hljs-comment">/* 边框的复合写法 简写:  */</span><br>     <span class="hljs-attribute">border</span>: <span class="hljs-number">5px</span> solid pink;<br>     <span class="hljs-comment">/* 上边框 */</span><br>     <span class="hljs-attribute">border-top</span>: <span class="hljs-number">5px</span> solid pink;<br>     <span class="hljs-comment">/* 下边框 */</span><br>     <span class="hljs-attribute">border-bottom</span>: <span class="hljs-number">10px</span> dashed purple;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>同时如果两个盒子连接（外边距为0）的话，可能会出现边框变粗的情况，这时候可以使用<code>border-collapse:collapse</code>使之合并。</p>
+<p>需要注意的是<strong>边框会增加盒子本身的大小</strong>，比如设置了300*200的盒子，给了10像素边框，那么实际的盒子大小是320*220（左右上下各加10）。</p>
+<h3 id="内边距相关"><a href="#内边距相关" class="headerlink" title="内边距相关"></a>内边距相关</h3><p>用于控制内容和内边框的距离，简写属性可以有一到四个值：</p>
+<table>
+<thead>
+<tr>
+<th>值的个数</th>
+<th>表达意思</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>padding:5px;</td>
+<td>上下左右5像素内边距</td>
+</tr>
+<tr>
+<td>padding:5px 10px;</td>
+<td>上下5，左右10</td>
+</tr>
+<tr>
+<td>padding:5px 10px 20px;</td>
+<td>上下5，左右10，下20</td>
+</tr>
+<tr>
+<td>padding:5px 10px 20px 30px;</td>
+<td>上向左右分别5、10、20、30</td>
+</tr>
+</tbody></table>
+<p>和边框类似，<strong>内边距同样会增加盒子的大小</strong></p>
+<h3 id="外边距相关"><a href="#外边距相关" class="headerlink" title="外边距相关"></a>外边距相关</h3><p>用于控制盒子和盒子之间距离，意思和内边距完全一致，不再重复，不同的是外边距<strong>不会</strong>增加盒子的大小。</p>
+<h4 id="外边距典型应用"><a href="#外边距典型应用" class="headerlink" title="外边距典型应用"></a>外边距典型应用</h4><p>使得块级盒子水品居中，但是得满足两个条件：</p>
+<ol>
+<li>盒子必须指定了宽度</li>
+<li>盒子左右外边距设置为<code>auto</code></li>
+</ol>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.header</span>&#123;<span class="hljs-attribute">width</span>:<span class="hljs-number">960px</span>;<span class="hljs-attribute">margin</span>:<span class="hljs-number">0</span> auto;&#125;<br></code></pre></td></tr></table></figure>
+
+<p>常见写法：</p>
+<ul>
+<li><code>margin-left:auto;</code> <code>margin-right:auto</code></li>
+<li><code>margin:auto;</code></li>
+<li><code>margin:0 auto;</code></li>
+</ul>
+<p>注意：上述方法只能适用于块级元素，对于行内元素和行内块元素水平居中则应该给其父元素添加<code>text-align:center</code>，同时竖直居中则是将行高设的和高度相同即可。</p>
+<h4 id="外边距合并"><a href="#外边距合并" class="headerlink" title="外边距合并"></a>外边距合并</h4><ul>
+<li>相邻块元素垂直外边距合并：使用<code>margin</code>定义块元素的<strong>垂直</strong>外边距时候可能会出现外边距的合并，选择一个大的作为外边距，尽量只给一个盒子设置外边距：</li>
+</ul>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/margincollapse.PNG" alt="margincollapse" class="lazyload"></p>
+<ul>
+<li>嵌套的块元素垂直外边距塌陷：对于两个嵌套关系（父子关系）的块元素，父元素上外边距同时子元素也有上外边距，此时父元素会塌陷为较大的外边距值</li>
+</ul>
+<p>​    <img data-fancybox="gallery" data-sizes="auto" data-src="/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/margincollapse2.PNG" alt="margincollapse2" class="lazyload"></p>
+<h3 id="清除内外边距"><a href="#清除内外边距" class="headerlink" title="清除内外边距"></a>清除内外边距</h3><p>网页元素常常有自己的默认内外边距，不同浏览器不同，于是还是得自己手动清除。通常来说上手写css第一个就是：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs css">* &#123;<br>    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;<br>    <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="圆角边框"><a href="#圆角边框" class="headerlink" title="圆角边框"></a>圆角边框</h2><p>使用<code>border-radius</code>属性</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-comment">/*以矩形中心画圆消除角*/</span><br><span class="hljs-selector-tag">div</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">150px</span>;<br>    <span class="hljs-attribute">background-color</span>: pink;<br>    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">10px</span>;<br>&#125;<br><span class="hljs-selector-class">.yuanxing</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">200px</span>;<br>    <span class="hljs-attribute">background-color</span>: pink;<br>    <span class="hljs-comment">/* border-radius: 100px; */</span><br>    <span class="hljs-comment">/* 50% 就是宽度和高度的一半  等价于 100px */</span><br>    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">50%</span>;<br>&#125;<br><span class="hljs-selector-class">.juxing</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">300px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">100px</span>;<br>    <span class="hljs-attribute">background-color</span>: pink;<br>    <span class="hljs-comment">/* 圆角矩形设置为高度的一半 */</span><br>    <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">50px</span>;<br>&#125;<br><span class="hljs-selector-class">.radius</span> &#123;<br>    <span class="hljs-attribute">width</span>: <span class="hljs-number">200px</span>;<br>    <span class="hljs-attribute">height</span>: <span class="hljs-number">200px</span>;<br>    <span class="hljs-comment">/* border-radius: 10px 20px 30px 40px; */</span><br>    <span class="hljs-comment">/* border-radius: 10px 40px; */</span><br>    <span class="hljs-attribute">border-top-left-radius</span>: <span class="hljs-number">20px</span>;<br>    <span class="hljs-attribute">background-color</span>: pink;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="阴影"><a href="#阴影" class="headerlink" title="阴影"></a>阴影</h2><h3 id="盒子阴影"><a href="#盒子阴影" class="headerlink" title="盒子阴影"></a>盒子阴影</h3><p><code>box-shadow: 10px 10px 10px -4px rgba(0, 0, 0, .3);</code></p>
+<p>各个参数具体作用：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>h-shadow</td>
+<td>相对水平位置，可负值</td>
+</tr>
+<tr>
+<td>v-shadow</td>
+<td>相对垂直位置，可负值</td>
+</tr>
+<tr>
+<td>blur</td>
+<td>可选，模糊距离</td>
+</tr>
+<tr>
+<td>spread</td>
+<td>可选，阴影尺寸</td>
+</tr>
+<tr>
+<td>color</td>
+<td>可选，阴影颜色</td>
+</tr>
+<tr>
+<td>inset</td>
+<td>可选，外部阴影改为内部</td>
+</tr>
+</tbody></table>
+<h3 id="文字阴影"><a href="#文字阴影" class="headerlink" title="文字阴影"></a>文字阴影</h3><p><code>text-shadow</code>，类似拥有：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>h-shadow</td>
+<td>相对水平位置，可负值</td>
+</tr>
+<tr>
+<td>v-shadow</td>
+<td>相对垂直位置，可负值</td>
+</tr>
+<tr>
+<td>blur</td>
+<td>可选，模糊距离</td>
+</tr>
+<tr>
+<td>color</td>
+<td>可选，阴影颜色</td>
+</tr>
+</tbody></table>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/02/24/CSS%E7%AC%94%E8%AE%B0(1)/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;02&#x2F;24&#x2F;CSS%E7%AC%94%E8%AE%B0(1)&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;02&#x2F;24&#x2F;CSS%E7%AC%94%E8%AE%B0(1)&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/CSS/">CSS</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" rel="tag">CSS盒模型</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" rel="tag">CSS选择器</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1647310809986"></script>
+
+
+	<script async src="/js/search.js?v=1647310809986"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>
