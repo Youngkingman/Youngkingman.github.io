@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>拓扑排序&amp;网络流算法&amp;二分图匹配 - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="拓扑排序&amp;网络流算法&amp;二分图匹配最近上了黄荷姣老师的计算机通识课，讲的是网络流算法，第一节课给没有计算机基础的同学介绍了各种图搜索算法和拓扑排序算法，后一节课讲的是网络流相关的问题，刚好最近在练习稳定AC中等偏困难题，所以上课之余总结一下。 拓扑排序力扣在拓扑排序这个专题经典题有三道：207课程表、210课程表Ⅱ和329矩阵最长递增路径 拓扑排序的作用在于对一个有向无环图中重新标号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拓扑排序&amp;网络流算法&amp;二分图匹配">
+<meta property="og:url" content="https://kimanyang.xyz/2022/05/15/%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="拓扑排序&amp;网络流算法&amp;二分图匹配最近上了黄荷姣老师的计算机通识课，讲的是网络流算法，第一节课给没有计算机基础的同学介绍了各种图搜索算法和拓扑排序算法，后一节课讲的是网络流相关的问题，刚好最近在练习稳定AC中等偏困难题，所以上课之余总结一下。 拓扑排序力扣在拓扑排序这个专题经典题有三道：207课程表、210课程表Ⅱ和329矩阵最长递增路径 拓扑排序的作用在于对一个有向无环图中重新标号">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kimanyang.xyz/2022/05/15/%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95/bisearch2.png">
+<meta property="og:image" content="https://kimanyang.xyz/2022/05/15/%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95/bisearch.png">
+<meta property="article:published_time" content="2022-05-15T11:32:04.000Z">
+<meta property="article:modified_time" content="2022-05-15T11:44:42.664Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="图论">
+<meta property="article:tag" content="拓扑排序">
+<meta property="article:tag" content="匈牙利算法">
+<meta property="article:tag" content="网络流">
+<meta property="article:tag" content="Ford-Fulkerson算法">
+<meta property="article:tag" content="Dinic算法">
+<meta property="article:tag" content="Edmond-Karp算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kimanyang.xyz/2022/05/15/%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95/bisearch2.png">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1652615164345">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1652615164345">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1652615164345">
+    <link rel="stylesheet" href="/css/style.css?v=1652615164345">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1652615164345">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>36</div>
+        <div><span>标签</span>80</div>
+        <div><span>分类</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">9</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">10</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/" style="font-size: 10px;">AC自动机</a> <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 11.67px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/Cookie/" style="font-size: 10px;">Cookie</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/Dinic%E7%AE%97%E6%B3%95/" style="font-size: 10px;">Dinic算法</a> <a href="/tags/Edmond-Karp%E7%AE%97%E6%B3%95/" style="font-size: 10px;">Edmond-Karp算法</a> <a href="/tags/Ford-Fulkerson%E7%AE%97%E6%B3%95/" style="font-size: 10px;">Ford-Fulkerson算法</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 18.33px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/HJB%E6%96%B9%E7%A8%8B/" style="font-size: 10px;">HJB方程</a> <a href="/tags/Javascript/" style="font-size: 11.67px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 11.67px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LQR%E7%AE%97%E6%B3%95/" style="font-size: 10px;">LQR算法</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 15px;">STL容器</a> <a href="/tags/ST%E8%A1%A8/" style="font-size: 10px;">ST表</a> <a href="/tags/Session/" style="font-size: 10px;">Session</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/Token/" style="font-size: 10px;">Token</a> <a href="/tags/Trie%E5%AD%97%E5%85%B8%E6%A0%91/" style="font-size: 10px;">Trie字典树</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/matlab/" style="font-size: 11.67px;">matlab</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BA%8C%E6%AC%A1%E8%A7%84%E5%88%92/" style="font-size: 10px;">二次规划</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" style="font-size: 11.67px;">优化算法</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 13.33px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" style="font-size: 10px;">凸优化</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" style="font-size: 10px;">分布式卡尔曼滤波</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 13.33px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 11.67px;">动态规划</a> <a href="/tags/%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">匈牙利算法</a> <a href="/tags/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" style="font-size: 11.67px;">卡尔曼滤波</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 11.67px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%89%A9%E5%B1%95%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" style="font-size: 10px;">扩展卡尔曼滤波</a> <a href="/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">拓扑排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.67px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/" style="font-size: 11.67px;">树状数组</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E6%8E%A7%E5%88%B6/" style="font-size: 10px;">模型预测控制</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 16.67px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91/" style="font-size: 10px;">线段树</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 13.33px;">编译原理</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%B5%81/" style="font-size: 10px;">网络流</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 11.67px;">自适应控制</a> <a href="/tags/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A9/" style="font-size: 10px;">路径压缩</a> <a href="/tags/%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81/" style="font-size: 10px;">身份认证</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 15px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 134.8314606741573%;"> 
+              <img data-src="/cover/yuanxiangcover34.jpg" data-sizes="auto" alt="拓扑排序&amp;网络流算法&amp;二分图匹配" class="lazyload">
+              <h1>拓扑排序&amp;网络流算法&amp;二分图匹配</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年05月15日</a>
+</div>
+
+      
+
+      <h1 id="拓扑排序-amp-网络流算法-amp-二分图匹配"><a href="#拓扑排序-amp-网络流算法-amp-二分图匹配" class="headerlink" title="拓扑排序&网络流算法&二分图匹配"></a>拓扑排序&amp;网络流算法&amp;二分图匹配</h1><p>最近上了黄荷姣老师的计算机通识课，讲的是网络流算法，第一节课给没有计算机基础的同学介绍了各种图搜索算法和拓扑排序算法，后一节课讲的是网络流相关的问题，刚好最近在练习稳定AC中等偏困难题，所以上课之余总结一下。</p>
+<h2 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h2><p>力扣在拓扑排序这个专题经典题有三道：<code>207课程表</code>、<code>210课程表Ⅱ</code>和<code>329矩阵最长递增路径</code></p>
+<p>拓扑排序的作用在于对一个有向无环图中重新标号使得边<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="4.479ex" height="2.262ex" role="img" focusable="false" viewbox="0 -750 1979.7 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"/></g><g data-mml-node="mi" transform="translate(389,0)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"/></g><g data-mml-node="mo" transform="translate(734,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"/></g><g data-mml-node="mi" transform="translate(1178.7,0)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"/></g><g data-mml-node="mo" transform="translate(1590.7,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"/></g></g></g></svg></mjx-container>满足<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.462ex" xmlns="http://www.w3.org/2000/svg" width="4.73ex" height="1.957ex" role="img" focusable="false" viewbox="0 -661 2090.6 865"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"/></g><g data-mml-node="mo" transform="translate(622.8,0)"><path data-c="3E" d="M84 520Q84 528 88 533T96 539L99 540Q106 540 253 471T544 334L687 265Q694 260 694 250T687 235Q685 233 395 96L107 -40H101Q83 -38 83 -20Q83 -19 83 -17Q82 -10 98 -1Q117 9 248 71Q326 108 378 132L626 250L378 368Q90 504 86 509Q84 513 84 520Z"/></g><g data-mml-node="mi" transform="translate(1678.6,0)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"/></g></g></g></svg></mjx-container>。</p>
+<p>算法的执行过程：初始化时队列为空，计算每一个节点的入度存入<code>indegree</code>数组中，定义一个<code>next</code>计数器为0：</p>
+<ol>
+<li>将入度为0的节点标记为<code>next</code>指针值，<code>next</code>指针自加，节点加入队列，若无进入步骤2</li>
+<li>若列表为空则算法结束，否则从列表弹出队头节点将其邻接边的<code>indegree</code>值减一，回到步骤1</li>
+</ol>
+<h3 id="LeetCode-207课程表-amp-LeetCode-210课程表Ⅱ"><a href="#LeetCode-207课程表-amp-LeetCode-210课程表Ⅱ" class="headerlink" title="LeetCode 207课程表&LeetCode 210课程表Ⅱ"></a>LeetCode 207课程表&amp;LeetCode 210课程表Ⅱ</h3><p>你这个学期必须选修 <code>numCourses</code> 门课程，记为 <code>0</code> 到 <code>numCourses - 1</code> 。</p>
+<p>在选修某些课程之前需要一些先修课程。 先修课程按数组 <code>prerequisites</code> 给出，其中 <code>prerequisites[i] = [ai, bi]</code>，表示如果要学习课程 ai 则 必须 先学习课程 <code>bi</code>。</p>
+<p>例如，先修课程对 <code>[0, 1]</code>表示：想要学习课程<code>0</code> ，你需要先完成课程 <code>1</code>。<br>请你判断是否可能完成所有课程的学习？如果可以，返回<code>true</code>；否则，返回 <code>false</code>。</p>
+<p>对于210则是返回一个可能的学习顺序。</p>
+<p>这道题并非完整的拓扑排序题，但是涉及到了相关知识，即判断给定的图是否满足拓扑序，如果满足拓扑序的话，每个节点的入度能够被依次清零。下面给出代码:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">canFinish</span><span class="hljs-params">(<span class="hljs-type">int</span> numCourses, vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; prerequisites)</span> </span>{<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">indegrees</span><span class="hljs-params">(numCourses,<span class="hljs-number">0</span>)</span></span>;<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">neiborlist</span>(numCourses,<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-number">0</span>));<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; p:prerequisites) {<br>            indegrees[p[<span class="hljs-number">0</span>]]++;<br>            neiborlist[p[<span class="hljs-number">1</span>]].<span class="hljs-built_in">push_back</span>(p[<span class="hljs-number">0</span>]);<br>        }<br>        <span class="hljs-type">int</span> permitCnt = <span class="hljs-number">0</span>;<br>        queue&lt;<span class="hljs-type">int</span>&gt; q;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i &lt; numCourses;++i) {<br>            <span class="hljs-keyword">if</span>(indegrees[i]==<span class="hljs-number">0</span>) q.<span class="hljs-built_in">push</span>(i);<br>        }<br>        <span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>()){<br>            <span class="hljs-type">int</span> node = q.<span class="hljs-built_in">front</span>();<br>            q.<span class="hljs-built_in">pop</span>();permitCnt++;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; i:neiborlist[node]){<br>                indegrees[i]--;<br>                <span class="hljs-keyword">if</span>(indegrees[i]==<span class="hljs-number">0</span>) {<br>                    q.<span class="hljs-built_in">push</span>(i);<br>                }<br>            }<br>        }<br>        <span class="hljs-keyword">return</span> permitCnt == numCourses;<br>    }<br>};<br></code></pre></td></tr></table></figure>
+<p>和上面的那道题是类似的，只不过需要返回的是一个学习顺序，那么我们只需要将广度优先搜索的每个弹出节点记录下来返回即可，需要注意的是同时也得判断可不可行。代码很类似如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">findOrder</span><span class="hljs-params">(<span class="hljs-type">int</span> numCourses, vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; prerequisites)</span> </span>{<br>        <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">indegrees</span><span class="hljs-params">(numCourses,<span class="hljs-number">0</span>)</span></span>;<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">neigborList</span>(numCourses,<span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-number">0</span>));<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; p:prerequisites) {<br>            neigborList[p[<span class="hljs-number">1</span>]].<span class="hljs-built_in">push_back</span>(p[<span class="hljs-number">0</span>]);<br>            indegrees[p[<span class="hljs-number">0</span>]]++;<br>        }<br>        queue&lt;<span class="hljs-type">int</span>&gt; q;vector&lt;<span class="hljs-type">int</span>&gt; ret;<br>        <span class="hljs-type">int</span> permitCnt = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i &lt; numCourses;++i) <span class="hljs-keyword">if</span>(indegrees[i] == <span class="hljs-number">0</span>) q.<span class="hljs-built_in">push</span>(i);<br>        <span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>()) {<br>            <span class="hljs-type">int</span> node = q.<span class="hljs-built_in">front</span>();<br>            permitCnt++;<br>            ret.<span class="hljs-built_in">push_back</span>(node);<br>            q.<span class="hljs-built_in">pop</span>();<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; i:neigborList[node]){<br>                indegrees[i]--;<br>                <span class="hljs-keyword">if</span>(indegrees[i]==<span class="hljs-number">0</span>) q.<span class="hljs-built_in">push</span>(i);<br>            }<br>        }<br>        <span class="hljs-keyword">return</span> permitCnt == numCourses ? ret : <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(<span class="hljs-number">0</span>);<br>    }<br>};<br></code></pre></td></tr></table></figure>
+<h3 id="LeetCode-329矩阵最长递增路径"><a href="#LeetCode-329矩阵最长递增路径" class="headerlink" title="LeetCode 329矩阵最长递增路径"></a>LeetCode 329矩阵最长递增路径</h3><p>第一次一次过的<code>HARD</code>，虽然知道用拓扑排序之后就很好想了，这道题题意很简单就是给定一个矩阵找出其中的最长递增路径。</p>
+<p>仔细思考利用入度的概念，一个节点如果能够作为最长递增路径的起点，那么它肯定是入度为0的，那么我们通过广度优先搜索将每一步将队列中所有入度为0的节点周围的可行节点入度减为1，再将每一步变为入度0的节点加入新的队列，直到新的队列为空，那么此时广度优先搜索的深度就是最长递增路径的长度。代码如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> {<br><span class="hljs-keyword">private</span>:<br>    vector&lt;<span class="hljs-type">int</span>&gt; dir = {<span class="hljs-number">-1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">-1</span>};<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">longestIncreasingPath</span><span class="hljs-params">(vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; matrix)</span> </span>{<br>        <span class="hljs-type">int</span> m = matrix.<span class="hljs-built_in">size</span>(), n = matrix[<span class="hljs-number">0</span>].<span class="hljs-built_in">size</span>();<br>        vector&lt;vector&lt;<span class="hljs-type">int</span>&gt;&gt; <span class="hljs-built_in">indegrees</span>(m, <span class="hljs-built_in">vector</span>&lt;<span class="hljs-type">int</span>&gt;(n,<span class="hljs-number">0</span>));<br>        <span class="hljs-comment">//获取所有初始节点的入度</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i &lt; m;++i) {<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;j&lt;n;++j) {<br>                <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>;k &lt; <span class="hljs-number">4</span>;++k) {<br>                    <span class="hljs-type">int</span> next_x = i + dir[k], next_y = j + dir[k+<span class="hljs-number">1</span>];<br>                    <span class="hljs-keyword">if</span>(next_x &gt;= <span class="hljs-number">0</span> &amp;&amp; next_y &gt;= <span class="hljs-number">0</span> &amp;&amp; next_x &lt; m &amp;&amp; next_y &lt; n) {<br>                        <span class="hljs-keyword">if</span>(matrix[next_x][next_y] &lt; matrix[i][j]) indegrees[i][j]++;<br>                    }<br>                }<br>            }<br>        }<br>		<span class="hljs-comment">//获取第一步可以作为起点的入度为0节点</span><br>        vector&lt;<span class="hljs-type">int</span>&gt; q;<br>        <span class="hljs-type">int</span> idx = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;i &lt; m;++i) {<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;j &lt; n;++j) {<br>                <span class="hljs-keyword">if</span>(indegrees[i][j] == <span class="hljs-number">0</span>) q.<span class="hljs-built_in">push_back</span>(i*n+j);<br>            }<br>        }<br>        <span class="hljs-comment">//当还存在入度为0的可行节点时</span><br>        <span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>()){<br>            <span class="hljs-comment">//存储下一步的可行节点队列</span><br>            vector&lt;<span class="hljs-type">int</span>&gt; next_q;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span>&amp; pos:q) {<br>                <span class="hljs-type">int</span> cur_x = pos / n, cur_y = pos % n;<br>                <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k = <span class="hljs-number">0</span>;k &lt; <span class="hljs-number">4</span>;++k) {<br>                    <span class="hljs-type">int</span> next_x = cur_x + dir[k], next_y = cur_y + dir[k+<span class="hljs-number">1</span>];<br>                    <span class="hljs-keyword">if</span>(next_x &gt;= <span class="hljs-number">0</span> &amp;&amp; next_y &gt;= <span class="hljs-number">0</span> &amp;&amp; next_x &lt; m &amp;&amp; next_y &lt; n) {<br>                        <span class="hljs-keyword">if</span>(matrix[next_x][next_y] &gt; matrix[cur_x][cur_y]){<br>                            indegrees[next_x][next_y]--;<br>                            <span class="hljs-keyword">if</span>(indegrees[next_x][next_y] == <span class="hljs-number">0</span>) {<br>                                next_q.<span class="hljs-built_in">push_back</span>(next_x*n+next_y);<br>                            }<br>                        }<br>                    }<br>                }<br>            }<br>            idx++;<br>            q = next_q;<br>        }<br>        <span class="hljs-keyword">return</span> idx;<br>    }<br>};<br></code></pre></td></tr></table></figure>
+<p>类似的题还有802/851/954，就不一一列举了。</p>
+<h2 id="网络流"><a href="#网络流" class="headerlink" title="网络流"></a>网络流</h2><p>网络流基础算法是Ford-Fulkerson算法，算法导论中讲的略微复杂（本文这里旨在给出代码和基本概念，作为作者个人消化学习的笔记，不适合新手学习相关知识，建议可以看<a target="_blank" rel="noopener" href="https://oi-wiki.org/graph/flow/">网络流简介 - OI Wiki (oi-wiki.org)</a>）。</p>
+<p>它的基本思想是寻找增广路，即容量不为0的路径，单纯减去流量并不能保证算法正确于是对每一条边引入了反向边，初始值为0，当我们选择了一条增广路的正向路径最小值，那对应的这条路径的反向路径要加上这个最小值，这可以理解为一种撤销操作，这个算法的正确性就不做证明，具体参考《算法导论》的内容。</p>
+<h3 id="朴素实现"><a href="#朴素实现" class="headerlink" title="朴素实现"></a>朴素实现</h3><p>具体编程实现上朴素想法可以通过深度优先搜索来获取增广路径，FF算法代码如下，存图方法采用<strong>链式前向星</strong>,这是一种采用数组来模拟链表的方法，免去了复杂的指针操作：</p>
+<h4 id="建图过程："><a href="#建图过程：" class="headerlink" title="建图过程："></a>建图过程：</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Edge</span> {<br>    <span class="hljs-type">int</span> to, w, next;<br>}edges[MAXN];<br><span class="hljs-type">int</span> head[MAXN], cnt=<span class="hljs-number">-1</span>; <span class="hljs-comment">//cnt为建图过程中当前边的编号,初始化为-1是必要的，可以简化反向边索引操作</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-type">int</span> from, <span class="hljs-type">int</span> to, <span class="hljs-type">int</span> w)</span> </span>{<br>    edges[++cnt].w = w;				<span class="hljs-comment">//新增一天编号为cnt+1的边，权重（容量）为w</span><br>    edges[cnt].to = to;				<span class="hljs-comment">//新增的边终点设为to</span><br>    edges[cnt].next = head[from];	<span class="hljs-comment">//下一条边作为当前起点的第一条边</span><br>    head[from] = cnt;				<span class="hljs-comment">//当前起点的边设置为新增的边</span><br>}<br></code></pre></td></tr></table></figure>
+<p>同时我们在建图的时候要保证同一条边的下一个编号的边就是反向边，具体操作就是：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> [from,to,w,isend]:=<span class="hljs-built_in">read</span>();!isend;){<br>    <span class="hljs-built_in">add</span>(from,to,w);<br>	<span class="hljs-built_in">add</span>(to,from,<span class="hljs-number">0</span>);<br>}<br></code></pre></td></tr></table></figure>
+<h4 id="算法过程："><a href="#算法过程：" class="headerlink" title="算法过程："></a>算法过程：</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m,s,t; <span class="hljs-comment">// s是源点,t是汇点</span><br><span class="hljs-type">bool</span> vis[MAXN]; <span class="hljs-comment">//dfs访问列表，在一次增广路搜索后重新清空</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> p = s, <span class="hljs-type">int</span> flow = INF)</span> </span>{<br>	<span class="hljs-keyword">if</span>(p == t) <span class="hljs-keyword">return</span> flow;<span class="hljs-comment">//到达汇点，返回增广路上的流量</span><br>    vis[p] = <span class="hljs-literal">true</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> eg = head[p];eg;eg = edges[eg].next){<br>        <span class="hljs-type">int</span> to = edges[eg].to, vol = edges[eg].w,c;<br>        <span class="hljs-keyword">if</span>(vol &gt; <span class="hljs-number">0</span> &amp;&amp; !vis[to] &amp;&amp;(c = <span class="hljs-built_in">dfs</span>(to,<span class="hljs-built_in">min</span>(vol,flow)))!=<span class="hljs-number">-1</span>) {<br>            <span class="hljs-comment">/*</span><br><span class="hljs-comment">            	网络流算法核心，对于正向边减去容量，反向边加上容量，形成新的残余网络</span><br><span class="hljs-comment">            	向上返回的容量是当前容量和下层递归得到容量的最小值</span><br><span class="hljs-comment">            */</span><br>            edges[eg].w -= c;<br>            edges[eg ^ <span class="hljs-number">1</span>].w += c;<br>            <span class="hljs-keyword">return</span> c;<br>        }<br>	}<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<span class="hljs-comment">//不可达的清空则返回-1</span><br>}<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">FordFulkerson</span><span class="hljs-params">()</span> </span>{<br>	<span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>,c;<br>    <span class="hljs-keyword">while</span>((c = <span class="hljs-built_in">dfs</span>())!=<span class="hljs-number">-1</span>) {<br>        <span class="hljs-built_in">memset</span>(vis,<span class="hljs-number">0</span>,<span class="hljs-built_in">sizeof</span>(vis));<span class="hljs-comment">//深搜时清空访问数组的简便方法</span><br>        ans += c;<br>    }<br>    <span class="hljs-keyword">return</span> ans; <span class="hljs-comment">//每条增广路径的流量加起来就是最大流</span><br>}<br></code></pre></td></tr></table></figure>
+<p>但是这种实现不是多项式复杂度的，意味着它很玄学。</p>
+<h3 id="Edmond-Karp改进"><a href="#Edmond-Karp改进" class="headerlink" title="Edmond-Karp改进"></a>Edmond-Karp改进</h3><p>一般会考虑采用BFS版本的实现，变成了Edmond-Karp算法，EK算法采用BFS的方式进行遍历构造，和之前一样我们忽略根据数据建图过程给出代码如下。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> n,m,s,t,last[MAXN],flow[MAXN];<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">bfs</span><span class="hljs-params">()</span></span>{<br>    <span class="hljs-built_in">memset</span>(last,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(last));<br>    queue&lt;<span class="hljs-type">int</span>&gt; q;<br>    q.<span class="hljs-built_in">push</span>(s);<br>    flow[s] = INF;<br>    <span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>()) {<br>        <span class="hljs-type">int</span> p = q.<span class="hljs-built_in">front</span>();<br>        q.<span class="hljs-built_in">pop</span>();<br>        <span class="hljs-keyword">if</span>(p == t){<span class="hljs-comment">//到达汇点循环结束</span><br>            <span class="hljs-keyword">break</span>;<br>        }<br>        <span class="hljs-comment">/*</span><br><span class="hljs-comment">        	广度优先搜索一条可行流，flow[i]表示以节点i为末尾的一个流,last[to]表示</span><br><span class="hljs-comment">        	到达to节点的边</span><br><span class="hljs-comment">        */</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> eg=head[p];eg;eg = edges[eg].next) {<br>            <span class="hljs-type">int</span> to = edges[eg].to, vol = edges[eg].w;<br>            <span class="hljs-keyword">if</span>(vol &gt; <span class="hljs-number">0</span> &amp;&amp; last[to] == <span class="hljs-number">-1</span>) {<span class="hljs-comment">//边容量大于0且没被选过</span><br>                last[to] = eg;<br>                flow[to] = <span class="hljs-built_in">min</span>(flow[p],vol);<br>                q.<span class="hljs-built_in">push</span>(to);<br>			}<br>        }<br>    }<br>    <span class="hljs-keyword">return</span> last[t] != <span class="hljs-number">-1</span>; <span class="hljs-comment">//返回是否有到达汇点的路径</span><br>}<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">EdmondKarp</span><span class="hljs-params">()</span> </span>{<br>    <span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">bfs</span>()){<span class="hljs-comment">//能够找到一条通往汇点的增广路径</span><br>		ans += flow[t];<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = t;i != s;i = edges[last[i]^<span class="hljs-number">1</span>].to) {<br>            <span class="hljs-comment">//向前回溯每一条路径的反向边并更新残余网络</span><br>            edges[last[i]].w -= flow[t];<br>            edge[last[i]^<span class="hljs-number">1</span>].w += flow[t];<br>		}<br>    }<br>}<br></code></pre></td></tr></table></figure>
+<p>上述算法的多项式时间复杂度上线<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="6.626ex" height="2.452ex" role="img" focusable="false" viewbox="0 -833.9 2928.6 1083.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"/></g><g data-mml-node="mo" transform="translate(763,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"/></g><g data-mml-node="mi" transform="translate(1152,0)"><path data-c="1D463" d="M173 380Q173 405 154 405Q130 405 104 376T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Q21 294 29 316T53 368T97 419T160 441Q202 441 225 417T249 361Q249 344 246 335Q246 329 231 291T200 202T182 113Q182 86 187 69Q200 26 250 26Q287 26 319 60T369 139T398 222T409 277Q409 300 401 317T383 343T365 361T357 383Q357 405 376 424T417 443Q436 443 451 425T467 367Q467 340 455 284T418 159T347 40T241 -11Q177 -11 139 22Q102 54 102 117Q102 148 110 181T151 298Q173 362 173 380Z"/></g><g data-mml-node="msup" transform="translate(1637,0)"><g data-mml-node="mi"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"/></g><g data-mml-node="mn" transform="translate(499,363) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/></g></g><g data-mml-node="mo" transform="translate(2539.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"/></g></g></g></svg></mjx-container>。</p>
+<h3 id="Dinic算法"><a href="#Dinic算法" class="headerlink" title="Dinic算法"></a>Dinic算法</h3><p>在边数<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex" xmlns="http://www.w3.org/2000/svg" width="1.054ex" height="1.025ex" role="img" focusable="false" viewbox="0 -442 466 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"/></g></g></g></svg></mjx-container>过多的稠密图状况下EK算法还有改进空间，就是Dinic算法，在现实中最常用的是这种(虽然老师上课讲的是label correcting，不过区别仅仅在于贴标签的方向不同）。</p>
+<p>Dinic算法先采用BFS分层贴标签然后再用DFS在可行弧中寻找解。其时间复杂度的上界是<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="6.626ex" height="2.452ex" role="img" focusable="false" viewbox="0 -833.9 2928.6 1083.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"/></g><g data-mml-node="mo" transform="translate(763,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"/></g><g data-mml-node="msup" transform="translate(1152,0)"><g data-mml-node="mi"><path data-c="1D463" d="M173 380Q173 405 154 405Q130 405 104 376T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Q21 294 29 316T53 368T97 419T160 441Q202 441 225 417T249 361Q249 344 246 335Q246 329 231 291T200 202T182 113Q182 86 187 69Q200 26 250 26Q287 26 319 60T369 139T398 222T409 277Q409 300 401 317T383 343T365 361T357 383Q357 405 376 424T417 443Q436 443 451 425T467 367Q467 340 455 284T418 159T347 40T241 -11Q177 -11 139 22Q102 54 102 117Q102 148 110 181T151 298Q173 362 173 380Z"/></g><g data-mml-node="mn" transform="translate(518,363) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/></g></g><g data-mml-node="mi" transform="translate(2073.6,0)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"/></g><g data-mml-node="mo" transform="translate(2539.6,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"/></g></g></g></svg></mjx-container>，平均为<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="10.381ex" height="2.262ex" role="img" focusable="false" viewbox="0 -750 4588.3 1000"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"/></g><g data-mml-node="mo" transform="translate(763,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"/></g><g data-mml-node="mi" transform="translate(1152,0)"><path data-c="1D463" d="M173 380Q173 405 154 405Q130 405 104 376T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Q21 294 29 316T53 368T97 419T160 441Q202 441 225 417T249 361Q249 344 246 335Q246 329 231 291T200 202T182 113Q182 86 187 69Q200 26 250 26Q287 26 319 60T369 139T398 222T409 277Q409 300 401 317T383 343T365 361T357 383Q357 405 376 424T417 443Q436 443 451 425T467 367Q467 340 455 284T418 159T347 40T241 -11Q177 -11 139 22Q102 54 102 117Q102 148 110 181T151 298Q173 362 173 380Z"/></g><g data-mml-node="mi" transform="translate(1637,0)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"/></g><g data-mml-node="mi" transform="translate(2269.7,0)"><path data-c="6C" d="M42 46H56Q95 46 103 60V68Q103 77 103 91T103 124T104 167T104 217T104 272T104 329Q104 366 104 407T104 482T104 542T103 586T103 603Q100 622 89 628T44 637H26V660Q26 683 28 683L38 684Q48 685 67 686T104 688Q121 689 141 690T171 693T182 694H185V379Q185 62 186 60Q190 52 198 49Q219 46 247 46H263V0H255L232 1Q209 2 183 2T145 3T107 3T57 1L34 0H26V46H42Z"/><path data-c="6F" d="M28 214Q28 309 93 378T250 448Q340 448 405 380T471 215Q471 120 407 55T250 -10Q153 -10 91 57T28 214ZM250 30Q372 30 372 193V225V250Q372 272 371 288T364 326T348 362T317 390T268 410Q263 411 252 411Q222 411 195 399Q152 377 139 338T126 246V226Q126 130 145 91Q177 30 250 30Z" transform="translate(278,0)"/><path data-c="67" d="M329 409Q373 453 429 453Q459 453 472 434T485 396Q485 382 476 371T449 360Q416 360 412 390Q410 404 415 411Q415 412 416 414V415Q388 412 363 393Q355 388 355 386Q355 385 359 381T368 369T379 351T388 325T392 292Q392 230 343 187T222 143Q172 143 123 171Q112 153 112 133Q112 98 138 81Q147 75 155 75T227 73Q311 72 335 67Q396 58 431 26Q470 -13 470 -72Q470 -139 392 -175Q332 -206 250 -206Q167 -206 107 -175Q29 -140 29 -75Q29 -39 50 -15T92 18L103 24Q67 55 67 108Q67 155 96 193Q52 237 52 292Q52 355 102 398T223 442Q274 442 318 416L329 409ZM299 343Q294 371 273 387T221 404Q192 404 171 388T145 343Q142 326 142 292Q142 248 149 227T179 192Q196 182 222 182Q244 182 260 189T283 207T294 227T299 242Q302 258 302 292T299 343ZM403 -75Q403 -50 389 -34T348 -11T299 -2T245 0H218Q151 0 138 -6Q118 -15 107 -34T95 -74Q95 -84 101 -97T122 -127T170 -155T250 -167Q319 -167 361 -139T403 -75Z" transform="translate(778,0)"/></g><g data-mml-node="mo" transform="translate(3547.7,0)"><path data-c="2061" d=""/></g><g data-mml-node="mi" transform="translate(3714.3,0)"><path data-c="1D463" d="M173 380Q173 405 154 405Q130 405 104 376T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Q21 294 29 316T53 368T97 419T160 441Q202 441 225 417T249 361Q249 344 246 335Q246 329 231 291T200 202T182 113Q182 86 187 69Q200 26 250 26Q287 26 319 60T369 139T398 222T409 277Q409 300 401 317T383 343T365 361T357 383Q357 405 376 424T417 443Q436 443 451 425T467 367Q467 340 455 284T418 159T347 40T241 -11Q177 -11 139 22Q102 54 102 117Q102 148 110 181T151 298Q173 362 173 380Z"/></g><g data-mml-node="mo" transform="translate(4199.3,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"/></g></g></g></svg></mjx-container>，如果用在二分图算法里则该算法优于匈牙利算法。</p>
+<p>Dinic算法给定了层级图(level graph)和距离标签(distance label)来对网络进行增广路径搜索。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> n, m, s, t, level[MAXN], cur[MAXN];<br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">bfs</span><span class="hljs-params">()</span> </span>{<span class="hljs-comment">//BFS算法对节点进行分层</span><br>    <span class="hljs-built_in">memset</span>(level,<span class="hljs-number">-1</span>,<span class="hljs-built_in">sizeof</span>(lv));<br>    level[s] = <span class="hljs-number">0</span>; <span class="hljs-comment">//从源节点开始给各个节点编号</span><br>    <span class="hljs-built_in">memcpy</span>(cur,head,<span class="hljs-built_in">sizeof</span>(head));<span class="hljs-comment">//将所有节点索引起始弧作为当前优化弧</span><br>    queue&lt;<span class="hljs-type">int</span>&gt; q;<br>    q.<span class="hljs-built_in">push</span>(s);<br>    <span class="hljs-keyword">while</span>(!q.<span class="hljs-built_in">empty</span>()){<br>        <span class="hljs-type">int</span> p = q.<span class="hljs-built_in">front</span>();<br>        q.<span class="hljs-built_in">pop</span>();<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> eg = head[p];eg;eg = edges[eg].next) {<br>			<span class="hljs-type">int</span> to = edges[eg].to, vol = edges[eg].w;<br>            <span class="hljs-keyword">if</span>(vol &gt; <span class="hljs-number">0</span> &amp;&amp; level[to] == <span class="hljs-number">-1</span>) {<span class="hljs-comment">//新一节点未被编号</span><br>                level[to] = level[p] + <span class="hljs-number">1</span>, q.<span class="hljs-built_in">push</span>(to);<br>            }<br>        }<br>    }<br>    <span class="hljs-keyword">return</span> level[t] != <span class="hljs-number">-1</span>; <span class="hljs-comment">//汇点无法被标签更新则无法到达，返回false</span><br>}<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> p = s, <span class="hljs-type">int</span> flow = INF)</span> </span>{<br>    <span class="hljs-keyword">if</span>(p == t){<br>        <span class="hljs-keyword">return</span> flow;<br>    }<br>    <span class="hljs-type">int</span> res = flow;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> eg = cur[p];eg &amp;&amp; res&gt;<span class="hljs-number">0</span>;eg = edges[eg].next) {<span class="hljs-comment">//有剩余流量则继续</span><br>        cur[p] = eg; <span class="hljs-comment">//节点p的当前弧更新</span><br>        <span class="hljs-type">int</span> to = edges[eg].to, vol = edges[eg].w;<br>        <span class="hljs-keyword">if</span>(vol &gt; <span class="hljs-number">0</span> &amp;&amp; level[to] == level[p] + <span class="hljs-number">1</span>){<br>            <span class="hljs-comment">//选择层数更高的方向即可行弧方向进行增广</span><br>            <span class="hljs-type">int</span> c = <span class="hljs-built_in">dfs</span>(to,<span class="hljs-built_in">min</span>(vol,res));<span class="hljs-comment">//尽可能多传递流量</span><br>            res -= c;	<span class="hljs-comment">//更新剩余流量</span><br>            <span class="hljs-comment">//更新残存网络</span><br>            edges[eg].w -= c;<br>            edges[eg ^ <span class="hljs-number">1</span>].w += c;<br>        }<br>    }<br>    <span class="hljs-keyword">return</span> flow - res; <span class="hljs-comment">//返回从当前节点传出去的流量</span><br>}<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">dinic</span><span class="hljs-params">()</span> </span>{<br>	<span class="hljs-type">int</span> ans = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">bfs</span>()) {<br>        ans += <span class="hljs-built_in">dfs</span>();<br>    }<br>    <span class="hljs-keyword">return</span> ans;<br>}<br></code></pre></td></tr></table></figure>
+<h2 id="最大二分匹配"><a href="#最大二分匹配" class="headerlink" title="最大二分匹配"></a>最大二分匹配</h2><p>假设我们的基础问题是董事长有八个员工编号为1到8，同时有8项工作编号为a到h，员工们能干的活如下：</p>
+<ul>
+<li>员工1： <code>a b c d</code></li>
+<li>员工2：<code>c d</code></li>
+<li>员工3： <code>e f</code></li>
+<li>员工4： <code>f g</code></li>
+<li>员工5：<code>a e f g</code></li>
+<li>员工6：<code>g</code></li>
+<li>员工7：<code>h</code></li>
+<li>员工8：<code>h</code></li>
+</ul>
+<p>问怎么找到一个算法安排每个员工同时干一件事来使得能够完成的工作最多。首先我们根据问题给出每个员工能干的活给出一个可视化的图。</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2022/05/15/%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95/bisearch2.png" alt="bisearch2" class="lazyload"></p>
+<h3 id="匈牙利算法"><a href="#匈牙利算法" class="headerlink" title="匈牙利算法"></a>匈牙利算法</h3><p>在介绍这个问题之前我们给出一个类似于<strong>最大流最小割</strong>的Konig定理，一个二分图中的最小覆盖点等于最大匹配数，最小覆盖点指选取一个最小的点集使得所有边（视作无向）都至少在这个点集中有一个端点。所以很多时候最小覆盖问题也可以转换为最大匹配问题从而用匈牙利算法解决，类似于最小割问题也可以转化为求取最大流问题，这体现了线性规划问题中的对偶性（我猜的）。</p>
+<p>匈牙利算法就是遍历二分图的<code>s</code>集合中的点<code>i</code>，与<code>i</code>能够匹配的第一个可行解直接匹配，如果发生冲突则看当前冲突的对象是否有别的可行解没被匹配，有的话就让它和其他解匹配，然后<code>i</code>和可行解匹配，没有的话就移到下一个可行解（优先NTR，不行就选择别人，真有你的黄毛）。代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-type">int</span> M = <span class="hljs-number">8</span>, N = <span class="hljs-number">8</span>;            <span class="hljs-comment">//M, N分别表示左、右侧集合的元素数量</span><br><span class="hljs-type">int</span> Map[M][N]; <span class="hljs-comment">//邻接矩阵存图</span><br><span class="hljs-type">int</span> p[M];         <span class="hljs-comment">//记录当前右侧元素所对应的左侧元素</span><br><span class="hljs-type">bool</span> vis[N];      <span class="hljs-comment">//记录右侧元素是否已被访问过</span><br><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">match</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span></span>{<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= N; ++j)<br>        <span class="hljs-keyword">if</span> (Map[i][j] &amp;&amp; !vis[j]) {<span class="hljs-comment">//有边且未访问</span><br>            vis[j] = <span class="hljs-literal">true</span>;                 <span class="hljs-comment">//记录状态为访问过</span><br>            <span class="hljs-keyword">if</span> (p[j] == <span class="hljs-number">0</span> || <span class="hljs-built_in">match</span>(p[j])){ <span class="hljs-comment">//如果暂无匹配，或者原来匹配的左侧元素可以找到新的匹配</span><br>                p[j] = i;    <span class="hljs-comment">//当前左侧元素成为当前右侧元素的新匹配</span><br>                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <span class="hljs-comment">//返回匹配成功</span><br>            }<br>        }<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <span class="hljs-comment">//循环结束，仍未找到匹配，返回匹配失败</span><br>}<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">Hungarian</span><span class="hljs-params">()</span></span>{<br>    <span class="hljs-type">int</span> cnt = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= M; ++i){<br>        <span class="hljs-built_in">memset</span>(vis, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(vis)); <span class="hljs-comment">//重置vis数组</span><br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">match</span>(i))<br>            cnt++;<br>    }<br>    <span class="hljs-keyword">return</span> cnt;<br>}<br></code></pre></td></tr></table></figure>
+<h3 id="网络流解法"><a href="#网络流解法" class="headerlink" title="网络流解法"></a>网络流解法</h3><p>这类问题也可以建模为网络流问题，通常需要自己加上一个原点和汇点，根据增广路算法的使用相比于匈牙利算法可能会更加高效（比如laebel correcting算法）。</p>
+<p>我们为前面所说的图添加一个源点和汇点：</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2022/05/15/%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95/bisearch.png" alt="bisearch" class="lazyload"></p>
+<p>每个原点流出为1，每个汇点接受也为1，这样就表示每个员工同时只能干一件工作，一件工作同时只能被一个人干，这就将二分图最大匹配问题转换为了网络流问题，可以使用我们在之前提到的网络流算法来解决了。</p>
+<h3 id="一些例题"><a href="#一些例题" class="headerlink" title="一些例题"></a>一些例题</h3><p>这部分给定一些看起来不像是二分图匹配但是却可以用二分图匹配解决的问题，以后再来写。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/broken-board-dominoes/">LCP 04. 覆盖 - 力扣（LeetCode）</a></p>
+<p><strong>（洛谷P1129） [ZJOI2007]矩阵游戏</strong></p>
+<p><strong>（TYVJ P1035） 棋盘覆盖</strong></p>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/05/15/%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;05&#x2F;15&#x2F;%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;05&#x2F;15&#x2F;%E7%BD%91%E7%BB%9C%E6%B5%81%E7%AE%97%E6%B3%95&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Dinic%E7%AE%97%E6%B3%95/" rel="tag">Dinic算法</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Edmond-Karp%E7%AE%97%E6%B3%95/" rel="tag">Edmond-Karp算法</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Ford-Fulkerson%E7%AE%97%E6%B3%95/" rel="tag">Ford-Fulkerson算法</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95/" rel="tag">匈牙利算法</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E5%9B%BE%E8%AE%BA/" rel="tag">图论</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" rel="tag">拓扑排序</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BD%91%E7%BB%9C%E6%B5%81/" rel="tag">网络流</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1652615164350"></script>
+
+
+	<script async src="/js/search.js?v=1652615164350"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>
