@@ -4,7 +4,7 @@
 
 <head>
     
-    <title>关于彼得堡的回忆 - Brief Candle</title>
+    <title>(六)Go语言实现Hopcroft算法 - Brief Candle</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="null">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,29 +12,29 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="关于彼得堡的回忆最近梦里我时常回到疫情前从彼得大帝青铜骑士像出发沿着涅瓦大街游荡的那个白夜凌晨。想起冬宫广场狂欢一夜后的一地酒瓶，一片静寂中在燃烧的垃圾桶前弹奏吉他的流浪汉，而后走到不远的喀山大教堂前又遇到了烂醉如泥倚到我身上的大胡子男人。想起莫斯科火车站（像在上海设了北京火车站一样别扭）旁分岔出两条小道，其中一条阴暗破旧路面积水，那里抽着水烟揽客的妓女意兴阑珊地望了我一眼又自顾自地抽烟。北极星商">
+    <meta name="description" content="Go语言实现Hopcroft算法作为本系列最后一篇，我们先重复一下之前所说的算法流程： 初始时刻，我们将$D$中的状态分为两个组，分别为非接受组$S-F$（包含所有非终止状态）和接受组$F$（包含所有终止状态）。从我们的当前划分出的组中选择一个状态组$A$，选定某个输入符号$a$检查是否可以用于区分状态组中的某些状态，对于能够区分的我们就划分为多个组使得组内的状态在$a$作用下都到达相同的状态。重">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于彼得堡的回忆">
-<meta property="og:url" content="https://kimanyang.xyz/2022/05/29/%E5%85%B3%E4%BA%8E%E5%BD%BC%E5%BE%97%E5%A0%A1%E7%9A%84%E5%9B%9E%E5%BF%86/index.html">
+<meta property="og:title" content="(六)Go语言实现Hopcroft算法">
+<meta property="og:url" content="https://kimanyang.xyz/2022/06/19/%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E(6)Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0Hopcrpft%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Brief Candle">
-<meta property="og:description" content="关于彼得堡的回忆最近梦里我时常回到疫情前从彼得大帝青铜骑士像出发沿着涅瓦大街游荡的那个白夜凌晨。想起冬宫广场狂欢一夜后的一地酒瓶，一片静寂中在燃烧的垃圾桶前弹奏吉他的流浪汉，而后走到不远的喀山大教堂前又遇到了烂醉如泥倚到我身上的大胡子男人。想起莫斯科火车站（像在上海设了北京火车站一样别扭）旁分岔出两条小道，其中一条阴暗破旧路面积水，那里抽着水烟揽客的妓女意兴阑珊地望了我一眼又自顾自地抽烟。北极星商">
+<meta property="og:description" content="Go语言实现Hopcroft算法作为本系列最后一篇，我们先重复一下之前所说的算法流程： 初始时刻，我们将$D$中的状态分为两个组，分别为非接受组$S-F$（包含所有非终止状态）和接受组$F$（包含所有终止状态）。从我们的当前划分出的组中选择一个状态组$A$，选定某个输入符号$a$检查是否可以用于区分状态组中的某些状态，对于能够区分的我们就划分为多个组使得组内的状态在$a$作用下都到达相同的状态。重">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Petersburg-square.jpg/1024px-Petersburg-square.jpg">
-<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/The_Bronze_Horseman_%28St._Petersburg%2C_Russia%29.jpg/1024px-The_Bronze_Horseman_%28St._Petersburg%2C_Russia%29.jpg">
-<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Palace_Bridge_SPB_%28img2%29.jpg/1024px-Palace_Bridge_SPB_%28img2%29.jpg">
-<meta property="article:published_time" content="2022-05-29T05:34:02.000Z">
-<meta property="article:modified_time" content="2022-05-29T05:43:35.703Z">
+<meta property="og:image" content="https://kimanyang.xyz/2022/06/19/%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E(6)Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0Hopcrpft%E7%AE%97%E6%B3%95/image-20220619202222546.png">
+<meta property="article:published_time" content="2022-06-19T12:58:24.000Z">
+<meta property="article:modified_time" content="2022-06-19T12:57:10.743Z">
 <meta property="article:author" content="Kiman Yang">
-<meta property="article:tag" content="散文">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="编译原理">
+<meta property="article:tag" content="正则表达式">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Petersburg-square.jpg/1024px-Petersburg-square.jpg">
-    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1655643504876">
+<meta name="twitter:image" content="https://kimanyang.xyz/2022/06/19/%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E(6)Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0Hopcrpft%E7%AE%97%E6%B3%95/image-20220619202222546.png">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1655643504837">
     
-    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1655643504876">
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1655643504876">
-    <link rel="stylesheet" href="/css/style.css?v=1655643504876">
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1655643504837">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1655643504837">
+    <link rel="stylesheet" href="/css/style.css?v=1655643504837">
     
-        <link rel="stylesheet" href="/css/dark.css?v=1655643504876">
+        <link rel="stylesheet" href="/css/dark.css?v=1655643504837">
      
     
 <!-- hexo injector head_end start -->
@@ -206,73 +206,53 @@
 
   <article>
       
-          <div class="nexmoe-post-cover" style="padding-bottom: 56.666666666666664%;"> 
-              <img data-src="/cover/emtsh.jpg" data-sizes="auto" alt="关于彼得堡的回忆" class="lazyload">
-              <h1>关于彼得堡的回忆</h1>
+          <div class="nexmoe-post-cover" style="padding-bottom: 77.16666666666666%;"> 
+              <img data-src="/cover/yuanxiangcover5.jpg" data-sizes="auto" alt="(六)Go语言实现Hopcroft算法" class="lazyload">
+              <h1>(六)Go语言实现Hopcroft算法</h1>
           </div>
       
       
       <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2022年05月29日</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年06月19日</a>
 </div>
 
       
 
-      <h1 id="关于彼得堡的回忆"><a href="#关于彼得堡的回忆" class="headerlink" title="关于彼得堡的回忆"></a>关于彼得堡的回忆</h1><p>最近梦里我时常回到疫情前从彼得大帝青铜骑士像出发沿着涅瓦大街游荡的那个白夜凌晨。想起冬宫广场狂欢一夜后的一地酒瓶，一片静寂中在燃烧的垃圾桶前弹奏吉他的流浪汉，而后走到不远的喀山大教堂前又遇到了烂醉如泥倚到我身上的大胡子男人。想起莫斯科火车站（像在上海设了北京火车站一样别扭）旁分岔出两条小道，其中一条阴暗破旧路面积水，那里抽着水烟揽客的妓女意兴阑珊地望了我一眼又自顾自地抽烟。北极星商场前一个年轻的推销员向我喊了几句俄语，看见我迷惑的表情又用英语说“We can be free friend.”，当时我仅仅回了句抱歉就继续前行，如今我却无比好奇他在那个白夜里究竟在贩卖些什么。当亚历山大·涅夫斯基修道院最终呈现在我面前时，太阳也恰恰升到修道院塔尖，十字架泛着金色的光芒，陀翁的墓近在眼前，但修道院并不会在五点开放，于是在路边的消防栓上坐了十分钟后我便返程了。清晨的彼得堡宁静祥和，人们早早出门聚集在涅瓦河畔等待着盛大的海军军演，那时的我并不知道从头顶飞过的苏24以及面前驶过的护卫舰们将会迎来怎样的未来。一个父亲将儿子扛到肩上，涅瓦河上的吊桥缓缓升起，随着飞机的轰鸣和军舰驶过，他们欢呼起来。</p>
-<img data-fancybox="gallery" data-sizes="auto" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Petersburg-square.jpg/1024px-Petersburg-square.jpg" alt="从埃尔米塔日博物馆看冬宫广场与亚历山大柱" class="lazyload">
+      <h1 id="Go语言实现Hopcroft算法"><a href="#Go语言实现Hopcroft算法" class="headerlink" title="Go语言实现Hopcroft算法"></a>Go语言实现Hopcroft算法</h1><p>作为本系列最后一篇，我们先重复一下之前所说的算法流程：</p>
+<p>初始时刻，我们将$D$中的状态分为两个组，分别为非接受组$S-F$（包含所有非终止状态）和接受组$F$（包含所有终止状态）。从我们的当前划分出的组中选择一个状态组$A$，选定某个输入符号$a$检查是否可以用于区分状态组中的某些状态，对于能够区分的我们就划分为多个组使得组内的状态在$a$作用下都到达相同的状态。重复上述分割过程直到无法继续分割。我们把某一步的算法得到的分割方法定义为$\prod_{new}$，初始划分${ {F},{S-F}} $为定义为$\prod$。算法完成时的分割方法定义为$\prod_{final}$。下面给出算法流程：</p>
+<ol>
+<li><p>如先前所说划分两个组接受组$F$和非接受组$S-F$作为初始划分</p>
+</li>
+<li><p>如下图所示进行划分构造</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2022/06/19/%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E(6)Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0Hopcrpft%E7%AE%97%E6%B3%95/image-20220619202222546.png" alt="image-20220619202222546" class="lazyload"></p>
+</li>
+<li><p>如果$\prod_{new}&#x3D;\prod$则直接令$\prod_{final}&#x3D;\prod$；否则用$\prod_{new}$替换$\prod$并重复步骤2。</p>
+</li>
+<li><p>在分划出的$\prod_{final}$的每个组选定一个状态作为该组的代表，这些代表构成了$D^{‘}$的状态，对于这些状态：</p>
+<ol>
+<li>$D^{‘}$的开始状态是包含了$D$开始状态的组</li>
+<li>$D^{‘}$的终止状态是包含了$D$终止状态的组</li>
+<li>令$s$是$\prod_{final}$中某个组$G$的代表，并令$D$中在输入$a$上离开$s$的转换到达状态$t$。令$r$为$t$所在组$H$的代表，那么在$D^{‘}$中存在一个从$s$到$r$在输入$a$上的转换。</li>
+</ol>
+</li>
+</ol>
+<p>下面我们开始给出实现过程：</p>
+<h2 id="MDFA相关结构"><a href="#MDFA相关结构" class="headerlink" title="MDFA相关结构"></a>MDFA相关结构</h2><p>类似地，还是有三个主要结构。</p>
+<h3 id="MDFA-Node"><a href="#MDFA-Node" class="headerlink" title="MDFA_Node"></a>MDFA_Node</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">type</span> MDFA_Node <span class="hljs-keyword">struct</span> &#123;<br>	Id       <span class="hljs-type">int</span><br>	Set      <span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">bool</span> <br>	IsAccept <span class="hljs-type">bool</span><br>	Edges    *MDFA_Edge<br>	Next     *MDFA_Node<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<center>
-    <h5>
-        冬宫广场与亚历山大柱
-    </h5>
-</center>
+<p>和之前完全一致。</p>
+<h3 id="MDFA-Edge"><a href="#MDFA-Edge" class="headerlink" title="MDFA_Edge"></a>MDFA_Edge</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">type</span> MDFA_Edge <span class="hljs-keyword">struct</span> &#123;<br>	Ch   <span class="hljs-type">byte</span><br>	From *MDFA_Node<br>	To   *MDFA_Node<br>	Next *MDFA_Edge<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<img data-fancybox="gallery" data-sizes="auto" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/The_Bronze_Horseman_%28St._Petersburg%2C_Russia%29.jpg/1024px-The_Bronze_Horseman_%28St._Petersburg%2C_Russia%29.jpg" alt="img" class="lazyload">
+<p>和之前完全一致。</p>
+<h3 id="MDFA-Graph"><a href="#MDFA-Graph" class="headerlink" title="MDFA_Graph"></a>MDFA_Graph</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-keyword">type</span> MDFA_Graph <span class="hljs-keyword">struct</span> &#123;<br>	innerDFA  *dfa.DFA_Graph	<span class="hljs-comment">//内建的非最小确定性状态机</span><br>	NodeCount <span class="hljs-type">int</span>				<span class="hljs-comment">//所有图节点的个数，随着构造过程逐渐增加</span><br>	Head      *MDFA_Node		<span class="hljs-comment">//整个DFA图的起始节点，构成一条链表用于最后的存图</span><br>	Nodes     []*MDFA_Node		<span class="hljs-comment">//存图后可以通过该项索引所有的点</span><br>	AlphaBeta <span class="hljs-keyword">map</span>[<span class="hljs-type">byte</span>]<span class="hljs-type">bool</span>		<span class="hljs-comment">//所有可行的字符集合</span><br>	<span class="hljs-comment">/*Used to compare whether two divisions are different*/</span><br>	GammaOld []<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">bool</span>		<span class="hljs-comment">//算法中的上一个集合划分</span><br>	GammaNew []<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">bool</span>		<span class="hljs-comment">//一个新的集合划分</span><br>&#125;<br></code></pre></td></tr></table></figure>
 
-<center>
-    <h5>
-        彼得大帝青铜骑士像
-    </h5>
-</center>
+<h2 id="MDFA核心函数"><a href="#MDFA核心函数" class="headerlink" title="MDFA核心函数"></a>MDFA核心函数</h2><p>三个函数，在开头提到的算法步骤1~3为函数<code>hopcroft()</code>，函数<code>split(Set map[int]bool) SetPair</code>实现了对集合的划分（一分二），最后的<code>MinimizeDFA()</code>实现了步骤4。最为核心的函数<code>split()</code>的实现较为繁琐，有兴趣可以仔细阅读（我的实现可能不是最优的，可能在集合比较上还得加上用哈希进行优化更好），这里就不做展示了。</p>
+<h3 id="hopcroft算法"><a href="#hopcroft算法" class="headerlink" title="hopcroft算法"></a>hopcroft算法</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(g *MDFA_Graph)</span></span> hopcroft() &#123;<br>	acceptSet := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">bool</span>)<br>	notAcceptSet := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">bool</span>)<br>	<span class="hljs-keyword">for</span> p := g.innerDFA.Head; p != <span class="hljs-literal">nil</span>; p = p.Next &#123;<br>		<span class="hljs-keyword">if</span> p.IsAccept &#123;<br>			acceptSet[p.Id] = <span class="hljs-literal">true</span><br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			notAcceptSet[p.Id] = <span class="hljs-literal">true</span><br>		&#125;<br>	&#125;<br>	g.GammaNew = <span class="hljs-built_in">append</span>(g.GammaNew, acceptSet)<br>	g.GammaNew = <span class="hljs-built_in">append</span>(g.GammaNew, notAcceptSet)<br>	<span class="hljs-keyword">for</span> !compareTwoGamma(g.GammaOld, g.GammaNew) &#123;<br>		g.GammaOld = g.GammaNew<br>		g.GammaNew = <span class="hljs-literal">nil</span><br>	&#125;<br>	<span class="hljs-keyword">for</span> _, v := <span class="hljs-keyword">range</span> g.GammaOld &#123;<br>		tmp := v<br>		s1 := g.split(tmp).Set1<br>		<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(s1) != <span class="hljs-number">0</span> &#123;<br>			g.GammaNew = <span class="hljs-built_in">append</span>(g.GammaNew, s1)<br>		&#125;<br>		s2 := g.split(tmp).Set2<br>		<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(s2) != <span class="hljs-number">0</span> &#123;<br>			g.GammaNew = <span class="hljs-built_in">append</span>(g.GammaNew, s2)<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>在我的梦中，拉斯科利尼科夫举起斧子将桥索砍断，彼得大帝筑城的二十万劳工与农奴的死魂灵从泥泞的大地中升起，从天而降的铝热剂燃烧弹将我与每个活人烧穿，青铜骑士在熊熊烈火里融化，阿芙乐尔号也缓缓沉没，在死亡与惨叫声中谢尔盖·沃尔孔斯基用年迈农奴的锄头为每具尸体挖好坟墓，就像他为被尼古拉一世炮火轰碎的十二月党人挖好的坟墓一样。随后一场冰雹从天而降，彼得堡如同从未存在过一样化为波罗的海旁一片沼泽。</p>
-<img data-fancybox="gallery" data-sizes="auto" data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Palace_Bridge_SPB_%28img2%29.jpg/1024px-Palace_Bridge_SPB_%28img2%29.jpg" alt="img" class="lazyload">
-
-<center>
-    <h5>
-       宫廷桥，涅瓦河上的吊桥
-    </h5>
-</center>
+<h3 id="最小化过程"><a href="#最小化过程" class="headerlink" title="最小化过程"></a>最小化过程</h3><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs golang"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(g *MDFA_Graph)</span></span> MinimizeDFA() &#123;<br>	g.AlphaBeta = g.innerDFA.Alphabeta<br>	g.hopcroft()<br><br>	<span class="hljs-comment">// store the graph</span><br>	<span class="hljs-keyword">for</span> _, v := <span class="hljs-keyword">range</span> g.GammaNew &#123;<br>		node := <span class="hljs-built_in">make</span>(<span class="hljs-keyword">map</span>[<span class="hljs-type">int</span>]<span class="hljs-type">bool</span>)<br>		<span class="hljs-keyword">for</span> k, v1 := <span class="hljs-keyword">range</span> v &#123;<br>			node[k] = v1<br>		&#125;<br>		p := NewMDFA_Node(g.NodeCount, node, <span class="hljs-literal">false</span>, <span class="hljs-literal">nil</span>, g.Head)<br>		g.NodeCount++<br>		g.Head = p<br>		<span class="hljs-keyword">for</span> k := <span class="hljs-keyword">range</span> v &#123;<br>			<span class="hljs-keyword">if</span> g.innerDFA.Nodes[k].IsAccept &#123;<br>				p.IsAccept = <span class="hljs-literal">true</span><br>			&#125;<br>		&#125;<br>	&#125;<br><br>	g.Nodes = <span class="hljs-built_in">make</span>([]*MDFA_Node, g.NodeCount)<br>	<span class="hljs-keyword">for</span> p := g.Head; p != <span class="hljs-literal">nil</span>; p = p.Next &#123;<br>		g.Nodes[p.Id] = p<br>	&#125;<br><br>	<span class="hljs-keyword">for</span> p := g.innerDFA.Head; p != <span class="hljs-literal">nil</span>; p = p.Next &#123;<br>		<span class="hljs-keyword">for</span> q := p.Edges; q != <span class="hljs-literal">nil</span>; q = q.Next &#123;<br>			g.addEdge(q.From.Id, q.To.Id, q.Char)<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-<p>醒来的我仍要面对着怎样寻找下一个李雅普诺夫函数的问题，这个在哈尔科夫大学任教的、为爱情自尽的彼得堡学派数学家葬于战舰波将金号起义的敖德萨港——那里已被战火覆盖。曾经崇高的一切被一个又一个独裁者的野心所摧毁，而纯粹的灵魂却能久远地影响世人，所以我将用同样出生于彼得堡的维克多·崔的歌曲结束这篇喃喃自语：</p>
-<blockquote>
-<p>多么温暖的房间啊 但我却不得不上路了</p>
-<p>我的军靴上有星光点点</p>
-<p>舒适的沙发，格子的纹络</p>
-<p>与没有扣动的扳机</p>
-<p>不要叫醒我好吗？以后阳光灿烂的日子只在美梦中</p>
-<p>而我的血型却写在我的袖章上</p>
-<p>我的编号写在我的袖口里</p>
-<p>但愿我能平安归来,愿我能平安归来</p>
-<p>不要死在战场上</p>
-<p>不要埋在战场上</p>
-<p>但愿我能平安归来,但愿我能平安归来!</p>
-<p>虽然有获取胜利的方法</p>
-<p>但是我并不想要</p>
-<p>我不想把靴子踏上谁的胸膛</p>
-<p>我只想和你在一起</p>
-<p>只是和你在一起</p>
-<p>但是天上高高的星星召唤我上路</p>
-<p>而我的血型却写在我的袖章上</p>
-<p>我的编号写在我的袖口里.</p>
-<p>但愿我能平安归来,愿我能平安归来</p>
-<p>不要死在战场上</p>
-<p>不要埋在战场上</p>
-<p>但愿我能平安归来,但愿我能平安归来!</p>
-<p>————<strong>《руппа крови》</strong>Виктор Цой</p>
-</blockquote>
 
   </article>
 
@@ -280,7 +260,7 @@
       
     <div class="nexmoe-post-copyright">
         <strong>本文作者：</strong>Kiman Yang<br>
-        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/05/29/%E5%85%B3%E4%BA%8E%E5%BD%BC%E5%BE%97%E5%A0%A1%E7%9A%84%E5%9B%9E%E5%BF%86/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;05&#x2F;29&#x2F;%E5%85%B3%E4%BA%8E%E5%BD%BC%E5%BE%97%E5%A0%A1%E7%9A%84%E5%9B%9E%E5%BF%86&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;05&#x2F;29&#x2F;%E5%85%B3%E4%BA%8E%E5%BD%BC%E5%BE%97%E5%A0%A1%E7%9A%84%E5%9B%9E%E5%BF%86&#x2F;</a><br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/06/19/%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E(6)Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0Hopcrpft%E7%AE%97%E6%B3%95/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;06&#x2F;19&#x2F;%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E(6)Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0Hopcrpft%E7%AE%97%E6%B3%95&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;06&#x2F;19&#x2F;%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E(6)Go%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0Hopcrpft%E7%AE%97%E6%B3%95&#x2F;</a><br>
         
             <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
         
@@ -291,10 +271,10 @@
   
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
-        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%95%A3%E6%96%87/">散文</a>
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%94%B1%E5%AE%9E%E4%BE%8B%E5%BC%80%E5%A7%8B%E6%9E%84%E9%80%A0%E6%AD%A3%E5%88%99%E5%BC%95%E6%93%8E/">由实例开始构造正则引擎</a>
     
     
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%95%A3%E6%96%87/" rel="tag">散文</a>
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Golang/" rel="tag">Golang</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">正则表达式</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag">编译原理</a>
     
 </div>
 
@@ -350,10 +330,10 @@
 
  
 
-<script async src="/js/app.js?v=1655643504879"></script>
+<script async src="/js/app.js?v=1655643504843"></script>
 
 
-	<script async src="/js/search.js?v=1655643504879"></script>
+	<script async src="/js/search.js?v=1655643504843"></script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
