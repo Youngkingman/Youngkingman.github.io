@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+    
+    <title>Go语言`sqlx`库使用总结 - Brief Candle</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="null">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="description" content="Go语言sqlx库使用总结思考再三决定还是不打算在项目中采用ORM的方式，仅仅使用sqlx库来完成与数据库的链接操作。在这里总结一下文档介绍的使用方法以及我在项目中对该库进行的一些简单二次封装。本文使用的时mysql的驱动，该库同样也支持其他数据库驱动。 起步与设计在初始化时命令行执行如下命令： 12go get github.com&#x2F;go-sql-driver&#x2F;mysqlgo get githu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go语言&#96;sqlx&#96;库使用总结">
+<meta property="og:url" content="https://kimanyang.xyz/2022/08/08/sqlx%E5%BA%93%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Brief Candle">
+<meta property="og:description" content="Go语言sqlx库使用总结思考再三决定还是不打算在项目中采用ORM的方式，仅仅使用sqlx库来完成与数据库的链接操作。在这里总结一下文档介绍的使用方法以及我在项目中对该库进行的一些简单二次封装。本文使用的时mysql的驱动，该库同样也支持其他数据库驱动。 起步与设计在初始化时命令行执行如下命令： 12go get github.com&#x2F;go-sql-driver&#x2F;mysqlgo get githu">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-08T15:43:24.000Z">
+<meta property="article:modified_time" content="2022-08-08T15:44:39.152Z">
+<meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="sqlx总结">
+<meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1659973571768">
+    
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1659973571768">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1659973571768">
+    <link rel="stylesheet" href="/css/style.css?v=1659973571768">
+    
+        <link rel="stylesheet" href="/css/dark.css?v=1659973571768">
+     
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="mdui-drawer-body-left">
+    
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" style="background-image: url(/images/yuanxiang.jpg)"></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="Kiman Yang" class="mdui-btn mdui-btn-icon"><img src="/images/aqua.png" alt="Kiman Yang"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="Kiman Yang">
+            <img src="/images/aqua.png" alt="Kiman Yang" alt="Kiman Yang">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>文章</span>43</div>
+        <div><span>标签</span>83</div>
+        <div><span>分类</span>7</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        
+            <form id="search_form">
+                <label><input class="st-default-search-input" id="search_value" name="q" type="search" placeholder="搜索" style="
+                    font-size: 15px !important;
+                    height: 56px !important;
+                    background-image: none;
+                "></label>
+            </form>
+         
+    </div>
+</div>
+    
+    <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'QQ群'}" style="color: rgb(249, 174, 8);background-color: rgba(249, 174, 8, .1);">
+            <i class="nexmoefont icon-QQ"></i>
+        </a><a class="mdui-ripple" href="https://space.bilibili.com/401742377" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141);background-color: rgba(231, 106, 141, .15);">
+            <i class="nexmoefont icon-bilibili"></i>
+        </a><a class="mdui-ripple" href="https://github.com/Youngkingman" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">文章分类</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/CSS/">CSS</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Golang学习/">Golang学习</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/Javascript/">Javascript</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/控制理论/">控制理论</a>
+          <span class="category-list-count">9</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/散文/">散文</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a>
+          <span class="category-list-count">10</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/由实例开始构造正则引擎/">由实例开始构造正则引擎</a>
+          <span class="category-list-count">6</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+    
+    
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/AC%E8%87%AA%E5%8A%A8%E6%9C%BA/" style="font-size: 10px;">AC自动机</a> <a href="/tags/BitSet/" style="font-size: 10px;">BitSet</a> <a href="/tags/C/" style="font-size: 18.75px;">C++</a> <a href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" style="font-size: 10px;">CSS 溢出显示</a> <a href="/tags/CSS3%E6%96%B0%E7%89%B9%E6%80%A7/" style="font-size: 10px;">CSS3新特性</a> <a href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" style="font-size: 10px;">CSS三角与精灵图</a> <a href="/tags/CSS%E5%B8%83%E5%B1%80/" style="font-size: 11.25px;">CSS布局</a> <a href="/tags/CSS%E6%B5%AE%E5%8A%A8%E4%B8%8E%E5%AE%9A%E4%BD%8D/" style="font-size: 10px;">CSS浮动与定位</a> <a href="/tags/CSS%E7%9B%92%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">CSS盒模型</a> <a href="/tags/CSS%E8%BF%87%E6%B8%A1/" style="font-size: 10px;">CSS过渡</a> <a href="/tags/CSS%E9%80%89%E6%8B%A9%E5%99%A8/" style="font-size: 10px;">CSS选择器</a> <a href="/tags/Context%E6%80%BB%E7%BB%93/" style="font-size: 10px;">Context总结</a> <a href="/tags/Cookie/" style="font-size: 10px;">Cookie</a> <a href="/tags/DOM%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">DOM事件</a> <a href="/tags/DOM%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">DOM模型</a> <a href="/tags/Dinic%E7%AE%97%E6%B3%95/" style="font-size: 10px;">Dinic算法</a> <a href="/tags/Edmond-Karp%E7%AE%97%E6%B3%95/" style="font-size: 10px;">Edmond-Karp算法</a> <a href="/tags/Ford-Fulkerson%E7%AE%97%E6%B3%95/" style="font-size: 10px;">Ford-Fulkerson算法</a> <a href="/tags/GMP%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">GMP模型</a> <a href="/tags/Golang/" style="font-size: 20px;">Golang</a> <a href="/tags/H5%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">H5标签</a> <a href="/tags/HJB%E6%96%B9%E7%A8%8B/" style="font-size: 10px;">HJB方程</a> <a href="/tags/Javascript/" style="font-size: 11.25px;">Javascript</a> <a href="/tags/KMP/" style="font-size: 11.25px;">KMP</a> <a href="/tags/LFU/" style="font-size: 10px;">LFU</a> <a href="/tags/LQR%E7%AE%97%E6%B3%95/" style="font-size: 10px;">LQR算法</a> <a href="/tags/LRU/" style="font-size: 10px;">LRU</a> <a href="/tags/Rabin-Karp/" style="font-size: 10px;">Rabin-Karp</a> <a href="/tags/STL/" style="font-size: 10px;">STL</a> <a href="/tags/STL%E5%AE%B9%E5%99%A8/" style="font-size: 13.75px;">STL容器</a> <a href="/tags/ST%E8%A1%A8/" style="font-size: 10px;">ST表</a> <a href="/tags/Session/" style="font-size: 10px;">Session</a> <a href="/tags/Tcmalloc/" style="font-size: 10px;">Tcmalloc</a> <a href="/tags/Token/" style="font-size: 10px;">Token</a> <a href="/tags/Trie%E5%AD%97%E5%85%B8%E6%A0%91/" style="font-size: 10px;">Trie字典树</a> <a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 10px;">lambda表达式</a> <a href="/tags/matlab/" style="font-size: 11.25px;">matlab</a> <a href="/tags/sqlx%E6%80%BB%E7%BB%93/" style="font-size: 10px;">sqlx总结</a> <a href="/tags/%E4%B8%80%E8%87%B4%E6%80%A7/" style="font-size: 10px;">一致性</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E6%B5%81%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">事件流模型</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 10px;">二分法</a> <a href="/tags/%E4%BA%8C%E6%AC%A1%E8%A7%84%E5%88%92/" style="font-size: 10px;">二次规划</a> <a href="/tags/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" style="font-size: 10px;">优先队列</a> <a href="/tags/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/" style="font-size: 11.25px;">优化算法</a> <a href="/tags/%E5%85%AB%E8%82%A1%E6%96%87/" style="font-size: 12.5px;">八股文</a> <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">内存模型</a> <a href="/tags/%E5%87%B8%E4%BC%98%E5%8C%96/" style="font-size: 10px;">凸优化</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" style="font-size: 10px;">分布式卡尔曼滤波</a> <a href="/tags/%E5%88%B7%E9%A2%98%E6%80%BB%E7%BB%93/" style="font-size: 12.5px;">刷题总结</a> <a href="/tags/%E5%89%8D%E7%AB%AF%E7%BB%8F%E5%85%B8%E6%A1%88%E4%BE%8B/" style="font-size: 10px;">前端经典案例</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 11.25px;">动态规划</a> <a href="/tags/%E5%8C%88%E7%89%99%E5%88%A9%E7%AE%97%E6%B3%95/" style="font-size: 10px;">匈牙利算法</a> <a href="/tags/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" style="font-size: 11.25px;">卡尔曼滤波</a> <a href="/tags/%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" style="font-size: 10px;">哈希算法</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 11.25px;">图论</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 10px;">垃圾回收</a> <a href="/tags/%E5%A0%86%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">堆排序</a> <a href="/tags/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93/" style="font-size: 10px;">多智能体</a> <a href="/tags/%E5%A4%9A%E8%B7%AF%E5%BD%92%E5%B9%B6/" style="font-size: 10px;">多路归并</a> <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">归并排序</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">快速排序</a> <a href="/tags/%E6%89%A9%E5%B1%95%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" style="font-size: 10px;">扩展卡尔曼滤波</a> <a href="/tags/%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">拓扑排序</a> <a href="/tags/%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">控制系统设计</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">操作系统</a> <a href="/tags/%E6%95%A3%E6%96%87/" style="font-size: 10px;">散文</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 15px;">数据结构与算法</a> <a href="/tags/%E6%9C%BA%E6%A2%B0%E8%87%82/" style="font-size: 10px;">机械臂</a> <a href="/tags/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/" style="font-size: 11.25px;">树状数组</a> <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E6%8E%A7%E5%88%B6/" style="font-size: 10px;">模型预测控制</a> <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 17.5px;">正则表达式</a> <a href="/tags/%E7%8A%B6%E6%80%81%E6%9C%BADP/" style="font-size: 10px;">状态机DP</a> <a href="/tags/%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82/" style="font-size: 10px;">矩阵快速幂</a> <a href="/tags/%E7%BA%BF%E6%AE%B5%E6%A0%91/" style="font-size: 10px;">线段树</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" style="font-size: 16.25px;">编译原理</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E6%B5%81/" style="font-size: 10px;">网络流</a> <a href="/tags/%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">自治系统</a> <a href="/tags/%E8%87%AA%E9%80%82%E5%BA%94%E6%8E%A7%E5%88%B6/" style="font-size: 11.25px;">自适应控制</a> <a href="/tags/%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A9/" style="font-size: 10px;">路径压缩</a> <a href="/tags/%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81/" style="font-size: 10px;">身份认证</a> <a href="/tags/%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%8E%A7%E5%88%B6/" style="font-size: 13.75px;">非线性控制</a> <a href="/tags/%E9%9D%9E%E8%87%AA%E6%B2%BB%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">非自治系统</a> <a href="/tags/%E9%A1%B5%E9%9D%A2%E4%BA%8B%E4%BB%B6/" style="font-size: 10px;">页面事件</a>
+    </div>
+    
+  </div>
+
+    
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2022 Kiman Yang
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+            <div class="nexmoe-post">
+
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 70.75%;"> 
+              <img data-src="/cover/yuanxiangcover33.jpg" data-sizes="auto" alt="Go语言`sqlx`库使用总结" class="lazyload">
+              <h1>Go语言`sqlx`库使用总结</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年08月08日</a>
+</div>
+
+      
+
+      <h1 id="Go语言sqlx库使用总结"><a href="#Go语言sqlx库使用总结" class="headerlink" title="Go语言sqlx库使用总结"></a>Go语言<code>sqlx</code>库使用总结</h1><p>思考再三决定还是不打算在项目中采用<code>ORM</code>的方式，仅仅使用<code>sqlx</code>库来完成与数据库的链接操作。在这里总结一下文档介绍的使用方法以及我在项目中对该库进行的一些简单二次封装。本文使用的时<code>mysql</code>的驱动，该库同样也支持其他数据库驱动。</p>
+<h2 id="起步与设计"><a href="#起步与设计" class="headerlink" title="起步与设计"></a>起步与设计</h2><p>在初始化时命令行执行如下命令：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">go</span> <span class="hljs-built_in">get</span> github.<span class="hljs-keyword">com</span>/<span class="hljs-keyword">go</span>-sql-driver/mysql<br><span class="hljs-keyword">go</span> <span class="hljs-built_in">get</span> github.<span class="hljs-keyword">com</span>/jmoiron/sqlx<br></code></pre></td></tr></table></figure>
+
+<p>我习惯将<code>mysql</code>&#x2F;<code>redis</code>以及一些进程内的缓存包装到项目下的<code>pkg/dbutil</code>文件夹中，作为相关插件的具体逻辑实现，然后再将与数据库相连接的具体对象放到全局包之中进行访问：对于<code>mysql</code>数据库而言就是<code>sqlx</code>的<code>DB</code>对象；对于<code>redis</code>则是<code>redis-client</code>对象；对于进程内缓存则是并发安全的<code>map</code>的抽象接口；对于云服务器数据库则是合法的访问链接，不同的厂商代码不一样。</p>
+<p>经过设计的任意单体项目的基本结构如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs awk">\---project<br>    |   initSetting.go <span class="hljs-regexp">/*一些初始化配置（包括数据库初始化）*/</span><br>    |   main.go  <span class="hljs-regexp">/*项目入口*/</span><br>    |<br>    +---global<br>    |       db.go		<span class="hljs-regexp">/*全局数据库变量*/</span><br>    |       setting.go	<span class="hljs-regexp">/*全局设定（包括数据库配置）*/</span><br>    |<br>    \---pkg<br>        \---dbutil		<span class="hljs-regexp">/*数据库相关逻辑*/</span><br></code></pre></td></tr></table></figure>
+
+<p>当然这只是一种抽象方法，也有些人喜欢用<code>Java</code>类似的那一套疯狂依赖注入层层抽象来获取对象，然后懒汉饿汉式单例模式或者接口抽象约束多次包装只能工厂模式访问数据库(对于一定会被访问的数据库这么做只会让你的代码变得啰嗦)，但gopher大道至简就一个单例全局即可。由于全局的数据库变量<code>var db *sqlx.DB</code>会自己维护一个连接池，所以我们<strong>并不需要关心并发</strong>的问题，直接访问并使用即可。</p>
+<h2 id="配置相关"><a href="#配置相关" class="headerlink" title="配置相关"></a>配置相关</h2><p>数据库的配置注入采用了如下的结构：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> DatabaseSettingS <span class="hljs-keyword">struct</span> &#123;<br>	DBType       <span class="hljs-type">string</span><br>	UserName     <span class="hljs-type">string</span><br>	Password     <span class="hljs-type">string</span><br>	Host         <span class="hljs-type">string</span><br>	DBName       <span class="hljs-type">string</span><br>	TablePrefix  <span class="hljs-type">string</span><br>	Charset      <span class="hljs-type">string</span><br>	MaxIdleConns <span class="hljs-type">int</span><br>	MaxOpenConns <span class="hljs-type">int</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>具体的注入配置方法不同的人喜欢不同的库，在这里我使用的是<code>viper</code>库。具体看每一个字段：</p>
+<ul>
+<li><code>DBType</code>:这个字段设为<code>mysql</code>，当然也可以是其他的，提高项目的一个可扩展性</li>
+<li><code>UserNmae~DBName</code>：配置用户名&#x2F;密码&#x2F;Host地址（这个带端口号，因为没有专门弄个<code>port</code>出来）&#x2F;数据库名</li>
+<li><code>TablePrefix</code>:部分安全考虑部分便捷考虑，和项目相关的数据库表会加上一个前缀，这个前缀在具体的<code>sql</code>语句中变为<code>#__</code>然后再被<code>dbutil</code>中的相关方法替换为真正的语句，能够防止一部分<code>sql</code>注入，同时针对不同项目的表的一些相同操作可以复用代码而仅仅单纯替换前缀的配置</li>
+<li><code>Charset</code>字符集，设置为<code>utf8</code></li>
+<li><code>MaxIdleConns</code>和<code>MaxOpenConns</code>两个参数和我们之前提到的数据库连接池有关，设置最大的挂起连接数和最大的开放连接数，分别通过调用<code>DB.SetMaxIdleConns(n int)</code>和<code>DB.SetMaxOpenConns(n int)</code>来实现</li>
+</ul>
+<p>这里给出我们如何创建一个数据库的连接的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">New</span><span class="hljs-params">(config *setting.DatabaseSettingS)</span></span> (db *sqlx.DB, err <span class="hljs-type">error</span>) &#123;<br>	<span class="hljs-keyword">var</span> dbonce sync.Once<br>	dbonce.Do(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		<span class="hljs-comment">// ：&quot;用户名:密码@tcp(IP:端口)/数据库?charset=utf8&quot;</span><br>		db, err = sqlx.Open(<br>			config.DBType,<br>			fmt.Sprintf(<br>				<span class="hljs-string">&quot;%s:%s@tcp(%s)/%s?charset=%s&quot;</span>,<br>				config.UserName,<br>				config.Password,<br>				config.Host,<br>				config.DBName,<br>				config.Charset,<br>			),<br>		)<br>		<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>			log.Printf(<span class="hljs-string">&quot;get mysql database error: %s&quot;</span>, err)<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			db.SetMaxIdleConns(config.MaxIdleConns)<br>			db.SetMaxOpenConns(config.MaxOpenConns)<br>			db.Mapper = reflectx.NewMapperFunc(<span class="hljs-string">&quot;json&quot;</span>, strings.ToLower)<span class="hljs-comment">//之后解释这行代码</span><br>		&#125;<br>	&#125;)<br><br>	<span class="hljs-keyword">return</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="CRUD-BOY具体怎么用sqlx工作"><a href="#CRUD-BOY具体怎么用sqlx工作" class="headerlink" title="CRUD BOY具体怎么用sqlx工作"></a>CRUD BOY具体怎么用<code>sqlx</code>工作</h2><p>这一节主要讲怎么通过<code>sqlx</code>库自己写<code>sql</code>语句进行苦逼的增删改查，成为一颗合格的<code>crud</code>螺丝钉，覆盖了一些常见的业务场景</p>
+<h3 id="查询接口"><a href="#查询接口" class="headerlink" title="查询接口"></a>查询接口</h3><p>罗列一些接口，这些接口我 <strong>不会</strong> 在项目中直接使用，一方面是包装简陋使用起来很复杂，一方面是存在需要自己把握的<code>sql</code>注入问题的避免。</p>
+<ul>
+<li><code>Query(...) (*sql.Rows, error)</code>单行查询适配原始<code>sql</code>库接口</li>
+<li><code>QueryRow(...) *sql.Row</code> 多行查询适配原始<code>sql</code>库接口</li>
+<li><code>Queryx(...) (*sqlx.Rows, error)</code>单行查询二次包装</li>
+<li><code>QueryRowx(...) *sqlx.Row</code>多行查询二次包装</li>
+</ul>
+<p>查询时使用<code>sqlx</code>库的正确方式是如下两个接口，这是该库独有的语法：</p>
+<ul>
+<li><code>Get(dest interface&#123;&#125;, ...) error</code> <strong>单行查询</strong>，可以直接实现类似于对象关系映射的功能，具有<strong>参数化</strong>查询接口</li>
+<li><code>Select(dest interface&#123;&#125;, ...) error</code> <strong>多行查询</strong>，直接获取一个对象数组，比原始的多行查询需要的代码大大减少</li>
+</ul>
+<blockquote>
+<p>何为参数化：参数化就是将<code>sql</code>语句中的具体参数替换为某个符号，在进行执行的时候预编译进行替换检查然后再交由数据库连接去执行，是规避<code>sql</code>注入的常用手段之一，具体为什么可以看下一小节的例子</p>
+<ul>
+<li><code>MySQL</code>使用符号<code>?</code></li>
+<li><code>PostgreSQL</code> 使用迭代的参数即<code>$1``$2</code></li>
+<li><code>SQLite</code>兼容上述两位，可以用<code>?</code>和<code>$1</code></li>
+<li><code>Oracl</code>  使用符号<code>:name</code></li>
+</ul>
+<p>你在使用到<code>sql</code>语句带有<code>IN</code>条件时你会用到”IN (?)”这样的例子，后面的具体参数应该是一个<code>golang</code>切片，如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">var</span> levels = []<span class="hljs-type">int</span>&#123;<span class="hljs-number">4</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>&#125;<br>rows, err := db.Query(<span class="hljs-string">&quot;SELECT * FROM users WHERE level IN (?);&quot;</span>, levels)<br></code></pre></td></tr></table></figure>
+</blockquote>
+<p>接下来回顾一下创建数据库连接时候的这行代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">db.Mapper = reflectx.NewMapperFunc(<span class="hljs-string">&quot;json&quot;</span>, strings.ToLower)<br></code></pre></td></tr></table></figure>
+
+<p>这里规定了数据库的对象映射规则，数据库字段将会全部小写之后和查询对象的<code>json</code>标记相匹配，当然如果你只是简单地定义<code>db.MapperFunc(strings.ToUpper)</code>那么数据库字段将会小写后和你的<code>db</code>字段相匹配，很多时候这个东西和<code>json</code>是重合的，所以只写一遍还是会舒服很多。下面给出一个官方的查询例子（适配了本文项目结构）：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> Place <span class="hljs-keyword">struct</span> &#123;<br>    Country       <span class="hljs-type">string</span><br>    City          sql.NullString<br>    TelephoneCode <span class="hljs-type">int</span> <span class="hljs-string">`db:&quot;telcode&quot;`</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	p := Place&#123;&#125;<br>    pp := []Place&#123;&#125;<br><br>    <span class="hljs-comment">// this will pull the first place directly into p</span><br>    err = global.db.Get(&amp;p, <span class="hljs-string">&quot;SELECT * FROM place LIMIT 1&quot;</span>)<br><br>    <span class="hljs-comment">// this will pull places with telcode &gt; 50 into the slice pp</span><br>    err = global.db.Select(&amp;pp, <span class="hljs-string">&quot;SELECT * FROM place WHERE telcode &gt; ?&quot;</span>, <span class="hljs-number">50</span>)<br><br>    <span class="hljs-comment">// they work with regular types as well</span><br>    <span class="hljs-keyword">var</span> id <span class="hljs-type">int</span><br>    err = gobal.db.Get(&amp;id, <span class="hljs-string">&quot;SELECT count(*) FROM place&quot;</span>)<br><br>    <span class="hljs-comment">// fetch at most 10 place names</span><br>    <span class="hljs-keyword">var</span> names []<span class="hljs-type">string</span><br>    err = global.db.Select(&amp;names, <span class="hljs-string">&quot;SELECT name FROM place LIMIT 10&quot;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>需要注意的是如果业务中你查的东西是无限的或者大的无法想象那可能得回到传统的做法去链接，但是一般也不会整出这种活。</p>
+<h3 id="增加数据条目或者创建新表"><a href="#增加数据条目或者创建新表" class="headerlink" title="增加数据条目或者创建新表"></a>增加数据条目或者创建新表</h3><p>本节不讨论删除，但也是同理的，但是实际业务一般并不会这么干，只会加懒标记。</p>
+<p>这个执行非查询语句的用法如下所示：</p>
+<ul>
+<li><code>Exec(...) (sql.Result, error)</code>和标准库一致</li>
+<li><code>MustExec() sql.Result</code> 经过了封装，查不出来那错误会变<code>panic</code>，记得线上环境处理这个要<code>recovery</code></li>
+</ul>
+<p>同样这个语句的亮点在于你<strong>可以且应当</strong>使用参数化的方式构建你的<code>sql</code>语句，然后再去交由<code>Exec</code>执行（建表除外，但一般这件事不在后端这里干而是使用迁移库）。同样是官方的例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go">schema := <span class="hljs-string">`CREATE TABLE place (</span><br><span class="hljs-string">    country text,</span><br><span class="hljs-string">    city text NULL,</span><br><span class="hljs-string">    telcode integer);`</span><br> <br><span class="hljs-comment">// execute a query on the server</span><br>result, err := global.db.Exec(schema)<br> <br><span class="hljs-comment">// or, you can use MustExec, which panics on error</span><br>cityState := <span class="hljs-string">`INSERT INTO place (country, telcode) VALUES (?, ?)`</span><br>countryCity := <span class="hljs-string">`INSERT INTO place (country, city, telcode) VALUES (?, ?, ?)`</span><br>global.db.MustExec(cityState, <span class="hljs-string">&quot;Hong Kong&quot;</span>, <span class="hljs-number">852</span>)<br>global.db.MustExec(cityState, <span class="hljs-string">&quot;Singapore&quot;</span>, <span class="hljs-number">65</span>)<br>global.db.MustExec(countryCity, <span class="hljs-string">&quot;South Africa&quot;</span>, <span class="hljs-string">&quot;Johannesburg&quot;</span>, <span class="hljs-number">27</span>)<br></code></pre></td></tr></table></figure>
+
+<p>这里仅仅展示了插入和创建语句，诸如<code>UPDATE/DELETE/INSERT...ON DUPLICATE KEY UPDATE</code>之类的都可以随便用，自由度很高。</p>
+<p>可以看到上述的插入语句都使用了<code>?</code>代替了具体参数，一般而言这些参数可能来自于客户端和前端的信息，这些信息是不可靠的，使用参数化的语句而不是直接拼接<code>sql</code>使得它能够根据类型进行预编译抛出错误从而防止<code>sql</code>注入。</p>
+<h3 id="事务的处理"><a href="#事务的处理" class="headerlink" title="事务的处理"></a>事务的处理</h3><p>在事务的处理这里我不过多细说，但是给出一个相对优雅的实现以及一些值得注意的细节。一个完整相对优雅的事务执行如下所示：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go">tx, err := global.db.Begin()<br><span class="hljs-keyword">defer</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        log.Printf(<span class="hljs-string">&quot;something failed with error: %s\n&quot;</span>, err)<br>        tx.Rollback()<span class="hljs-comment">//事务回滚</span><br>        <span class="hljs-keyword">return</span><br>    &#125;<br>    err = tx.Commit()<br>&#125;()<br>tx.Exec(...)<br>...<span class="hljs-comment">//具体的多条业务逻辑</span><br></code></pre></td></tr></table></figure>
+
+<p><code>sqlx</code>同时也提供了等级更高的接口<code>db.MustBegin()</code>和<code>tx.MustExec(...)</code>配套使用，记得这两位会抛出<code>panic</code>，上述的<code>defer()</code>得改成：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">defer</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        log.Printf(<span class="hljs-string">&quot;something failed with error: %s\n&quot;</span>, err)<br>        <span class="hljs-keyword">if</span> err := <span class="hljs-built_in">recover</span>();err != <span class="hljs-literal">nil</span> &#123;<br>            log.Printf(<span class="hljs-string">&quot;panic recover failed with: %s\n&quot;</span>, err)<br>        &#125;<br>        tx.Rollback()<span class="hljs-comment">//事务回滚</span><br>        <span class="hljs-keyword">return</span><br>    &#125;<br>    err = tx.Commit()<br>&#125;()<br></code></pre></td></tr></table></figure>
+
+<p>最后要说的一点是<code>tx.Exec()</code>事实上具有返回值，分别是一个<code>result</code>接口和一个<code>error</code>，关于<code>result</code>接口具体看这里<a target="_blank" rel="noopener" href="https://pkg.go.dev/database/sql#Result">sql package - database&#x2F;sql - Go Packages</a>。你调用这个接口的<code>LastInsertId() (int64, error)</code>方法获得的<code>id</code>是你表中插入数据的自增主键，这个细节在实际业务中可能会很有用。<code>RowsAffected() (int64, error)</code>返回受影响的行数，多用于日志记录。</p>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/08/08/sqlx%E5%BA%93%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;08&#x2F;08&#x2F;sqlx%E5%BA%93%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;08&#x2F;08&#x2F;sqlx%E5%BA%93%E4%BD%BF%E7%94%A8%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/Golang%E5%AD%A6%E4%B9%A0/">Golang学习</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Golang/" rel="tag">Golang</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/sqlx%E6%80%BB%E7%BB%93/" rel="tag">sqlx总结</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
+            <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="回到顶部" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+     
+    <div id="nexmoe-search-space">
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-container">
+                    <input class="search-input" type="text" placeholder="搜索" oninput="sinput();">
+                </div>
+                <a class="search-close" onclick="sclose();">×</a>
+            </div>
+            <div class="search-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+ 
+
+<script async src="/js/app.js?v=1659973571777"></script>
+
+
+	<script async src="/js/search.js?v=1659973571777"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
+<script>
+	$(".justified-gallery").justifiedGallery({
+		rowHeight: 160,
+		margins: 10,
+	});
+</script>
+
+
+    
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"position":"right","width":240,"height":480},"mobile":{"show":false},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>
