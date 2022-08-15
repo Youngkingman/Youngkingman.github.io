@@ -4,7 +4,7 @@
 
 <head>
     
-    <title>JS中正则表达式使用总结 - Brief Candle</title>
+    <title>Go并发相关的一些碎碎念 - Brief Candle</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="null">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,26 +12,25 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="JS中正则表达式使用总结详细的规则参考MDN文档：正则表达式 - JavaScript | MDN (mozilla.org)。 好用的正则工具：在线正则表达式测试 (oschina.net) 使用方法在 JavaScript中，正则表达式也是对象。这些模式被用于 RegExp 的 exec 和 test 方法, 以及 String 的 match、matchAll、replace、search">
+    <meta name="description" content="Go并发相关的一些碎碎念在实践中遇到的一些问题，不够全面，只是个人的一个巩固总结。 单例模式两种实现： 饿汉式：简单，但是调用开销大 123456789101112package singletontype singleton struct &amp;#123;  count int&amp;#125;var Instance &#x3D; new(singleton)func (s *singleton) Add() i">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS中正则表达式使用总结">
-<meta property="og:url" content="https://kimanyang.xyz/2022/03/13/JS%E4%B8%AD%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:title" content="Go并发相关的一些碎碎念">
+<meta property="og:url" content="https://kimanyang.xyz/2022/08/15/Go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Brief Candle">
-<meta property="og:description" content="JS中正则表达式使用总结详细的规则参考MDN文档：正则表达式 - JavaScript | MDN (mozilla.org)。 好用的正则工具：在线正则表达式测试 (oschina.net) 使用方法在 JavaScript中，正则表达式也是对象。这些模式被用于 RegExp 的 exec 和 test 方法, 以及 String 的 match、matchAll、replace、search">
+<meta property="og:description" content="Go并发相关的一些碎碎念在实践中遇到的一些问题，不够全面，只是个人的一个巩固总结。 单例模式两种实现： 饿汉式：简单，但是调用开销大 123456789101112package singletontype singleton struct &amp;#123;  count int&amp;#125;var Instance &#x3D; new(singleton)func (s *singleton) Add() i">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-03-13T04:15:14.000Z">
-<meta property="article:modified_time" content="2022-03-13T05:26:57.134Z">
+<meta property="article:published_time" content="2022-08-15T05:42:24.000Z">
+<meta property="article:modified_time" content="2022-08-15T05:42:36.925Z">
 <meta property="article:author" content="Kiman Yang">
-<meta property="article:tag" content="正则表达式">
-<meta property="article:tag" content="Javascript">
+<meta property="article:tag" content="golang">
 <meta name="twitter:card" content="summary">
-    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1660542244541">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1660542244055">
     
-    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1660542244541">
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1660542244541">
-    <link rel="stylesheet" href="/css/style.css?v=1660542244541">
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1660542244055">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1660542244055">
+    <link rel="stylesheet" href="/css/style.css?v=1660542244055">
     
-        <link rel="stylesheet" href="/css/dark.css?v=1660542244541">
+        <link rel="stylesheet" href="/css/dark.css?v=1660542244055">
      
     
 <!-- hexo injector head_end start -->
@@ -204,194 +203,53 @@
   <article>
       
           <div class="nexmoe-post-cover" style="padding-bottom: 100%;"> 
-              <img data-src="/cover/yuanxiangcover35.jpg" data-sizes="auto" alt="JS中正则表达式使用总结" class="lazyload">
-              <h1>JS中正则表达式使用总结</h1>
+              <img data-src="/cover/yuanxiangcover35.jpg" data-sizes="auto" alt="Go并发相关的一些碎碎念" class="lazyload">
+              <h1>Go并发相关的一些碎碎念</h1>
           </div>
       
       
       <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2022年03月13日</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年08月15日</a>
 </div>
 
       
 
-      <h1 id="JS中正则表达式使用总结"><a href="#JS中正则表达式使用总结" class="headerlink" title="JS中正则表达式使用总结"></a>JS中正则表达式使用总结</h1><p>详细的规则参考MDN文档：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions">正则表达式 - JavaScript | MDN (mozilla.org)</a>。</p>
-<p>好用的正则工具：<a target="_blank" rel="noopener" href="https://tool.oschina.net/regex">在线正则表达式测试 (oschina.net)</a></p>
-<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>在 JavaScript中，正则表达式也是对象。这些模式被用于 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp"><code>RegExp</code></a> 的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec"><code>exec</code></a> 和 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test"><code>test</code></a> 方法, 以及 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String"><code>String</code></a> 的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/match"><code>match</code></a>、<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll"><code>matchAll</code></a>、<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace"><code>replace</code></a>、<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/search"><code>search</code></a> 和 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/split"><code>split</code></a> 方法。</p>
-<p>脚本加载后，正则表达式字面量就会被编译。当正则表达式保持不变时，使用预先定义的正则规则可获得更好的性能。</p>
-<table>
-<thead>
-<tr>
-<th align="left">方法</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec"><code>exec</code></a></td>
-<td align="left">一个在字符串中执行查找匹配的RegExp方法，它返回一个数组（未匹配到则返回 null）。语法：<code>regexObj.exec(str)</code></td>
-</tr>
-<tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test"><code>test</code></a></td>
-<td align="left">一个在字符串中测试是否匹配的RegExp方法，它返回 true 或 false。语法：<code>regexObj.test(str)</code></td>
-</tr>
-<tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/match"><code>match</code></a></td>
-<td align="left">一个在字符串中执行查找匹配的String方法，它返回一个数组，在未匹配到时会返回 null。语法：<code>str.match(regexp)</code></td>
-</tr>
-<tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll"><code>matchAll</code></a></td>
-<td align="left">一个在字符串中执行查找所有匹配的String方法，它返回一个迭代器（iterator）。语法：<code>str.matchAll(regexp)</code></td>
-</tr>
-<tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/search"><code>search</code></a></td>
-<td align="left">一个在字符串中测试匹配的String方法，它返回匹配到的位置索引，或者在失败时返回-1。语法：<code>str.search(regexp)</code></td>
-</tr>
-<tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace"><code>replace</code></a></td>
-<td align="left">一个在字符串中执行查找匹配的String方法，并且使用替换字符串替换掉匹配到的子字符串。语法：&#96;str.replace(regexp</td>
-</tr>
-<tr>
-<td align="left"><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/split"><code>split</code></a></td>
-<td align="left">一个使用正则表达式或者一个固定字符串分隔一个字符串，并将分隔后的子字符串存储到数组中的 <code>String</code> 方法。语法：<code>str.split([separator[, limit]])</code></td>
-</tr>
-</tbody></table>
-<h2 id="元字符"><a href="#元字符" class="headerlink" title="元字符"></a>元字符</h2><ul>
-<li><p>边界符（表示匹配边界），<code>^</code>表示开头，<code>$</code>表示结尾</p>
+      <h1 id="Go并发相关的一些碎碎念"><a href="#Go并发相关的一些碎碎念" class="headerlink" title="Go并发相关的一些碎碎念"></a>Go并发相关的一些碎碎念</h1><p>在实践中遇到的一些问题，不够全面，只是个人的一个巩固总结。</p>
+<h2 id="单例模式两种实现："><a href="#单例模式两种实现：" class="headerlink" title="单例模式两种实现："></a>单例模式两种实现：</h2><ul>
+<li><p>饿汉式：简单，但是调用开销大</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> singleton<br><br><span class="hljs-keyword">type</span> singleton <span class="hljs-keyword">struct</span> &#123;<br>  count <span class="hljs-type">int</span><br>&#125;<br><br><span class="hljs-keyword">var</span> Instance = <span class="hljs-built_in">new</span>(singleton)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *singleton)</span></span> Add() <span class="hljs-type">int</span> &#123;<br>  s.count++<br>  <span class="hljs-keyword">return</span> s.count<br>&#125;<br></code></pre></td></tr></table></figure>
 </li>
-<li><p>量词（表示重复次数）</p>
-<table>
-<thead>
-<tr>
-<th>量词</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>*</td>
-<td>重复零次或更多次</td>
-</tr>
-<tr>
-<td>+</td>
-<td>重复一次或更多次</td>
-</tr>
-<tr>
-<td>?</td>
-<td>重复零次或一次</td>
-</tr>
-<tr>
-<td>{n}</td>
-<td>重复n次</td>
-</tr>
-<tr>
-<td>{n,}</td>
-<td>重复n次或者更多次</td>
-</tr>
-<tr>
-<td>{n,m}</td>
-<td>重复n次到m次（左闭右闭）</td>
-</tr>
-</tbody></table>
+<li><p>懒汉式：写起来复杂，可能有多个<code>goroutine</code>（线程）同时创建该单例所以有同步问题（该问题仅仅在创建时有可能出现），但是开销相对较小。又分为一般的懒汉式和<code>double check</code>的懒汉式，后者在创建后就可以不再使用锁了，进一步降低了调用开销。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> singleton<br><br><span class="hljs-keyword">import</span> (<br>	<span class="hljs-string">&quot;sync&quot;</span><br>)<br><br><span class="hljs-keyword">type</span> singleton <span class="hljs-keyword">struct</span> &#123;<br>  count <span class="hljs-type">int</span><br>&#125;<br><br><span class="hljs-keyword">var</span> (<br>  instance *singleton<br>  mutex sync.Mutex<br>)<br><span class="hljs-comment">//单次检查模式</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">New</span><span class="hljs-params">()</span></span> *singleton &#123;<br>  mutex.Lock()<br>  <span class="hljs-keyword">if</span> instance == <span class="hljs-literal">nil</span> &#123;<br>    instance = <span class="hljs-built_in">new</span>(singleton)<br>  &#125;<br>  mutex.Unlock()<br>  <br>  <span class="hljs-keyword">return</span> instance<br>&#125;<br><span class="hljs-comment">//double check模式</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewDC</span><span class="hljs-params">()</span></span> *singleton &#123;<br>  <span class="hljs-keyword">if</span> instance == <span class="hljs-literal">nil</span> &#123;	<span class="hljs-comment">// 第一次检查</span><br>    <span class="hljs-comment">// 这里可能有多于一个 goroutine 同时达到</span><br>    mutex.Lock()<br>    <span class="hljs-comment">// 这里每个时刻只会有一个 goroutine</span><br>    <span class="hljs-keyword">if</span> instance == <span class="hljs-literal">nil</span> &#123;	<span class="hljs-comment">// 第二次检查</span><br>      instance = <span class="hljs-built_in">new</span>(singleton)<br>    &#125;<br>    mutex.Unlock()<br>  &#125;<br>  <br>  <span class="hljs-keyword">return</span> instance<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *singleton)</span></span> Add() <span class="hljs-type">int</span> &#123;<br>  s.count++<br>  <span class="hljs-keyword">return</span> s.count<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="关于goroutine的最佳实践小思考"><a href="#关于goroutine的最佳实践小思考" class="headerlink" title="关于goroutine的最佳实践小思考"></a>关于<code>goroutine</code>的最佳实践小思考</h2><ul>
+<li><p>一个最佳实践：应该让函数的调用者自行决定是否需要并发执行，每新开一个<code>goroutine</code>都必须知道它什么时候会停止。每次写出<code>go Somefunc()</code>之前必须搞清楚<strong>什么时候</strong>这个函数会被终止以及<strong>怎么样</strong>终止。</p>
 </li>
-<li><p>字符类（表示特定字符集），[]匹配字符集合，诸如</p>
+<li><p><code>time.After()</code>相关的内存泄漏：该函数等待一段时间返回一个只读的通道传送触发的时间，如果在等待时间内<code>goroutine</code>退出了，此时该通道不会被GC回收，同时你又没有任何途径去读取该通道将其释放，于是会造成内存泄漏。<strong>解决方法</strong>：1.要么注意这段时间内<code>goroutinue</code>一定不会退出 2.要么使用<code>time.NewTimer()</code> 并记得退出的时候关闭，具体如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> process() &#123;<br>    idleDuration := <span class="hljs-number">5</span> * time.Minute<br>    idleDelay := time.NewTimer(idleDuration)<br>    <span class="hljs-keyword">defer</span> idleDelay.Stop()<br>    <span class="hljs-comment">//...处理并发的逻辑，可能涉及</span><br>    <span class="hljs-comment">/*select&#123;</span><br><span class="hljs-comment">    	case &lt;- idleDelay.C: dosomething()</span><br><span class="hljs-comment">    	case &lt;- somethingCouldDone()</span><br><span class="hljs-comment">      &#125;</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-comment">//......</span><br>    <span class="hljs-keyword">return</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><code>channel</code>阻塞造成的内存泄漏：比如你的管道一直在被<code>for-range</code>读并且阻塞着，但是你又不去关闭它或者发送一方不会发送数据但你一直在阻塞等待<code>&lt;- readCh</code>，那么管道就会一直占用内存资源直到程序退出</p>
+</li>
+</ul>
+<h2 id="channel的一些碎碎念"><a href="#channel的一些碎碎念" class="headerlink" title="channel的一些碎碎念"></a><code>channel</code>的一些碎碎念</h2><h3 id="生产消费模型的良好抽象"><a href="#生产消费模型的良好抽象" class="headerlink" title="生产消费模型的良好抽象"></a>生产消费模型的良好抽象</h3><p>我们希望某一个实例所持有的所有管道的生产与消费操作都完全由该实例完成，那么如果这个实例作为：</p>
 <ul>
-<li><code>/[aeiou]/</code>,元音集合</li>
-<li><code>/[a-z]/</code>,<code>/[a-zA-Z]/</code>,<code>/[0-9]/</code>小写字母、大小写数字</li>
-<li><code>[^aeiou]</code>,<code>[^a-z]</code>非元音，非小写字母</li>
+<li><strong>生产者</strong>：<ol>
+<li>自身持有一个包装为函数的<code>close(ch)</code>方法在生产结束时进行关闭，操作关闭的对象可以是自身也可以是其他对象，但是编程时必须关注这一点(因为关闭操作只能由发送方进行，对应只能对双向和只发送管道执行<code>close</code>)</li>
+<li>往管道中添加数据并不直接访问管道本身进行操作，而是包装成一个方法，显示生产者对管道的持有与管理，限制对管道的滥用</li>
+</ol>
+</li>
+<li><strong>消费者</strong>：<ul>
+<li>一般消费者都持有一个<strong>死循环</strong>&#x2F;对<strong>管道的遍历</strong>&#x2F;<code>for</code>与<code>select</code>组合，用于对读出数据的处理，同样这些应当包装为对应处理对象所持有的函数，大部分时候生产消费者模型的处理过程都在这一步进行</li>
 </ul>
 </li>
-<li><p><code>.</code>通配符，匹配任意字符</p>
-</li>
-<li><p><code>x|y</code>选择符，匹配x或y</p>
-</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>预定类</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>\d</td>
-<td>匹配0-9之间的任意数字，[0-9]</td>
-</tr>
-<tr>
-<td>\D</td>
-<td>匹配所有0-9以外的字符，[^0-9 ]</td>
-</tr>
-<tr>
-<td>\w</td>
-<td>匹配任意字母、数字和下划线，[A-Za-z0-9_]</td>
-</tr>
-<tr>
-<td>\W</td>
-<td>匹配任意字母、数字和下划线以外，[^A-Za-z0-9_]</td>
-</tr>
-<tr>
-<td>\s</td>
-<td>匹配空格（换行符、制表符和空格），[\t\r\n\v\f]</td>
-</tr>
-<tr>
-<td>\S</td>
-<td>匹配非空格的字符，相当于[^\t\r\n\v\f]</td>
-</tr>
-</tbody></table>
-<h3 id="经典例子："><a href="#经典例子：" class="headerlink" title="经典例子："></a>经典例子：</h3><ul>
-<li>用户名验证：英文字母、数字、下划线和短横线组成的6-16位用户名<code>/^[a-zA-Z0-9-_]&#123;6,16&#125;$/</code></li>
-<li>用户只能输入中文：<code>/^[\u4e00-\u9fa5]+/</code></li>
-<li>日期格式：<code>^/\d&#123;4&#125;-\d&#123;1,2&#125;-\d&#123;1,2&#125;/</code></li>
-</ul>
-<h2 id="高级特性"><a href="#高级特性" class="headerlink" title="高级特性"></a>高级特性</h2><ul>
-<li>捕获：<code>(xyz)|(abc)</code>，匹配并记忆整个括号中的内容，使得后面的作用符作用于前面的整个表达式</li>
-<li>非捕获：<code>(?:foo)+</code></li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">let</span> personList = <span class="hljs-string">`First_Name: John, Last_Name: Doe</span><br><span class="hljs-string">First_Name: Jane, Last_Name: Smith`</span>;<br><br><span class="hljs-keyword">let</span> regexpNames =  <span class="hljs-regexp">/First_Name: (\w+), Last_Name: (\w+)/mg</span>;<br><span class="hljs-keyword">let</span> match = regexpNames.<span class="hljs-title function_">exec</span>(personList);<br><span class="hljs-keyword">do</span> &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Hello <span class="hljs-subst">$&#123;match[<span class="hljs-number">1</span>]&#125;</span> <span class="hljs-subst">$&#123;match[<span class="hljs-number">2</span>]&#125;</span>`</span>);<br>&#125; <span class="hljs-keyword">while</span>((match = regexpNames.<span class="hljs-title function_">exec</span>(personList)) !== <span class="hljs-literal">null</span>);<br></code></pre></td></tr></table></figure>
-
-<p>​    上述代码的<code>(\w+)</code>采用非捕获<code>(?:\w+)</code>则不会输出<code>$&#123;match[1]&#125;</code>和<code>$&#123;match[2]&#125;</code>，但是性能会相应提高</p>
-<ul>
-<li><p>正向否定查找：<code>x(?!y)</code>，仅当x后不跟着y时匹配x</p>
-</li>
-<li><p>反向否定查找：<code>(?&lt;!y)</code>，仅当x前面不是y时匹配x</p>
-</li>
-<li><p>先行断言：<code>x(?=y)</code>，仅当x后面跟着y时匹配x</p>
-</li>
-<li><p>后行断言：<code>(?&lt;=y)x</code>，仅当x前面跟着y时匹配x</p>
-</li>
-<li><p>使用组与命名组</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">let</span> users= <span class="hljs-string">`姓氏: 李, 名字: 雷</span><br><span class="hljs-string">姓氏: 韩, 名字: 梅梅`</span>;<br><span class="hljs-keyword">let</span> regexpNames =  <span class="hljs-regexp">/姓氏: (?&lt;first&gt;.+), 名字: (?&lt;last&gt;.+)/mg</span>;<br><span class="hljs-keyword">let</span> match = regexpNames.<span class="hljs-title function_">exec</span>(users);<br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	[</span><br><span class="hljs-comment">    &quot;姓氏: 李, 名字: 雷&quot;,</span><br><span class="hljs-comment">    &quot;李&quot;,</span><br><span class="hljs-comment">    &quot;雷&quot;</span><br><span class="hljs-comment">	]</span><br><span class="hljs-comment">	groups:</span><br><span class="hljs-comment">		first:&quot;李&quot;</span><br><span class="hljs-comment">		last:&quot;雷&quot;</span><br><span class="hljs-comment">	index:0</span><br><span class="hljs-comment">	length:3</span><br><span class="hljs-comment">*/</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="标志位"><a href="#标志位" class="headerlink" title="标志位"></a>标志位</h2><table>
-<thead>
-<tr>
-<th align="left">标志</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>g</code></td>
-<td align="left">全局搜索。</td>
-</tr>
-<tr>
-<td align="left"><code>i</code></td>
-<td align="left">不区分大小写搜索。</td>
-</tr>
-<tr>
-<td align="left"><code>m</code></td>
-<td align="left">多行搜索。</td>
-</tr>
-<tr>
-<td align="left"><code>s</code></td>
-<td align="left">允许 <code>.</code> 匹配换行符。</td>
-</tr>
-<tr>
-<td align="left"><code>u</code></td>
-<td align="left">使用<code>unicode</code>码的模式进行匹配。</td>
-</tr>
-<tr>
-<td align="left"><code>y</code></td>
-<td align="left">执行“粘性(<code>sticky</code>)”搜索,匹配从目标字符串的当前位置开始。</td>
-</tr>
-</tbody></table>
+<h3 id="通过无缓冲管道实现同步的处理"><a href="#通过无缓冲管道实现同步的处理" class="headerlink" title="通过无缓冲管道实现同步的处理"></a>通过无缓冲管道实现同步的处理</h3><p>两个无缓冲管道<code>ch1</code>和<code>ch2</code>，两个协程<code>goroutine</code> A和<code>goroutine</code> B，<code>ch1</code>由A-&gt;B发送数据，B进行处理后立刻把结果从<code>ch2</code>由B-&gt;A发送数据，只要两个管道都是无缓冲的，那么协程A拿到的结果就是它刚刚发送出去的，但是如果加了缓冲同时存在协程C且C提前向B发送了数据，那么A就有可能拿到B对C数据的处理结果造成混乱，这点小细节要注意下</p>
+<h3 id="管道关闭后的发送数据及接收数据情况"><a href="#管道关闭后的发送数据及接收数据情况" class="headerlink" title="管道关闭后的发送数据及接收数据情况"></a>管道关闭后的发送数据及接收数据情况</h3><p>管道关闭后接收方还能持续获取信息直到重复获得一个零值，<code>for range</code>语法下会跳出，但我们也无法从接收方判断管道是否被关闭。发送方重复关闭一个管道会<code>panic</code>，对于一个<code>nil</code>管道进行关闭也会<code>panic</code></p>
+<h3 id="管道可能造成的goroutine泄露"><a href="#管道可能造成的goroutine泄露" class="headerlink" title="管道可能造成的goroutine泄露"></a>管道可能造成的<code>goroutine</code>泄露</h3><p>如果一个生产者开了<code>goroutine</code>通过某个管道发送数据，但是对应管道的接收者跑路直接退出了会造成泄露，解决方法是确保管道会被关闭并且在接收端使用<code>for range</code>，确切的方法还得具体问题具体分析（还没有设计过太多的并发呜呜呜）。</p>
+<p>在<code>select</code>场景下如果没有搭配<code>for</code>使死循环用，那么需要很谨慎地思考如果一个管道得到返回之后退出其他管道是否还能被接受，如果不能那么它们的发送者<code>goroutine</code>就可能发生泄漏。<code>select</code>如果想要无阻塞那么可以使用<code>default</code>。</p>
+<h2 id="Goroutine和线程的一些区别"><a href="#Goroutine和线程的一些区别" class="headerlink" title="Goroutine和线程的一些区别"></a><code>Goroutine</code>和线程的一些区别</h2><p>这一点更加详细的GMP模型的文章已经写过了。这里做些补充，我们都知道<code>goroutine</code>运行在用户态，和操作系统线程不同，而且量远远大于操作系统的线程。操作系统线程的栈大小是固定的（可能是2MB），这种大空间对于小小的协程来说是种浪费，所以一个<code>goroutine</code>栈是动态伸缩的，开始会<code>2KB</code>左右，最大甚至可能1GB。</p>
+<p><code>goroutine</code>是绑定在操作系统线程上 执行的，这个操作系统线程一般被称为<code>P</code>，大量的<code>goroutine</code>绑定在<code>P</code>上执行，但是<code>goroutine</code>本身的调度并不需要进入内核态，切换效率会高很多。</p>
+<p><code>goroutine</code>在设计上让应用程序编写者不能获取其索引，即没有特定的<code>id</code>号。这鼓励程序员尽量不要关心并发协程的调度过程从而搞出一堆黑魔法，而是专注于并发本身的逻辑。</p>
 
   </article>
 
@@ -399,7 +257,7 @@
       
     <div class="nexmoe-post-copyright">
         <strong>本文作者：</strong>Kiman Yang<br>
-        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/03/13/JS%E4%B8%AD%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;03&#x2F;13&#x2F;JS%E4%B8%AD%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;03&#x2F;13&#x2F;JS%E4%B8%AD%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93&#x2F;</a><br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/08/15/Go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;08&#x2F;15&#x2F;Go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;08&#x2F;15&#x2F;Go%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%9A%84%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93&#x2F;</a><br>
         
             <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
         
@@ -410,10 +268,10 @@
   
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
-        <a class="nexmoefont icon-appstore-fill -link" href="/categories/Javascript/">Javascript</a>
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/Golang%E5%AD%A6%E4%B9%A0/">Golang学习</a>
     
     
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/Javascript/" rel="tag">Javascript</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag">正则表达式</a>
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/golang/" rel="tag">golang</a>
     
 </div>
 
@@ -469,10 +327,10 @@
 
  
 
-<script async src="/js/app.js?v=1660542244544"></script>
+<script async src="/js/app.js?v=1660542244071"></script>
 
 
-	<script async src="/js/search.js?v=1660542244544"></script>
+	<script async src="/js/search.js?v=1660542244071"></script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
