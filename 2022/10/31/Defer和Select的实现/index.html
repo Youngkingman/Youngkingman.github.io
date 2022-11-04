@@ -4,7 +4,7 @@
 
 <head>
     
-    <title>标签：CSS三角与精灵图 - Brief Candle</title>
+    <title>字节二面问题Defer和Select的实现 - Brief Candle</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="null">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,22 +12,25 @@
     
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <meta name="description" content="Planet earth is blue, and there is nothing I can do.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Brief Candle">
-<meta property="og:url" content="https://kimanyang.xyz/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/index.html">
+    <meta name="description" content="Defer和Select的实现这个问题是字节二面面试官问的，我只能答出这两个关键字的具体用法，但是对于它们在go语言中如何实现并没有答得很好。虽然面试过了不过这里还是得复盘一下。 关于defer理解defer关键字的实现可以理解一些现象的产生，诸如：调用时机以及执行顺序、传值的方式以及预计算机制导致不合理的结果诸如此类。 Go语言所有函数都是传的值。对于defer关键字，Go语言采用了堆分配、栈分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字节二面问题Defer和Select的实现">
+<meta property="og:url" content="https://kimanyang.xyz/2022/10/31/Defer%E5%92%8CSelect%E7%9A%84%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="Brief Candle">
-<meta property="og:description" content="Planet earth is blue, and there is nothing I can do.">
+<meta property="og:description" content="Defer和Select的实现这个问题是字节二面面试官问的，我只能答出这两个关键字的具体用法，但是对于它们在go语言中如何实现并没有答得很好。虽然面试过了不过这里还是得复盘一下。 关于defer理解defer关键字的实现可以理解一些现象的产生，诸如：调用时机以及执行顺序、传值的方式以及预计算机制导致不合理的结果诸如此类。 Go语言所有函数都是传的值。对于defer关键字，Go语言采用了堆分配、栈分">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-31T05:22:14.000Z">
+<meta property="article:modified_time" content="2022-11-04T07:48:05.170Z">
 <meta property="article:author" content="Kiman Yang">
+<meta property="article:tag" content="golang">
 <meta name="twitter:card" content="summary">
-    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1667548196661">
+    <link rel="stylesheet" href="/lib/jquery.fancybox.min.css?v=1667548195754">
     
-    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1667548196661">
-    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1667548196661">
-    <link rel="stylesheet" href="/css/style.css?v=1667548196661">
+    <link rel="stylesheet" href="/lib/mdui_043tiny/css/mdui.css?v=1667548195754">
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1667548195754">
+    <link rel="stylesheet" href="/css/style.css?v=1667548195754">
     
-        <link rel="stylesheet" href="/css/dark.css?v=1667548196661">
+        <link rel="stylesheet" href="/css/dark.css?v=1667548195754">
      
     
 <!-- hexo injector head_end start -->
@@ -195,35 +198,110 @@
     </div>
     <div id="nexmoe-content">
         <div class="nexmoe-primary">
-            <section class="nexmoe-posts">
-    
-    <div class="nexmoe-post">
-        <a href="/2022/02/28/CSS%E7%AC%94%E8%AE%B0(3)/">
-            
-                <div class="nexmoe-post-cover mdui-ripple" style="padding-bottom: 64.5%;"> 
-                    <img data-src="/cover/yuanxiangcover10.jpg" data-sizes="auto" alt="CSS笔记(3)" class="lazyload">
-                    <h1>CSS笔记(3)</h1>
-                </div>
-            
-        </a>
+            <div class="nexmoe-post">
 
-        <div class="nexmoe-post-meta nexmoe-rainbow">
-            <a><i class="nexmoefont icon-calendar-fill"></i>2022年02月28日</a>
-            
-                <a class="nexmoefont icon-appstore-fill -link" href="/categories/CSS/">CSS</a>
-            
-            
-                <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSS-%E6%BA%A2%E5%87%BA%E6%98%BE%E7%A4%BA/" rel="tag">CSS 溢出显示</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSS%E4%B8%89%E8%A7%92%E4%B8%8E%E7%B2%BE%E7%81%B5%E5%9B%BE/" rel="tag">CSS三角与精灵图</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/CSS%E5%B8%83%E5%B1%80/" rel="tag">CSS布局</a>
-            
-        </div>
+  <article>
+      
+          <div class="nexmoe-post-cover" style="padding-bottom: 100%;"> 
+              <img data-src="/cover/yuanxiangcover35.jpg" data-sizes="auto" alt="字节二面问题Defer和Select的实现" class="lazyload">
+              <h1>字节二面问题Defer和Select的实现</h1>
+          </div>
+      
+      
+      <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2022年10月31日</a>
+</div>
 
-        <article>
-            
-        </article>
+      
+
+      <h2 id="Defer和Select的实现"><a href="#Defer和Select的实现" class="headerlink" title="Defer和Select的实现"></a>Defer和Select的实现</h2><p>这个问题是字节二面面试官问的，我只能答出这两个关键字的具体用法，但是对于它们在go语言中如何实现并没有答得很好。虽然面试过了不过这里还是得复盘一下。</p>
+<h2 id="关于defer"><a href="#关于defer" class="headerlink" title="关于defer"></a>关于defer</h2><p>理解<code>defer</code>关键字的实现可以理解一些现象的产生，诸如：调用时机以及执行顺序、传值的方式以及预计算机制导致不合理的结果诸如此类。</p>
+<p>Go语言所有函数都是传的值。对于<code>defer</code>关键字，Go语言采用了<strong>堆分配</strong>、<strong>栈分配</strong>和<strong>开放编码</strong>三种方式根据不同情况进行实现。这里先给出<code>_defer</code>结构体作为调用链的一环的一个基本结构：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> _defer <span class="hljs-keyword">struct</span> &#123;<br>	siz       <span class="hljs-type">int32</span><br>	started   <span class="hljs-type">bool</span><br>	openDefer <span class="hljs-type">bool</span> <span class="hljs-comment">// 是否经过优化</span><br>	sp        <span class="hljs-type">uintptr</span><br>	pc        <span class="hljs-type">uintptr</span><br>	fn        *funcval<br>	_panic    *_panic<br>	link      *_defer<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里面主要包括了参数和结果的内存大小，调用方的栈指针和程序计数器（只有一个，这也可能是链式调用中<code>defer</code>只保留最后一个闭包的原因）。</p>
+<h3 id="堆上分配"><a href="#堆上分配" class="headerlink" title="堆上分配"></a>堆上分配</h3><p>当运行时将 <code>runtime._defer</code> 分配到堆上时，Go 语言的编译器不仅将 <code>defer</code> 转换成了 <code>runtime.deferproc</code>，还在所有调用 <code>defer</code> 的函数结尾插入了 <code>runtime.deferreturn</code>。上述两个运行时函数是 <code>defer</code> 关键字运行时机制的入口，它们分别承担了不同的工作：</p>
+<ul>
+<li><code>runtime.deferproc</code> 负责创建新的延迟调用；</li>
+<li><code>runtime.deferreturn</code>负责在函数调用结束时执行所有的延迟调用；</li>
+</ul>
+<p>同时每个<code>runtime_.defer</code>结构体会将自身追加到所在的<code>goroutine</code>的<code>defer</code>链表的头，所以表现出来就是每个<code>_defer</code>是逆序执行的（是链表而不是栈，这点在面试的时候没说对）</p>
+<h3 id="栈上分配"><a href="#栈上分配" class="headerlink" title="栈上分配"></a>栈上分配</h3><p>如果结构体中的函数最多执行一次，那么编译期间这个结构体会被分配到栈上，这样减少了同步以及垃圾回收上的额外开销。除了分配位置以外而这并没有过多不同，但栈上的开销更低一些。</p>
+<h3 id="开放编码"><a href="#开放编码" class="headerlink" title="开放编码"></a>开放编码</h3><p>开放编码属于一种优化方式，由编译器决定。其最重要操作就是将延迟调用直接插入到函数返回之前减少了<code>deferproc</code>的运行时调用。这种做法就<strong>不需要<code>_defer</code>结构体和链表的使用</strong>。</p>
+<p>延迟比特和延迟记录是使用开放编码实现 <code>defer</code> 的两个最重要结构。</p>
+<p>延迟比特的作用就是标记哪些 <code>defer</code> 关键字在函数中被执行，这样在函数返回时可以根据对应 <code>deferBits</code> 的内容确定执行的函数，而正是因为 <code>deferBits</code> 的大小仅为 8 比特，所以该优化的启用条件为函数中的 <code>defer</code> 关键字少于 8 个。函数返回之前，倒序检查延迟比特，通过掩码逐位进行与运算，来判断是否调用函数</p>
+<h2 id="关于Select"><a href="#关于Select" class="headerlink" title="关于Select"></a>关于Select</h2><p>基本的用法就不多介绍了，用途是监听多个管道中的信息到达情况。使用<code>select</code>控制结构时会发现：</p>
+<ul>
+<li>多个管道信息同时到达<code>select</code>随机选择一种执行</li>
+<li>在监听管道操作时不像普通的操作会被阻塞，<code>select</code>能够不阻塞地进行轮询</li>
+</ul>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>在编译期间转换成的<code>token</code>为一个持有一组<code>OCASE</code>节点的<code>OSELECT</code>节点。对于<code>select</code>可能出现的所有情况，编译器会有四种不同处理方式：</p>
+<ol>
+<li>不存在任何<code>case</code>，直接<code>runtime.block</code></li>
+<li>只有一个<code>case</code>，转化成常规的管道操作</li>
+<li>两个<code>case</code>其中一个是<code>default</code>，这也是常见的非阻塞化管道的操作，对于非阻塞发送和非阻塞接受编译器会实现不同的优化，调用一些特殊的内置函数来实现非阻塞</li>
+<li>存在多个<code>case</code></li>
+</ol>
+<p>这里重点讲一下多个<code>case</code>的情况，这也是跟所谓的<code>linux</code>的多个<code>case</code>情况相似的一种，我猜面试官希望我回答的也是这个。我当时只回答了一个应该是采用轮询的方式，轮询顺序随机。</p>
+<p>默认情况下对于<code>select</code>的节点树实施如下操作：</p>
+<ol>
+<li>所有<code>case</code>转换为包含 Channel 以及类型等信息的<code>runtime.scase</code>结构体</li>
+<li>调用运行时函数<code>runtime.selectgo</code>从多个就绪的管道中选择一个可以执行的<code>runtime.scase</code>，这个选择具有随机性</li>
+<li>生成一组<code>if</code>语句判断对应被选中的管道</li>
+</ol>
+<p>函数首先会进行执行必要的初始化操作并决定处理 <code>case</code> 的两个顺序 — 轮询顺序 <code>pollOrder</code> 和加锁顺序 <code>lockOrder</code>。前者具有随机性，后者可以避免死锁。</p>
+<p>当锁定了所有的管道之后，就进入了执行<code>runtime.selectgo</code>的主循环，根据 <code>pollOrder</code> 遍历所有的 <code>case</code> 查看是否有可以立刻处理的 Channel：</p>
+<ol>
+<li>如果存在，直接获取 <code>case</code> 对应的索引并返回</li>
+<li>如果不存在，创建 <code>runtime.sudog</code>结构体，将当前 Goroutine 加入到所有相关 Channel 的收发队列，并调用 <code>runtime.gopark</code> 挂起当前 Goroutine 等待调度器的唤醒</li>
+</ol>
+<p>当调度器唤醒当前 Goroutine 时，会再次按照 <code>lockOrder</code> 遍历所有的 <code>case</code>，从中查找需要被处理的 <code>runtime.sudog</code> 对应的索引。</p>
+
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>本文作者：</strong>Kiman Yang<br>
+        <strong>本文链接：</strong><a href="https://kimanyang.xyz/2022/10/31/Defer%E5%92%8CSelect%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;10&#x2F;31&#x2F;Defer%E5%92%8CSelect%E7%9A%84%E5%AE%9E%E7%8E%B0&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;kimanyang.xyz&#x2F;2022&#x2F;10&#x2F;31&#x2F;Defer%E5%92%8CSelect%E7%9A%84%E5%AE%9E%E7%8E%B0&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
     </div>
-    
-</section>
 
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/Golang%E5%AD%A6%E4%B9%A0/">Golang学习</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/golang/" rel="tag">golang</a>
+    
+</div>
+
+  
+      <div class="nexmoe-post-footer">
+          <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '80b2453b6d5f37ad6225',
+        clientSecret: '43e99fa852795c9a7b3eb924b2558c64b84bbdeb',
+        id: window.location.pathname,
+        repo: 'nexmoe.github.io',
+        owner: 'nexmoe',
+        admin: 'nexmoe'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+      </div>
+  
+</div>
             <div class="nexmoe-post-right">
               <div class="nexmoe-fixed">
                   <div class="nexmoe-tool"> 
@@ -255,10 +333,10 @@
 
  
 
-<script async src="/js/app.js?v=1667548196666"></script>
+<script async src="/js/app.js?v=1667548195763"></script>
 
 
-	<script async src="/js/search.js?v=1667548196666"></script>
+	<script async src="/js/search.js?v=1667548195763"></script>
 
 
 <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js"></script>
